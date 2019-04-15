@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context=".View.Fragment.CourseFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100sp"
+        android:src="@drawable/hat2"
+        android:layout_gravity="center"
+        android:layout_marginTop="60sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorAccent"
+        android:text="UniGrade"
+        android:textSize="40sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:textColor="@color/colorAccent"
+        android:text="Campus"
+        android:layout_marginStart="30sp"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"/>
+
+    <Spinner
+        android:id="@+id/campusSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginLeft="30sp"
+        android:entries="@array/campus"/>
+
+    <TextView
+        android:layout_marginTop="40sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:text="Curso"
+        android:layout_marginStart="30sp"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"/>
+
+    <Spinner
+        android:id="@+id/courseSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginLeft="30sp"
+        android:entries="@array/courses_array"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continuar"
+        android:layout_gravity="right"
+        android:layout_marginRight="30sp"
+        android:layout_marginEnd="30sp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="40sp"
+        android:background="@color/colorPrimary"
+        android:padding="10sp"
+        android:id="@+id/btn_continue"/>
+
+</LinearLayout>
