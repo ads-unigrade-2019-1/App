@@ -17,6 +17,15 @@ out/
 
 # Gradle files
 .gradle/
+.gradle/fileChanges
+.gradle/fileContent
+.gradle/fileHashes
+.gradle/javaCompile
+.gradle/taskHistory
+.gradle/vcsMetadata-1
+.gradle/gc.properties
+!.gradle/
+.gradle/*
 build/
 
 # Local configuration file (sdk path, etc)
