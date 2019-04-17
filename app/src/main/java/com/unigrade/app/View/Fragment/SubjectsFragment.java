@@ -1,6 +1,8 @@
 package com.unigrade.app.View.Fragment;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.unigrade.app.Controller.ConnectivityHelper;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
@@ -73,16 +77,37 @@ public class SubjectsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        String result="";
-        GetSubjects getRequest = new GetSubjects();
-        try {
-            result = getRequest.execute("https://jsonplaceholder.typicode.com/users").get();
-            System.out.println(result);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (ConnectivityHelper.isConnectedToNetwork(this.getActivity())) {
+            String result="";
+            GetSubjects getRequest = new GetSubjects();
+            try {
+                result = getRequest.execute("https://jsonplaceholder.typicode.com/users").get();
+                try {
+
+                    JSONArray jsonArray = new JSONArray(result);
+                    JSONObject company = null;
+                    String[] catchphrase = new String[jsonArray.length()];
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject c = jsonArray.getJSONObject(i);
+                        company = c.getJSONObject("company");
+                        catchphrase[i] = company.getString("catchPhrase");
+                        System.out.println(catchphrase[i]);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this.getActivity(), "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
         }
+
+
 
     }
 

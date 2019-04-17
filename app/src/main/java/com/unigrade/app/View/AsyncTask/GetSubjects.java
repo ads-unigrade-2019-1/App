@@ -72,22 +72,6 @@ public class GetSubjects extends AsyncTask<String, Integer, String> {
             result = null;
         }
 
-        try {
-
-            JSONArray jsonArray = new JSONArray(result);
-            JSONObject company = null;
-            String[] catchphrase = new String[jsonArray.length()];
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject c = jsonArray.getJSONObject(i);
-                company = c.getJSONObject("company");
-                catchphrase[i] = company.getString("catchPhrase");
-                 System.out.println(catchphrase[i]);
-            }
-            result = catchphrase[2];
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
 
         //Notifica o Android de que ele precisa
