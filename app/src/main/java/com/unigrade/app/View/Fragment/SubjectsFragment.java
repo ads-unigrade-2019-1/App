@@ -12,6 +12,13 @@ import android.widget.ListView;
 
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
+import com.unigrade.app.View.AsyncTask.GetSubjects;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 import androidx.navigation.Navigation;
 
@@ -65,11 +72,26 @@ public class SubjectsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        String result="";
+        GetSubjects getRequest = new GetSubjects();
+        try {
+            result = getRequest.execute("https://jsonplaceholder.typicode.com/users").get();
+            System.out.println(result);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
         // Inflate the layout for this fragment
