@@ -1,31 +1,23 @@
 package com.unigrade.app.View.Fragment;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.unigrade.app.Controller.ConnectivityHelper;
+import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.AsyncTask.GetSubjects;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import androidx.navigation.Navigation;
 
@@ -43,6 +35,8 @@ public class SubjectsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private SubjectsController subjectsController;
+    private SwipeRefreshLayout swipeLayout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -50,7 +44,7 @@ public class SubjectsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private List<String> json = new ArrayList<>();
+    private List<String> subjects = new ArrayList<String>();
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -89,29 +83,12 @@ public class SubjectsFragment extends Fragment {
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
         // Inflate the layout for this fragment
-        //R.layout.fragment_subjects
         View v = inflater.inflate(R.layout.fragment_subjects, container, false);
-
         ListView subjectList = v.findViewById(R.id.subjects_list);
+        subjectsController = new SubjectsController();
+        subjects = subjectsController.getSubjects();
 
-        if (ConnectivityHelper.isConnectedToNetwork(this.getActivity())) {
-            GetSubjects getRequest = new GetSubjects();
-            try {
-                json = getRequest.execute("https://jsonplaceholder.typicode.com/users").get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this.getActivity(), "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
-
-
-            //Navigation.findNavController(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa).navigate(R.id.connectionErrorFragment);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_list_item_1, json);
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_list_item_1, subjects);
         subjectList.setAdapter(adapter);
 
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,7 +96,6 @@ public class SubjectsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Navigation. findNavController(view).navigate(R.id.connectionErrorFragment);
             }
-
         });
 
         return v;
