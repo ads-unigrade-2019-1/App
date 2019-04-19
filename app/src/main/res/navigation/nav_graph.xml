@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_SubjectsFragment_to_ClassFragment"
             app:destination="@id/classesFragment" />
+        <action
+            android:id="@+id/action_subjectsFragment_to_connectionErrorFragment"
+            app:destination="@id/connectionErrorFragment" />
     </fragment>
     <fragment
         android:id="@+id/flowFragment"
@@ -42,6 +45,11 @@
         android:id="@+id/classesFragment"
         android:name="com.unigrade.app.View.Fragment.ClassesFragment"
         android:label="ClassesFragment" />
+    <fragment
+        android:id="@+id/connectionErrorFragment"
+        android:name="com.unigrade.app.View.Fragment.ConnectionErrorFragment"
+        android:label="fragment_connection_error"
+        tools:layout="@layout/fragment_connection_error" />
 
 
 </navigation>

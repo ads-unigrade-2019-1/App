@@ -3,6 +3,9 @@ package com.unigrade.app.View.AsyncTask;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
+import com.unigrade.app.Controller.SubjectsParser;
+import com.unigrade.app.Model.Subject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,8 +15,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GetSubjects extends AsyncTask<String, Integer, String> {
+public class GetSubjects extends AsyncTask<String, Integer, List> {
 
     public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;
@@ -26,9 +31,11 @@ public class GetSubjects extends AsyncTask<String, Integer, String> {
     // o qual é executado pela
     //UI thread.
     @Override
-    protected String doInBackground(String... params) {
+    protected List doInBackground(String... params) {
         String stringUrl = params[0];
         String result = "";
+        List<String> parsedResult = new ArrayList<>();
+        List<Subject> subjects;
         String inputLine;
 
         try {
@@ -66,10 +73,18 @@ public class GetSubjects extends AsyncTask<String, Integer, String> {
             streamReader.close();
             //Set our result equal to our stringBuilder
             result = stringBuilder.toString();
+
+            SubjectsParser parser = new SubjectsParser();
+            subjects = parser.sParser(result);
+
+            for(Subject subject: subjects){
+                parsedResult.add(subject.getCodigoMateria() + " - " + subject.getNomeMateria());
+            }
+
         }
         catch(IOException e){
             e.printStackTrace();
-            result = null;
+            parsedResult = null;
         }
 
 
@@ -81,7 +96,7 @@ public class GetSubjects extends AsyncTask<String, Integer, String> {
         //passando o valor do
         //contador como parâmetro
         publishProgress();
-        return result;
+        return parsedResult;
 
     }
 
@@ -89,12 +104,6 @@ public class GetSubjects extends AsyncTask<String, Integer, String> {
     // interface gráfica
     @Override
     protected void onProgressUpdate(Integer... values) {
-
-    }
-
-
-    protected void onPostExecute(String result){
-        super.onPostExecute(result);
 
     }
 

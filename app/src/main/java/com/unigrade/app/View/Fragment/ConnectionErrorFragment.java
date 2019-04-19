@@ -1,31 +1,16 @@
 package com.unigrade.app.View.Fragment;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.Button;
 
-import com.unigrade.app.Controller.ConnectivityHelper;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.AsyncTask.GetSubjects;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import androidx.navigation.Navigation;
 
@@ -33,12 +18,12 @@ import androidx.navigation.Navigation;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SubjectsFragment.OnFragmentInteractionListener} interface
+ * {@link ConnectionErrorFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SubjectsFragment#newInstance} factory method to
+ * Use the {@link ConnectionErrorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SubjectsFragment extends Fragment {
+public class ConnectionErrorFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -50,9 +35,10 @@ public class SubjectsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private List<String> json = new ArrayList<>();
+    private Button retryButton;
+    private Button mTrueButton;
 
-    public SubjectsFragment() {
+    public ConnectionErrorFragment() {
         // Required empty public constructor
     }
 
@@ -62,11 +48,11 @@ public class SubjectsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SubjectsFragment.
+     * @return A new instance of fragment ConnectionErrorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SubjectsFragment newInstance(String param1, String param2) {
-        SubjectsFragment fragment = new SubjectsFragment();
+    public static ConnectionErrorFragment newInstance(String param1, String param2) {
+        ConnectionErrorFragment fragment = new ConnectionErrorFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -81,49 +67,26 @@ public class SubjectsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
-    @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
+        final View view = inflater.inflate(R.layout.fragment_connection_error, container, false);
+
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha campus e curso");
+
+        final Button button = view.findViewById(R.id.btn_retry);
+        button.setOnClickListener(
+                Navigation.createNavigateOnClickListener(R.id.subjectsFragment, null)
+        );
+
         // Inflate the layout for this fragment
-        //R.layout.fragment_subjects
-        View v = inflater.inflate(R.layout.fragment_subjects, container, false);
-
-        ListView subjectList = v.findViewById(R.id.subjects_list);
-
-        if (ConnectivityHelper.isConnectedToNetwork(this.getActivity())) {
-            GetSubjects getRequest = new GetSubjects();
-            try {
-                json = getRequest.execute("https://jsonplaceholder.typicode.com/users").get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this.getActivity(), "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
-
-
-            //Navigation.findNavController(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa).navigate(R.id.connectionErrorFragment);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_list_item_1, json);
-
-        subjectList.setAdapter(adapter);
-
-        subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Navigation. findNavController(view).navigate(R.id.connectionErrorFragment);
-            }
-
-        });
-
-        return v;
+        return view;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
