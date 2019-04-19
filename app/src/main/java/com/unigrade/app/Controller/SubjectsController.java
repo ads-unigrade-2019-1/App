@@ -1,10 +1,17 @@
 package com.unigrade.app.Controller;
 
-import com.unigrade.app.View.AsyncTask.GetSubjects;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import com.unigrade.app.DAO.GetDAO;
+import com.unigrade.app.Model.Subject;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_SUBJECTS;
 
@@ -26,7 +33,7 @@ public class SubjectsController {
     public ArrayList<Subject> getSubjectsList(){
         // Returns the list of all subjects from the API
 
-        String result = new GetDao("https://jsonplaceholder.typicode.com/users").get();
+        String result = new GetDAO("https://jsonplaceholder.typicode.com/users").get();
         ArrayList<Subject> subjects = new ArrayList<>();
 
         try {

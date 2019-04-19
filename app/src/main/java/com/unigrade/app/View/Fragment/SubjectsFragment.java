@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.unigrade.app.Controller.SubjectsController;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
+import com.unigrade.app.View.AsyncTask.GetSubjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +46,15 @@ public class SubjectsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private List<String> subjects = new ArrayList<String>();
+    private List<Subject> subjects = new ArrayList<Subject>();
+    ArrayAdapter<Subject> adapter;
 
     public SubjectsFragment() {
         // Required empty public constructor
     }
 
-    public setSubjects(ArrayList<Subject> subjects){
-        this.subjects = subjects
+    public void setSubjects(ArrayList<Subject> subjects){
+        this.subjects = subjects;
     }
 
     /**
@@ -90,7 +94,7 @@ public class SubjectsFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
        
         ListView subjectList = v.findViewById(R.id.subjects_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_list_item_1, subjects);
+        adapter = new ArrayAdapter<Subject>(this.getActivity(),android.R.layout.simple_list_item_1, subjects);
         subjectList.setAdapter(adapter);
 
         callServer();
@@ -108,8 +112,8 @@ public class SubjectsFragment extends Fragment {
     private void callServer(){
          SubjectsController subjectsController = SubjectsController.getInstance();
 
-        if(subjectsController.isConnectedToNetwork(getActivity())) {
-            new GetSubjects(this, ).execute();
+        if(subjectsController.isConnectedToNetwork(getActivity())){
+            new GetSubjects(this, adapter).execute();
         }else {
             Toast.makeText(this.getActivity(), "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
         }

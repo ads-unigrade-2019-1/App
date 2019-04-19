@@ -1,20 +1,12 @@
 package com.unigrade.app.View.AsyncTask;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.ArrayAdapter;
 
-import com.unigrade.app.Controller.SubjectsParser;
+import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
+import com.unigrade.app.View.Fragment.SubjectsFragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +14,10 @@ public class GetSubjects extends AsyncTask<String, Integer, List> {
 
     private SubjectsController subjectsController;
     private SubjectsFragment subjectsFragment;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<Subject> adapter;
+    private ArrayList<Subject> subjects;
 
-    public GetSubjects(SubjectsFragment subjectsFragment, ArrayAdapter<String> adapter){
+    public GetSubjects(SubjectsFragment subjectsFragment, ArrayAdapter<Subject> adapter){
         this.subjectsFragment = subjectsFragment;
         this.adapter = adapter;
     }
@@ -40,9 +33,9 @@ public class GetSubjects extends AsyncTask<String, Integer, List> {
     }
 
     @Override
-    protected void onProgressUpdate(ArrayList<UserClass> subjects) {
+    protected void onProgressUpdate(Integer... values) {
         subjectsFragment.setSubjects(subjects);
-        adapter.notifyDataSetChanged(); 
+        adapter.notifyDataSetChanged();
     }
 
 }
