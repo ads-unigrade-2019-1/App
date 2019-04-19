@@ -43,11 +43,14 @@ public class SubjectsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
     private List<String> subjects = new ArrayList<String>();
 
     public SubjectsFragment() {
         // Required empty public constructor
+    }
+
+    public setSubjects(ArrayList<Subject> subjects){
+        this.subjects = subjects
     }
 
     /**
@@ -81,15 +84,16 @@ public class SubjectsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_subjects, container, false);
-        ListView subjectList = v.findViewById(R.id.subjects_list);
-        subjectsController = new SubjectsController();
-        subjects = subjectsController.getSubjects();
 
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
+       
+        ListView subjectList = v.findViewById(R.id.subjects_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_list_item_1, subjects);
         subjectList.setAdapter(adapter);
+
+        callServer();
 
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -99,6 +103,17 @@ public class SubjectsFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void callServer(){
+         SubjectsController subjectsController = SubjectsController.getInstance();
+
+        if(subjectsController.isConnectedToNetwork(getActivity())) {
+            new GetSubjects(this, ).execute();
+        }else {
+            Toast.makeText(this.getActivity(), "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,6 +138,12 @@ public class SubjectsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+        @Override
+    public void onResume() {
+        callServer();
+        super.onResume();
     }
 
     /**
