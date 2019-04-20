@@ -33,7 +33,7 @@ public class SubjectsController {
     public ArrayList<Subject> getSubjectsList(){
         // Returns the list of all subjects from the API
 
-        String result = new GetDAO("https://jsonplaceholder.typicode.com/users").get();
+        String result = new GetDAO(URL_ALL_SUBJECTS).get();
         ArrayList<Subject> subjects = new ArrayList<>();
 
         try {
