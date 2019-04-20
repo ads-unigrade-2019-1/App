@@ -17,7 +17,6 @@ import com.unigrade.app.View.Fragment.UserSubjectsFragment;
 import com.unigrade.app.View.Fragment.ClassesFragment;
 import com.unigrade.app.View.Fragment.CourseFragment;
 import com.unigrade.app.View.Fragment.FlowFragment;
-import com.unigrade.app.View.Fragment.ConnectionErrorFragment;
 
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -31,8 +30,7 @@ public class MainActivity extends AppCompatActivity
                     FlowFragment.OnFragmentInteractionListener,
         UserSubjectsFragment.OnFragmentInteractionListener,
         TimetablesFragment.OnFragmentInteractionListener,
-                    ClassesFragment.OnFragmentInteractionListener,
-                    ConnectionErrorFragment.OnFragmentInteractionListener{
+                    ClassesFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +56,6 @@ public class MainActivity extends AppCompatActivity
                     bottomNavigationView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
                 } else if (destination.getId() == R.id.classesFragment) {
-                    bottomNavigationView.setVisibility(View.GONE);
-                } else if (destination.getId() == R.id.connectionErrorFragment) {
                     bottomNavigationView.setVisibility(View.GONE);
                 } else {
                     bottomNavigationView.setVisibility(View.VISIBLE);
