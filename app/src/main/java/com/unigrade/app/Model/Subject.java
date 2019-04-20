@@ -1,28 +1,28 @@
 package com.unigrade.app.Model;
 
 public class Subject {
-    private String codigoMateria;
-    private String nomeMateria;
+    private String code;
+    private String name;
 
-    public Subject(String codigoMateria, String nomeMateria) {
-        this.codigoMateria = codigoMateria;
-        this.nomeMateria = nomeMateria;
+    public Subject(String code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
-    public String getCodigoMateria() {
-        return codigoMateria;
+    public String getCode() {
+        return code;
     }
 
-    public void setCodigoMateria(String codigoMateria) {
-        this.codigoMateria = codigoMateria;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getNomeMateria() {
-        return nomeMateria;
+    public String getName() {
+        return name;
     }
 
-    public void setNomeMateria(String nomeMateria) {
-        this.nomeMateria = nomeMateria;
+    public void setName(String name) {
+        this.name = name;
     }
 
 
