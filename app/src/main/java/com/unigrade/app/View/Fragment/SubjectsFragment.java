@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.unigrade.app.Controller.SubjectsController;
@@ -40,6 +41,7 @@ public class SubjectsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private SubjectsController subjectsController;
     private SwipeRefreshLayout swipeLayout;
+    private ProgressBar progressBar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -91,13 +93,15 @@ public class SubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_subjects, container, false);
 
+        progressBar = v.findViewById(R.id.progressBar);
+        ListView subjectList = v.findViewById(R.id.subjectsList);
+
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
-       
-        ListView subjectList = v.findViewById(R.id.subjects_list);
+
         adapter = new ArrayAdapter<Subject>(this.getActivity(),android.R.layout.simple_list_item_1, subjects);
         subjectList.setAdapter(adapter);
 
-        callServer();
+        callServer(true);
 
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,11 +113,11 @@ public class SubjectsFragment extends Fragment {
         return v;
     }
 
-    private void callServer(){
+    private void callServer(Boolean loading){
          SubjectsController subjectsController = SubjectsController.getInstance();
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
-            new GetSubjects(this, adapter).execute();
+            new GetSubjects(this, adapter, loading, progressBar).execute();
         }else {
             Toast.makeText(this.getActivity(), "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
         }
@@ -146,7 +150,7 @@ public class SubjectsFragment extends Fragment {
 
         @Override
     public void onResume() {
-        callServer();
+        callServer(true);
         super.onResume();
     }
 
