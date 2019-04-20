@@ -36,13 +36,13 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
     protected void onPostExecute(ArrayList<Subject> subjects) {
         subjectsFragment.setSubjects(subjects);
         View v = subjectsFragment.getView();
-        ListView lv = v.findViewById(R.id.subjectsList);
+        ListView lv = v.findViewById(R.id.subjects_list);
         lv.setAdapter( new ArrayAdapter<>(
                         subjectsFragment.getActivity(),
                         android.R.layout.simple_list_item_1,
                         subjects)
         );
-        ProgressBar pb = v.findViewById(R.id.progressBar);
+        ProgressBar pb = v.findViewById(R.id.progress_bar);
         pb.setVisibility(View.GONE);
 
     }

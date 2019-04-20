@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -20,7 +20,7 @@
         android:orientation="horizontal">
 
         <ListView
-            android:id="@+id/subjectsList"
+            android:id="@+id/subjects_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_nav"

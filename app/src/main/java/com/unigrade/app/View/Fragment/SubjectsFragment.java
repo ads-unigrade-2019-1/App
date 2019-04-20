@@ -2,6 +2,7 @@ package com.unigrade.app.View.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,6 @@ import androidx.navigation.Navigation;
 
 public class SubjectsFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private OnFragmentInteractionListener mListener;
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ProgressBar progressBar;
     private ListView subjectList;
@@ -53,17 +50,19 @@ public class SubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_subjects, container, false);
 
-        progressBar = v.findViewById(R.id.progressBar);
-        subjectList = v.findViewById(R.id.subjectsList);
+        progressBar = v.findViewById(R.id.progress_bar);
+        subjectList = v.findViewById(R.id.subjects_list);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 
         subjectList.setAdapter(new ArrayAdapter<>(this.getActivity(),android.R.layout.simple_list_item_1, subjects));
 
+        callServer();
+
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Navigation. findNavController(view).navigate(R.id.connectionErrorFragment);
+                Navigation. findNavController(view).navigate(R.id.classesFragment);
             }
         });
 
@@ -81,14 +80,6 @@ public class SubjectsFragment extends Fragment {
         }
 
     }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        callServer();
-    }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

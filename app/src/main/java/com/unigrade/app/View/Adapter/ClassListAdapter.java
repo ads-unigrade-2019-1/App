@@ -91,14 +91,14 @@ public class ClassListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.class_list_item, null);
+        View view = inflater.inflate(R.layout.item_class, null);
 
         classItem = classes.get(position);
 
-        viewHolder.classCampus = view.findViewById(R.id.classCampusItem);
-        viewHolder.classCode = view.findViewById(R.id.classCodeItem);
-        viewHolder.classTeacher = view.findViewById(R.id.classTeacherItem);
-        viewHolder.classTime = view.findViewById(R.id.classTimeItem);
+        viewHolder.classCampus = view.findViewById(R.id.class_campus);
+        viewHolder.classCode = view.findViewById(R.id.class_code);
+        viewHolder.classTeacher = view.findViewById(R.id.class_teacher);
+        viewHolder.classTime = view.findViewById(R.id.class_time);
         viewHolder.checkbox = view.findViewById(R.id.checkbox);
 
         viewHolder.classCode.setText((String)classItem.get("code"));
