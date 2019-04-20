@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -29,6 +30,7 @@ public class SubjectsFragment extends Fragment {
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ProgressBar progressBar;
     private LinearLayout noInternet;
+    private Button btnReload;
     private ListView subjectList;
 
     public SubjectsFragment() {
@@ -55,6 +57,8 @@ public class SubjectsFragment extends Fragment {
         progressBar = v.findViewById(R.id.progress_bar);
         subjectList = v.findViewById(R.id.subjects_list);
         noInternet = v.findViewById(R.id.subjects_no_internet);
+        btnReload = v.findViewById(R.id.subjects_reload);
+
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 
@@ -66,6 +70,13 @@ public class SubjectsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Navigation.findNavController(view).navigate(R.id.classesFragment);
+            }
+        });
+
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callServer();
             }
         });
 
