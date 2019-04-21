@@ -44,7 +44,6 @@ public class SubjectsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -87,7 +86,6 @@ public class SubjectsFragment extends Fragment {
          SubjectsController subjectsController = SubjectsController.getInstance();
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
-            progressBar.setVisibility(View.VISIBLE);
             subjectList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
             new GetSubjects(this).execute();
@@ -101,5 +99,13 @@ public class SubjectsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public ListView getSubjectList() {
+        return subjectList;
     }
 }

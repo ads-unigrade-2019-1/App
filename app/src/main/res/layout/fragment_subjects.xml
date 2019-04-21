@@ -9,14 +9,12 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:visibility="gone"
-        />
-
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/contentLayout"
+        android:id="@+id/content_layout"
         android:orientation="horizontal">
 
         <ListView
@@ -28,7 +26,6 @@
         </ListView>
 
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/subjects_no_internet"
@@ -45,7 +42,6 @@
             android:layout_gravity="center_horizontal"
             android:text="Sem conexão com a internet"/>
 
-
         <Button
             android:id="@+id/subjects_reload"
             android:layout_width="wrap_content"
@@ -55,6 +51,5 @@
             android:text="Recarregar"/>
 
     </LinearLayout>
-
 
 </FrameLayout>
