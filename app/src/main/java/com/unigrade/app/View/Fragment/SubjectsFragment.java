@@ -1,5 +1,6 @@
 package com.unigrade.app.View.Fragment;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,7 +13,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
@@ -32,6 +32,7 @@ public class SubjectsFragment extends Fragment {
     private LinearLayout noInternet;
     private Button btnReload;
     private ListView subjectList;
+    private AsyncTask getSubjectsTask;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -39,6 +40,14 @@ public class SubjectsFragment extends Fragment {
 
     public void setSubjects(ArrayList<Subject> subjects){
         this.subjects = subjects;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public ListView getSubjectList() {
+        return subjectList;
     }
 
     @Override
@@ -88,7 +97,7 @@ public class SubjectsFragment extends Fragment {
         if(subjectsController.isConnectedToNetwork(getActivity())){
             subjectList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            new GetSubjects(this).execute();
+            getSubjectsTask = new GetSubjects(this).execute();
         } else {
             subjectList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -101,11 +110,14 @@ public class SubjectsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public ProgressBar getProgressBar() {
-        return progressBar;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(getSubjectsTask != null && getSubjectsTask.getStatus() != AsyncTask.Status.FINISHED) {
+            getSubjectsTask.cancel(true);
+        }
     }
 
-    public ListView getSubjectList() {
-        return subjectList;
-    }
+
 }
