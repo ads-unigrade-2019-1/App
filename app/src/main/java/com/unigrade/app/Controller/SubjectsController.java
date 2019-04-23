@@ -19,7 +19,7 @@ public class SubjectsController {
 
     private static SubjectsController instance;
 
-    public SubjectsController(){
+    private SubjectsController(){
         //Empty constructor
     }
 
@@ -39,7 +39,7 @@ public class SubjectsController {
         try {
 
             JSONArray jsonArray = new JSONArray(result);
-            JSONObject adress = null;
+            JSONObject object;
             String name;
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -47,8 +47,8 @@ public class SubjectsController {
 
                 name = c.getString("name");
 
-                adress = c.getJSONObject("address");
-                String code = adress.getString("zipcode");
+                object = c.getJSONObject("address");
+                String code = object.getString("zipcode");
 
                 Subject subject = new Subject(code,name);
                 subjects.add(subject);
