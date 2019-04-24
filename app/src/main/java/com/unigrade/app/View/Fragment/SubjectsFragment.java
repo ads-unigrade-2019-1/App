@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,6 +17,7 @@ import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
+import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
 
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ public class SubjectsFragment extends Fragment {
     private Button btnReload;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
+    private SubjectListAdapter adapter;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -48,6 +49,10 @@ public class SubjectsFragment extends Fragment {
 
     public ListView getSubjectList() {
         return subjectList;
+    }
+
+    public ArrayList<Subject> getSubjects() {
+        return subjects;
     }
 
     @Override
@@ -69,8 +74,6 @@ public class SubjectsFragment extends Fragment {
 
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
-
-        subjectList.setAdapter(new ArrayAdapter<>(this.getActivity(),android.R.layout.simple_list_item_1, subjects));
 
         callServer();
 
@@ -118,6 +121,4 @@ public class SubjectsFragment extends Fragment {
             getSubjectsTask.cancel(true);
         }
     }
-
-
 }
