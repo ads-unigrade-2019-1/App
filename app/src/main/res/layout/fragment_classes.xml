@@ -22,7 +22,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:textColor="#000"
-        android:id="@+id/creditos" />
+        android:id="@+id/classCredits" />
     <View
         android:layout_width="300dp"
         android:layout_height="1dp"

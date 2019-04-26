@@ -1,6 +1,8 @@
 package com.unigrade.app.Model;
 
-public class Subject {
+import java.io.Serializable;
+
+public class Subject implements Serializable {
     private String code;
     private String name;
 

@@ -20,6 +20,7 @@ import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
@@ -80,7 +81,9 @@ public class SubjectsFragment extends Fragment {
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Navigation.findNavController(view).navigate(R.id.classesFragment);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
             }
         });
 

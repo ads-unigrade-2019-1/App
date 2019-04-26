@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.View.Adapter.ClassListAdapter;
 import com.unigrade.app.R;
 
@@ -75,6 +77,13 @@ public class ClassesFragment extends Fragment {
         ListView list = v.findViewById(R.id.class_list);
         adapter = new ClassListAdapter(getActivity());
         list.setAdapter(adapter);
+        Bundle bundle = getArguments();
+        Subject subject = (Subject) bundle.getSerializable("subject");
+
+        TextView tvClassTitle = v.findViewById(R.id.classTitle);
+        TextView tvClassCredits = v.findViewById(R.id.classCredits);
+        tvClassTitle.setText(subject.getName());
+        tvClassCredits.setText("11-11-11-11");
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
