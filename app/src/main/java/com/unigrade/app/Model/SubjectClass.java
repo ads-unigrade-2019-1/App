@@ -2,13 +2,22 @@ package com.unigrade.app.Model;
 
 public class SubjectClass {
     private String codeLetter;
-    private String professor;
+    private String teacher;
     private String campus;
     private String schedules;
+    private boolean isSelected;
 
-    public SubjectClass(String codeLetter, String professor, String campus, String schedules){
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public SubjectClass(String codeLetter, String teacher, String campus, String schedules){
         this.codeLetter = codeLetter;
-        this.professor = professor;
+        this.teacher = teacher;
         this.campus = campus;
         this.schedules = schedules;
     }
@@ -30,12 +39,12 @@ public class SubjectClass {
         this.codeLetter = codeLetter;
     }
 
-    public String getProfessor() {
-        return professor;
+    public String getTeacher() {
+        return teacher;
     }
 
-    public void setProfessor(String professor) {
-        this.professor = professor;
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 
     public String getCampus() {
