@@ -73,7 +73,6 @@ public class SubjectsFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 
         callServer();
