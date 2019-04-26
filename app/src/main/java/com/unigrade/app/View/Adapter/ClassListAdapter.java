@@ -63,7 +63,7 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTime.setText(s);
         viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 
-        viewHolder.checkbox.setTag(((SubjectClass)this.getItem(position)).isSelected());
+        viewHolder.checkbox.setTag(((SubjectClass)this.getItem(position)));
 
         viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
