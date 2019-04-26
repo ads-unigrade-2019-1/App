@@ -1,12 +1,17 @@
 package com.unigrade.app.Model;
 
-import java.util.ArrayList;
-
 public class SubjectClass {
     private String codeLetter;
     private String professor;
     private String campus;
     private String schedules;
+
+    public SubjectClass(String codeLetter, String professor, String campus, String schedules){
+        this.codeLetter = codeLetter;
+        this.professor = professor;
+        this.campus = campus;
+        this.schedules = schedules;
+    }
 
     public String[] getSchedules() {
         String[] parts = schedules.split("[|]|,");
