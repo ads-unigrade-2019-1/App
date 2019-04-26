@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/subjects_no_internet"
+    android:id="@+id/no_internet"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -16,7 +16,7 @@
         android:text="Sem conexão com a internet"/>
 
     <Button
-        android:id="@+id/subjects_reload"
+        android:id="@+id/reload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

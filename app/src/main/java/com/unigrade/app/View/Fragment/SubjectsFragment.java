@@ -70,8 +70,8 @@ public class SubjectsFragment extends Fragment {
 
         progressBar = v.findViewById(R.id.progress_bar);
         subjectList = v.findViewById(R.id.subjects_list);
-        noInternet = v.findViewById(R.id.subjects_no_internet);
-        btnReload = v.findViewById(R.id.subjects_reload);
+        noInternet = v.findViewById(R.id.no_internet);
+        btnReload = v.findViewById(R.id.reload);
 
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
