@@ -40,7 +40,7 @@ public class SubjectsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public void setSubjectsList(ArrayList<Subject> subjects){
+    public void setSubjects(ArrayList<Subject> subjects){
         this.subjects = subjects;
     }
 
