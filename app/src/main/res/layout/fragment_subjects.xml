@@ -26,29 +26,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/subjects_no_internet"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal|center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_gravity="center_horizontal"
-            android:text="Sem conexão com a internet"/>
-
-        <Button
-            android:id="@+id/subjects_reload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:text="Recarregar"/>
-
-    </LinearLayout>
+    <include layout="@layout/content_no_internet"/>
 
 </FrameLayout>
