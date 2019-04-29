@@ -5,6 +5,10 @@ import java.io.Serializable;
 public class Subject implements Serializable {
     private String code;
     private String name;
+    //TODO add credits
+
+    public Subject(){
+    }
 
     public Subject(String code, String name) {
         this.code = code;
