@@ -18,10 +18,9 @@ public class SubjectDAO extends SQLiteOpenHelper {
         super(context, "Unigrade", null, version);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = String.format("CREATE TABLE %s(name VARCHAR(255) NOT NULL, code BIGINT NOT NULL, credits VARCHAR(255) NOT NULL)", table);
+        String sql = String.format("CREATE TABLE %s(code BIGINT NOT NULL PRIMARY KEY, name VARCHAR(255) NOT NULL, credits VARCHAR(255) NOT NULL)", table);
         db.execSQL(sql);
     }
 
