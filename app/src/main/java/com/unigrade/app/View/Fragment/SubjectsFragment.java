@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,8 +17,10 @@ import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
+import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
@@ -33,6 +34,7 @@ public class SubjectsFragment extends Fragment {
     private Button btnReload;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
+    private SubjectListAdapter adapter;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -50,6 +52,10 @@ public class SubjectsFragment extends Fragment {
         return subjectList;
     }
 
+    public ArrayList<Subject> getSubjects() {
+        return subjects;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,20 +70,19 @@ public class SubjectsFragment extends Fragment {
 
         progressBar = v.findViewById(R.id.progress_bar);
         subjectList = v.findViewById(R.id.subjects_list);
-        noInternet = v.findViewById(R.id.subjects_no_internet);
-        btnReload = v.findViewById(R.id.subjects_reload);
-
+        noInternet = v.findViewById(R.id.no_internet);
+        btnReload = v.findViewById(R.id.reload);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
-
-        subjectList.setAdapter(new ArrayAdapter<>(this.getActivity(),android.R.layout.simple_list_item_1, subjects));
 
         callServer();
 
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Navigation.findNavController(view).navigate(R.id.classesFragment);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
             }
         });
 
@@ -118,6 +123,4 @@ public class SubjectsFragment extends Fragment {
             getSubjectsTask.cancel(true);
         }
     }
-
-
 }

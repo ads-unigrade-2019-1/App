@@ -2,16 +2,6 @@
     <string name="app_name">Unigrade</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="subjects_array">
-        <item>1012093 - Engenharia e Ambiente</item>
-        <item>1982745 - Cálculo 1</item>
-        <item>2309483 - Cálculo 2</item>
-        <item>9834738 - Desenvolvimento de Software</item>
-        <item>2987483 - Engenharia de Produto de Software</item>
-        <item>2983748 - Compiladores</item>
-        <item>2343847 - Estrutura de Dados</item>
-    </string-array>
-
     <string-array name="campus">
         <item>Selecione</item>
         <item>Gama</item>
@@ -34,4 +24,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="separator">-</string>
 </resources>

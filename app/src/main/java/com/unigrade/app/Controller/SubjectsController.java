@@ -39,18 +39,16 @@ public class SubjectsController {
         try {
 
             JSONArray jsonArray = new JSONArray(result);
-            JSONObject object;
             String name;
+            String code;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject c = jsonArray.getJSONObject(i);
 
                 name = c.getString("name");
+                code = c.getString("code");
 
-                object = c.getJSONObject("address");
-                String code = object.getString("zipcode");
-
-                Subject subject = new Subject(code,name);
+                Subject subject = new Subject(code, name);
                 subjects.add(subject);
             }
 

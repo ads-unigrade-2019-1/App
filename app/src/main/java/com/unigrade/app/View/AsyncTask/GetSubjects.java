@@ -1,11 +1,13 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
+import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.Fragment.SubjectsFragment;
 
 import java.util.ArrayList;
@@ -32,12 +34,11 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
 
     @Override
     protected void onPostExecute(ArrayList<Subject> subjects) {
+
         subjectsFragment.setSubjects(subjects);
         subjectsFragment.getSubjectList()
-                .setAdapter( new ArrayAdapter<>(
-                        subjectsFragment.getActivity(),
-                        android.R.layout.simple_list_item_1,
-                        subjects)
+                .setAdapter(
+                        new SubjectListAdapter(subjectsFragment.getSubjects(), subjectsFragment.getActivity())
         );
         subjectsFragment.getProgressBar().setVisibility(View.GONE);
     }

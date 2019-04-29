@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 
 import java.util.ArrayList;
@@ -17,65 +18,20 @@ import java.util.HashMap;
 public class ClassListAdapter extends BaseAdapter {
 
     private HashMap classItem;
-    private ArrayList<HashMap> classes = new ArrayList<>();
+    private ArrayList<SubjectClass> classes = new ArrayList<>();
 
     private static LayoutInflater inflater = null;
     //private View v;
     private Activity act;
     private ViewHolder viewHolder = new ViewHolder();
 
-    public ClassListAdapter(Context context) {
+    public ClassListAdapter(ArrayList<SubjectClass> classes, Context context) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        classItem = new HashMap<>();
-        classItem.put("code", "A");
-        classItem.put("teacher", "Mauricio");
-        classItem.put("time", "12:00");
-        classItem.put("campus", "Darcy");
-        classItem.put("check", false);
-        classes.add(classItem);
-
-        classItem = new HashMap<>();
-        classItem.put("code", "B");
-        classItem.put("teacher", "Milene");
-        classItem.put("time", "10:00");
-        classItem.put("campus", "FGA");
-        classItem.put("check", false);
-        classes.add(classItem);
-
-        classItem = new HashMap<>();
-        classItem.put("code", "C");
-        classItem.put("teacher", "Vandor");
-        classItem.put("time", "08:00");
-        classItem.put("campus", "Ceilândia");
-        classItem.put("check", false);
-        classes.add(classItem);
-
-
-        /*classCode = new ArrayList<>();
-        classCode.add("12345");
-        classCode.add("65432");
-        classCode.add("32132");
-
-        classTeacher = new ArrayList<>();
-        classTeacher.add("Mario");
-        classTeacher.add("Joao");
-        classTeacher.add("Maria");
-
-        classTime = new ArrayList<>();
-        classTime.add("12:00");
-        classTime.add("14:00");
-        classTime.add("20:00");
-
-        classCampus = new ArrayList<>();
-        classCampus.add("Darcy");
-        classCampus.add("Ceilândia");
-        classCampus.add("Gama"); */
+        this.classes = classes;
     }
 
     @Override
     public int getCount() {
-        //return turmas.size();
         return classes.size();
     }
 
@@ -93,29 +49,29 @@ public class ClassListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(R.layout.item_class, null);
 
-        classItem = classes.get(position);
-
         viewHolder.classCampus = view.findViewById(R.id.class_campus);
         viewHolder.classCode = view.findViewById(R.id.class_code);
         viewHolder.classTeacher = view.findViewById(R.id.class_teacher);
         viewHolder.classTime = view.findViewById(R.id.class_time);
         viewHolder.checkbox = view.findViewById(R.id.checkbox);
 
-        viewHolder.classCode.setText((String)classItem.get("code"));
-        viewHolder.classTeacher.setText((String)classItem.get("teacher"));
-        viewHolder.classCampus.setText((String)classItem.get("campus"));
-        viewHolder.classTime.setText((String)classItem.get("time"));
+        viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getCodeLetter());
+        viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacher());
+        viewHolder.classCampus.setText(((SubjectClass)this.getItem(position)).getCampus());
+        String[] schedules = ((SubjectClass)this.getItem(position)).getSchedules();
+        String s = schedules[0] + "\n" + schedules[1];
+        viewHolder.classTime.setText(s);
+        viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 
-        viewHolder.checkbox.setChecked((Boolean) classItem.get("check"));
-        viewHolder.checkbox.setTag(classItem);
+        viewHolder.checkbox.setTag(((SubjectClass)this.getItem(position)));
 
         viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CheckBox c = (CheckBox) v;
 
-                HashMap classItem = (HashMap) v.getTag();
-                classItem.put("check", c.isChecked());
+                SubjectClass subjectClass = (SubjectClass) v.getTag();
+                subjectClass.setSelected(c.isChecked());
             }
         });
 
