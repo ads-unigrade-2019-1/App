@@ -5,6 +5,7 @@ public class SubjectClass {
     private String teacher;
     private String campus;
     private String schedules;
+    private String subjectCode;
     private boolean isSelected;
 
     public SubjectClass(){
@@ -58,4 +59,11 @@ public class SubjectClass {
         this.campus = campus;
     }
 
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
 }

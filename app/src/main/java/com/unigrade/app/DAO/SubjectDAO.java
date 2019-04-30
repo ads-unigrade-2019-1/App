@@ -21,7 +21,7 @@ public class SubjectDAO extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = String.format("CREATE TABLE %s(" +
-                "code BIGINT NOT NULL PRIMARY KEY, " +
+                "code VARCHAR(255) NOT NULL PRIMARY KEY, " +
                 "name VARCHAR(255) NOT NULL, " +
                 "credits VARCHAR(255) NOT NULL)", table);
         db.execSQL(sql);

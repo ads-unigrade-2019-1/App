@@ -24,7 +24,7 @@ public class ClassDAO extends SQLiteOpenHelper {
                 "codeLetter VARCHAR(255) NOT NULL, " +
                 "teacher VARCHAR(255) NOT NULL, " +
                 "campus VARCHAR(255) NOT NULL," +
-                "subjectCode BIGINT NOT NULL" +
+                "subjectCode VARCHAR(255) NOT NULL" +
                 "FOREIGN KEY (subjectCode) " +
                 "REFERENCES subject(code)" +
                 ")", table);
