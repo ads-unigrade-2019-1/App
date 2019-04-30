@@ -14,6 +14,9 @@ import java.util.List;
 public class ClassDAO extends SQLiteOpenHelper {
     private String table = "classes";
 
+    //TODO Criar DAO para os horários das turmas
+    //TODO Criar horarios no banco de dados para cada turma
+
     public ClassDAO(Context context, int version) {
         super(context, "Unigrade", null, version);
     }
@@ -33,7 +36,7 @@ public class ClassDAO extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS " + table;
+        String sql = String.format("DROP TABLE IF EXISTS %s", table);
         db.execSQL(sql);
         onCreate(db);
     }
@@ -57,12 +60,30 @@ public class ClassDAO extends SQLiteOpenHelper {
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
             subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+            //TODO Adicionar Horário de cada turma
         }
-
+        cursor.close();
         return subjectsClass;
     }
 
-    public ContentValues getClassAttribute(SubjectClass subjectClass){
+    public void delete(SubjectClass subjectClass){
+        SQLiteDatabase db = getWritableDatabase();
+        String[] params = {subjectClass.getCodeLetter(),
+                           subjectClass.getSubjectCode()};
+        db.delete(table, "codeLetter = ? AND subjectCode = ?", params);
+    }
+
+    public void alter(SubjectClass subjectClass) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = getClassAttribute(subjectClass);
+
+        String[] params = {subjectClass.getCodeLetter(),
+                subjectClass.getSubjectCode()};
+
+        db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
+    }
+
+    private ContentValues getClassAttribute(SubjectClass subjectClass){
         ContentValues values = new ContentValues();
 
         values.put("codeLetter", subjectClass.getCodeLetter());
