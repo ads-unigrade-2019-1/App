@@ -7,6 +7,9 @@ public class SubjectClass {
     private String schedules;
     private boolean isSelected;
 
+    public SubjectClass(){
+    }
+
     public boolean isSelected() {
         return isSelected;
     }

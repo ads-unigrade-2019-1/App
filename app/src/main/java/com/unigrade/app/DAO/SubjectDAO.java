@@ -20,7 +20,10 @@ public class SubjectDAO extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = String.format("CREATE TABLE %s(code BIGINT NOT NULL PRIMARY KEY, name VARCHAR(255) NOT NULL, credits VARCHAR(255) NOT NULL)", table);
+        String sql = String.format("CREATE TABLE %s(" +
+                "code BIGINT NOT NULL PRIMARY KEY, " +
+                "name VARCHAR(255) NOT NULL, " +
+                "credits VARCHAR(255) NOT NULL)", table);
         db.execSQL(sql);
     }
 
@@ -49,7 +52,7 @@ public class SubjectDAO extends SQLiteOpenHelper {
             Subject subject = new Subject();
             subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
             subject.setName(cursor.getString(cursor.getColumnIndex("name")));
-            //subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
+            subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
         }
 
         return subjects;
@@ -75,7 +78,7 @@ public class SubjectDAO extends SQLiteOpenHelper {
 
         values.put("code", subject.getCode());
         values.put("name", subject.getName());
-        //values.put("credits", subject.getCredits());
+        values.put("credits", subject.getCredits());
         return values;
     }
 
