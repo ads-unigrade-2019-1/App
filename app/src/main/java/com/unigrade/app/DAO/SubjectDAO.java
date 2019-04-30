@@ -55,12 +55,13 @@ public class SubjectDAO extends SQLiteOpenHelper {
             subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
         }
 
+        cursor.close();
         return subjects;
     }
 
     public void delete(Subject subject){
         SQLiteDatabase db = getWritableDatabase();
-        String[] params = {subject.getCode().toString()};
+        String[] params = {subject.getCode()};
         db.delete(table, "code = ?", params);
     }
 
@@ -68,7 +69,7 @@ public class SubjectDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = getSubjectAttributes(subject);
 
-        String[] params = {subject.getCode().toString()};
+        String[] params = {subject.getCode()};
 
         db.update(table, values, "code = ?", params);
     }
