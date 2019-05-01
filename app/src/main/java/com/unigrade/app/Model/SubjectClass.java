@@ -31,6 +31,10 @@ public class SubjectClass {
         return parts;
     }
 
+    public String getSchedulesString() {
+        return schedules;
+    }
+
     public void setSchedules(String schedules) {
         this.schedules = schedules;
     }

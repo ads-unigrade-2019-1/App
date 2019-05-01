@@ -14,9 +14,6 @@ import java.util.List;
 public class ClassDAO extends SQLiteOpenHelper {
     private String table = "classes";
 
-    //TODO Criar DAO para os horários das turmas
-    //TODO Criar horarios no banco de dados para cada turma
-
     public ClassDAO(Context context, int version) {
         super(context, "Unigrade", null, version);
     }
@@ -28,7 +25,9 @@ public class ClassDAO extends SQLiteOpenHelper {
                 "teacher VARCHAR(255) NOT NULL, " +
                 "campus VARCHAR(255) NOT NULL," +
                 "subjectCode VARCHAR(255) NOT NULL" +
-                "FOREIGN KEY (subjectCode) " +
+                "schedules VARCHAR(255) NOT NULL" +
+                "CONSTRAINT PRIMARY KEY (codeLetter, subjectCode)" +
+                "CONSTRAINT FOREIGN KEY (subjectCode) " +
                 "REFERENCES subject(code)" +
                 ")", table);
         db.execSQL(sql);
@@ -60,7 +59,7 @@ public class ClassDAO extends SQLiteOpenHelper {
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
             subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
-            //TODO Adicionar Horário de cada turma
+            subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
         }
         cursor.close();
         return subjectsClass;
@@ -90,6 +89,7 @@ public class ClassDAO extends SQLiteOpenHelper {
         values.put("teacher", subjectClass.getTeacher());
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
+        values.put("schedules", subjectClass.getSchedulesString());
 
         return values;
     }
