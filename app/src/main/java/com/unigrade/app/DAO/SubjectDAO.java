@@ -42,13 +42,13 @@ public class SubjectDAO extends SQLiteOpenHelper {
         db.insert(table, null, values);
     }
 
-    public List<Subject> all(){
+    public ArrayList<Subject> all(){
         String sql = String.format("SELECT * from %s", table);
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery(sql, null);
 
-        List<Subject> subjects = new ArrayList<>();
+        ArrayList<Subject> subjects = new ArrayList<>();
         while (cursor.moveToNext()){
             Subject subject = new Subject();
             subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
