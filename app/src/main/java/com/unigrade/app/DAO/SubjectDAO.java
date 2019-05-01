@@ -25,6 +25,7 @@ public class SubjectDAO extends SQLiteOpenHelper {
                 "name VARCHAR(255) NOT NULL, " +
                 "credits VARCHAR(255) NOT NULL)", table);
         db.execSQL(sql);
+        insert(new Subject("123456", "Algotitmo e Programação de Comp"));
     }
 
     @Override

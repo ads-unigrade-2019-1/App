@@ -19,11 +19,12 @@ public class SubjectClass {
         isSelected = selected;
     }
 
-    public SubjectClass(String codeLetter, String teacher, String campus, String schedules){
+    public SubjectClass(String codeLetter, String teacher, String campus, String schedules, String subjectCode){
         this.codeLetter = codeLetter;
         this.teacher = teacher;
         this.campus = campus;
         this.schedules = schedules;
+        this.subjectCode = subjectCode;
     }
 
     public String[] getSchedules() {

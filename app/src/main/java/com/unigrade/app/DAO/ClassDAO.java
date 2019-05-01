@@ -31,6 +31,13 @@ public class ClassDAO extends SQLiteOpenHelper {
                 "REFERENCES subject(code)" +
                 ")", table);
         db.execSQL(sql);
+
+        insert(new SubjectClass(
+                "AA",
+                "Maurício",
+                "Darcy Ribeiro",
+                "[Ter 08h-10h, Qui 08h-10h]",
+                "123456"));
     }
 
     @Override
