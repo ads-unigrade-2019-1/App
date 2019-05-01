@@ -10,10 +10,10 @@ public class Subject implements Serializable {
     public Subject(){
     }
 
-    public Subject(String code, String name/*, String credits*/) {
+    public Subject(String code, String name, String credits) {
         this.code = code;
         this.name = name;
-        //this.credits = credits;
+        this.credits = credits;
     }
 
     public String getCode() {

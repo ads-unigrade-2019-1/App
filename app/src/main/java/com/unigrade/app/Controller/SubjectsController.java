@@ -41,14 +41,17 @@ public class SubjectsController {
             JSONArray jsonArray = new JSONArray(result);
             String name;
             String code;
+            String credits;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject c = jsonArray.getJSONObject(i);
 
                 name = c.getString("name");
                 code = c.getString("code");
+                //TODO Puxar da API
+                credits = "002-003-004-005";
 
-                Subject subject = new Subject(code, name);
+                Subject subject = new Subject(code, name, credits);
                 subjects.add(subject);
             }
 

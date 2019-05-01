@@ -4,11 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.unigrade.app.DAO.SubjectDAO;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
+
+import java.util.List;
 
 
 /**
@@ -30,6 +37,8 @@ public class UserSubjectsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private SubjectDAO subjectDAO;
 
     public UserSubjectsFragment() {
         // Required empty public constructor
@@ -66,7 +75,19 @@ public class UserSubjectsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_subjects, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
+
+        subjectDAO = new SubjectDAO(getActivity(), 1);
+
+        List<Subject> subjectsList;
+
+        subjectsList = subjectDAO.all();
+
+        ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
+        Log.d("Fragment", "List: " + subjectsList);
+        listSubjectsUser.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjectsList));
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

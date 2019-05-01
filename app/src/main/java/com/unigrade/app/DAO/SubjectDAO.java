@@ -25,7 +25,7 @@ public class SubjectDAO extends SQLiteOpenHelper {
                 "name VARCHAR(255) NOT NULL, " +
                 "credits VARCHAR(255) NOT NULL)", table);
         db.execSQL(sql);
-        insert(new Subject("123456", "Algotitmo e Programação de Comp"));
+        insert(new Subject("123456", "Algotitmo e Programação de Comp", "002-003-004-005"));
     }
 
     @Override
@@ -45,15 +45,17 @@ public class SubjectDAO extends SQLiteOpenHelper {
     public List<Subject> all(){
         String sql = String.format("SELECT * from %s", table);
         SQLiteDatabase db = getReadableDatabase();
+
         Cursor cursor = db.rawQuery(sql, null);
 
         List<Subject> subjects = new ArrayList<>();
-
         while (cursor.moveToNext()){
             Subject subject = new Subject();
             subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
             subject.setName(cursor.getString(cursor.getColumnIndex("name")));
             subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
+
+            subjects.add(subject);
         }
 
         cursor.close();
