@@ -5,61 +5,34 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassDAO extends SQLiteOpenHelper {
+public class ClassDAO {
     private String table = "classes";
+    private DAO dbHelper;
 
-    public ClassDAO(Context context, int version) {
-        super(context, "Unigrade", null, version);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String sql = String.format("CREATE TABLE %s(" +
-                "codeLetter VARCHAR(255) NOT NULL, " +
-                "teacher VARCHAR(255) NOT NULL, " +
-                "campus VARCHAR(255) NOT NULL," +
-                "subjectCode VARCHAR(255) NOT NULL" +
-                "schedules VARCHAR(255) NOT NULL" +
-                "CONSTRAINT PRIMARY KEY (codeLetter, subjectCode)" +
-                "CONSTRAINT FOREIGN KEY (subjectCode) " +
-                "REFERENCES subject(code)" +
-                ")", table);
-        db.execSQL(sql);
-
-        insert(new SubjectClass(
-                "AA",
-                "Maurício",
-                "Darcy Ribeiro",
-                "[Ter 08h-10h, Qui 08h-10h]",
-                "123456"));
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = String.format("DROP TABLE IF EXISTS %s", table);
-        db.execSQL(sql);
-        onCreate(db);
+    public ClassDAO(Context context) {
+        dbHelper = new DAO(context);
     }
 
     public void insert(SubjectClass subjectClass){
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = getClassAttribute(subjectClass);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        ContentValues values = getClassAttribute(subjectClass);
         db.insert(table, null, values);
     }
 
-    public List<SubjectClass> all(){
+    public ArrayList<SubjectClass> all(){
         String sql = String.format("SELECT * from %s", table);
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
 
-        List<SubjectClass> subjectsClass = new ArrayList<>();
+        ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
 
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
@@ -67,26 +40,55 @@ public class ClassDAO extends SQLiteOpenHelper {
             subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
             subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
             subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
+            subjectsClass.add(subjectClass);
         }
         cursor.close();
         return subjectsClass;
     }
 
     public void delete(SubjectClass subjectClass){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String[] params = {subjectClass.getCodeLetter(),
                            subjectClass.getSubjectCode()};
         db.delete(table, "codeLetter = ? AND subjectCode = ?", params);
     }
 
     public void alter(SubjectClass subjectClass) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = getClassAttribute(subjectClass);
 
-        String[] params = {subjectClass.getCodeLetter(),
-                subjectClass.getSubjectCode()};
+        String[] params = {subjectClass.getCodeLetter(), subjectClass.getSubjectCode()};
 
         db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
+    }
+
+    public ArrayList<SubjectClass> selectSubjectClasses(String subjectCode){
+        ArrayList<SubjectClass> classes = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);
+
+        ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
+
+        while (cursor.moveToNext()){
+            SubjectClass subjectClass = new SubjectClass();
+            subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
+            subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
+            subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+            subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
+            subjectsClass.add(subjectClass);
+        }
+        cursor.close();
+
+        return subjectsClass;
+    }
+
+    public void insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
+        for(SubjectClass subjectClass : subjectClassesList){
+            insert(subjectClass);
+        }
     }
 
     private ContentValues getClassAttribute(SubjectClass subjectClass){
@@ -97,6 +99,9 @@ public class ClassDAO extends SQLiteOpenHelper {
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
         values.put("schedules", subjectClass.getSchedulesString());
+        values.put("added", subjectClass.isSelected());
+
+        Log.d("ClassDAO ", "get(): " + values.toString());
 
         return values;
     }

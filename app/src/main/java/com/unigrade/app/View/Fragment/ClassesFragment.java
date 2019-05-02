@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.unigrade.app.Controller.ClassesController;
+import com.unigrade.app.DAO.ClassDAO;
+import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.View.Activity.MainActivity;
@@ -81,6 +83,21 @@ public class ClassesFragment extends Fragment {
         classesList = v.findViewById(R.id.class_list);
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
+
+        SubjectDAO subjectDAO = new SubjectDAO(getActivity());
+        ClassDAO classDAO = new ClassDAO(getActivity());
+
+        //Exemplos de como usar as classes DAO
+        subjectDAO.insert(new Subject("124564", "Prog e Alg de Comp", "004 - 005 - 001 - 006"));
+        classDAO.insert(new SubjectClass("AA", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "124564"));
+        classDAO.insert(new SubjectClass("BB", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "124564"));
+        classDAO.insert(new SubjectClass("BB", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "123456"));
+
+        ArrayList<SubjectClass> list = new ArrayList<>();
+        list.add(new SubjectClass("AA", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "654321"));
+        list.add(new SubjectClass("AA", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "987654"));
+        classDAO.insertClassesArray(list);
+        //Fim dos Exemplos
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 

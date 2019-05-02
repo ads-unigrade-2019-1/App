@@ -11,40 +11,23 @@ import com.unigrade.app.Model.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectDAO extends SQLiteOpenHelper {
+public class SubjectDAO {
     private String table = "subjects";
+    private DAO dbHelper;
 
-    public SubjectDAO(Context context, int version) {
-        super(context, "Unigrade", null, version);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String sql = String.format("CREATE TABLE %s(" +
-                "code VARCHAR(255) NOT NULL PRIMARY KEY, " +
-                "name VARCHAR(255) NOT NULL, " +
-                "credits VARCHAR(255) NOT NULL)", table);
-        db.execSQL(sql);
-        insert(new Subject("123456", "Algotitmo e Programação de Comp", "002-003-004-005"));
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS " + table;
-        db.execSQL(sql);
-        onCreate(db);
+    public SubjectDAO(Context context){
+        dbHelper = new DAO(context);
     }
 
     public void insert(Subject subject){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = getSubjectAttributes(subject);
-
         db.insert(table, null, values);
     }
 
     public ArrayList<Subject> all(){
         String sql = String.format("SELECT * from %s", table);
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(sql, null);
 
@@ -63,13 +46,13 @@ public class SubjectDAO extends SQLiteOpenHelper {
     }
 
     public void delete(Subject subject){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String[] params = {subject.getCode()};
         db.delete(table, "code = ?", params);
     }
 
     public void alter(Subject subject) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = getSubjectAttributes(subject);
 
         String[] params = {subject.getCode()};

@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.unigrade.app.DAO.ClassDAO;
 import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
+import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
 
@@ -77,11 +79,15 @@ public class UserSubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
 
-        subjectDAO = new SubjectDAO(getActivity(), 1);
+        subjectDAO = new SubjectDAO(getActivity());
+        ClassDAO classDAO = new ClassDAO(getActivity());
 
-        ArrayList<Subject> subjectsList;
+        ArrayList<Subject> subjectsList = subjectDAO.all();
+        ArrayList<SubjectClass> subjectClass = classDAO.selectSubjectClasses("124564");
+        ArrayList<SubjectClass> allClasses =  classDAO.all();
 
-        subjectsList = subjectDAO.all();
+        Log.d("UserSubjectsFragment", "allClasses: " + allClasses);
+        Log.d("UserSubjectsFragment", "subjectsClass: " + subjectClass);
 
         ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
         listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));
