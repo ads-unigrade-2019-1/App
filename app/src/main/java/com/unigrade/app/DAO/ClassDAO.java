@@ -4,13 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ClassDAO {
     private String table = "classes";
@@ -20,91 +19,143 @@ public class ClassDAO {
         dbHelper = new DAO(context);
     }
 
-    public void insert(SubjectClass subjectClass){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues values = getClassAttribute(subjectClass);
-        db.insert(table, null, values);
+    public boolean insert(SubjectClass subjectClass){
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = getClassAttribute(subjectClass);
+            db.insert(table, null, values);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public ArrayList<SubjectClass> all(){
         String sql = String.format("SELECT * from %s", table);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
+        SQLiteDatabase db;
+        try {
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
 
+        Cursor cursor = db.rawQuery(sql, null);
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
 
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
-            subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-            subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-            subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
-            subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
-
+            try {
+                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
+                subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
+                subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+                subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+            } catch (SQLiteException e){
+                e.printStackTrace();
+                return null;
+            }
             subjectsClass.add(subjectClass);
         }
         cursor.close();
         return subjectsClass;
     }
 
-    public void delete(SubjectClass subjectClass){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String[] params = {subjectClass.getCodeLetter(),
-                           subjectClass.getSubjectCode()};
-        db.delete(table, "codeLetter = ? AND subjectCode = ?", params);
+    public boolean delete(SubjectClass subjectClass){
+        try{
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            String[] params = {subjectClass.getCodeLetter(),
+                               subjectClass.getSubjectCode()};
+            db.delete(table, "codeLetter = ? AND subjectCode = ?", params);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public void alter(SubjectClass subjectClass) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = getClassAttribute(subjectClass);
+    public boolean alter(SubjectClass subjectClass) {
+        try{
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = getClassAttribute(subjectClass);
 
-        String[] params = {subjectClass.getCodeLetter(), subjectClass.getSubjectCode()};
+            String[] params = {subjectClass.getCodeLetter(), subjectClass.getSubjectCode()};
 
-        db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
+            db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
     public SubjectClass getClass(String codeLetter, String subjectCode){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db;
+        try {
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
 
         Cursor cursor = db.query(table, null, "subjectCode=? AND codeLetter=?", new String[]{subjectCode, codeLetter}, null, null, null);
         cursor.moveToFirst();
 
         SubjectClass subjectClass = new SubjectClass();
-        subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-        subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-        subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
-        subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
-
-        cursor.close();
-
-        return subjectClass;
-    }
-
-    public ArrayList<SubjectClass> getSubjectClasses(String subjectCode){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        Cursor cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);
-
-        ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
-
-        while (cursor.moveToNext()){
-            SubjectClass subjectClass = new SubjectClass();
+        try {
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
             subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
             subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
-
-            subjectsClass.add(subjectClass);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
         }
         cursor.close();
+        return subjectClass;
+    }
 
+    public ArrayList<SubjectClass> getSubjectClasses(String subjectCode){
+        SQLiteDatabase db;
+        Cursor cursor;
+        try {
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
+
+        try{
+            cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);
+            while (cursor.moveToNext()){
+                SubjectClass subjectClass = new SubjectClass();
+                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
+                subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
+                subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+                subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
+                subjectsClass.add(subjectClass);
+            }
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
+        cursor.close();
         return subjectsClass;
     }
 
-    public void insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
+    public boolean insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
         for(SubjectClass subjectClass : subjectClassesList){
-            insert(subjectClass);
+            try {
+                insert(subjectClass);
+            } catch (SQLiteException e){
+                e.printStackTrace();
+                return false;
+            }
         }
+        return true;
     }
 
     private ContentValues getClassAttribute(SubjectClass subjectClass){

@@ -79,21 +79,8 @@ public class UserSubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
 
-        //Exemplos de como usar as classes DAO
         subjectDAO = new SubjectDAO(getActivity());
-        ClassDAO classDAO = new ClassDAO(getActivity());
-
         ArrayList<Subject> subjectsList = subjectDAO.all();
-        ArrayList<SubjectClass> subjectClass = classDAO.getSubjectClasses("124564");
-        ArrayList<SubjectClass> allClasses =  classDAO.all();
-        SubjectClass resultClass = classDAO.getClass("AA", "124564");
-        Subject subject = subjectDAO.getSubject("124564");
-
-        Log.d("UserSubjectsFragment", "allClasses: " + allClasses);
-        Log.d("UserSubjectsFragment", "subjectsClass: " + subjectClass);
-        Log.d("UserSubjectsFragment", "class: " + resultClass);
-        Log.d("UserSubjectsFragment", "subject: " + subject);
-        //Fim de exemplos
 
         ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
         listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));

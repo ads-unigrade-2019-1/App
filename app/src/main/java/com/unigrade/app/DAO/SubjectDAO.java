@@ -4,12 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteException;
 
 import com.unigrade.app.Model.Subject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SubjectDAO {
     private String table = "subjects";
@@ -19,25 +18,41 @@ public class SubjectDAO {
         dbHelper = new DAO(context);
     }
 
-    public void insert(Subject subject){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = getSubjectAttributes(subject);
-        db.insert(table, null, values);
+    public boolean insert(Subject subject){
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = getSubjectAttributes(subject);
+            db.insert(table, null, values);
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public ArrayList<Subject> all(){
         String sql = String.format("SELECT * from %s", table);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db;
+
+        try{
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
 
         Cursor cursor = db.rawQuery(sql, null);
-
         ArrayList<Subject> subjects = new ArrayList<>();
         while (cursor.moveToNext()){
             Subject subject = new Subject();
-            subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
-            subject.setName(cursor.getString(cursor.getColumnIndex("name")));
-            subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
-
+            try{
+                subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
+                subject.setName(cursor.getString(cursor.getColumnIndex("name")));
+                subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
+            } catch (SQLiteException e){
+                e.printStackTrace();
+                return null;
+            }
             subjects.add(subject);
         }
 
@@ -45,31 +60,54 @@ public class SubjectDAO {
         return subjects;
     }
 
-    public void delete(Subject subject){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String[] params = {subject.getCode()};
-        db.delete(table, "code = ?", params);
+    public boolean delete(Subject subject){
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            String[] params = {subject.getCode()};
+            db.delete(table, "code = ?", params);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public void alter(Subject subject) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = getSubjectAttributes(subject);
+    public boolean alter(Subject subject) {
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = getSubjectAttributes(subject);
 
-        String[] params = {subject.getCode()};
+            String[] params = {subject.getCode()};
 
-        db.update(table, values, "code = ?", params);
+            db.update(table, values, "code = ?", params);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public Subject getSubject(String code){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db;
+        try {
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
 
         Cursor cursor = db.query(table, null, "code=?", new String[]{code}, null, null, null);
         cursor.moveToFirst();
 
         Subject subject = new Subject();
-        subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
-        subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
-        subject.setName(cursor.getString(cursor.getColumnIndex("name")));
+        try {
+            subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
+            subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
+            subject.setName(cursor.getString(cursor.getColumnIndex("name")));
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }
 
         cursor.close();
         return subject;

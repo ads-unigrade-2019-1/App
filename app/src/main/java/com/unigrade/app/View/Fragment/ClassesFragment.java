@@ -87,18 +87,6 @@ public class ClassesFragment extends Fragment {
         SubjectDAO subjectDAO = new SubjectDAO(getActivity());
         ClassDAO classDAO = new ClassDAO(getActivity());
 
-        //Exemplos de como usar as classes DAO
-        subjectDAO.insert(new Subject("124564", "Prog e Alg de Comp", "004 - 005 - 001 - 006"));
-        classDAO.insert(new SubjectClass("AA", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "124564"));
-        classDAO.insert(new SubjectClass("BB", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "124564"));
-        classDAO.insert(new SubjectClass("BB", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "123456"));
-
-        ArrayList<SubjectClass> list = new ArrayList<>();
-        list.add(new SubjectClass("AA", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "654321"));
-        list.add(new SubjectClass("AA", "Maurício Serrano", "Darcy Ribeiro", "8h-10h 10h-12h Seg", "987654"));
-        classDAO.insertClassesArray(list);
-        //Fim dos Exemplos
-
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
         callServer();
