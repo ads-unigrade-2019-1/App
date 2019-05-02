@@ -4,10 +4,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -90,6 +93,24 @@ public class ClassesFragment extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
         callServer();
+
+
+        classesList.setItemsCanFocus(false);
+
+        classesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox cb = view.findViewById(R.id.checkbox);
+
+                if(!cb.isChecked())
+                    cb.setChecked(true);
+                else
+                    cb.setChecked(false);
+
+
+
+            }
+        });
 
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
