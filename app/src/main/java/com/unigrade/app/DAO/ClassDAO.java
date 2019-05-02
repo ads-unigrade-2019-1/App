@@ -62,9 +62,25 @@ public class ClassDAO {
 
         db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
     }
+    
+    public SubjectClass getClass(String codeLetter, String subjectCode){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-    public ArrayList<SubjectClass> selectSubjectClasses(String subjectCode){
-        ArrayList<SubjectClass> classes = new ArrayList<>();
+        Cursor cursor = db.query(table, null, "subjectCode=? AND codeLetter=?", new String[]{subjectCode, codeLetter}, null, null, null);
+        cursor.moveToFirst();
+
+        SubjectClass subjectClass = new SubjectClass();
+        subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
+        subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
+        subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+        subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
+        cursor.close();
+
+        return subjectClass;
+    }
+
+    public ArrayList<SubjectClass> getSubjectClasses(String subjectCode){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);

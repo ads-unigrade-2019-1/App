@@ -60,6 +60,21 @@ public class SubjectDAO {
         db.update(table, values, "code = ?", params);
     }
 
+    public Subject getSubject(String code){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(table, null, "code=?", new String[]{code}, null, null, null);
+        cursor.moveToFirst();
+
+        Subject subject = new Subject();
+        subject.setCode(cursor.getString(cursor.getColumnIndex("code")));
+        subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
+        subject.setName(cursor.getString(cursor.getColumnIndex("name")));
+
+        cursor.close();
+        return subject;
+    }
+
     private ContentValues getSubjectAttributes(Subject subject){
         ContentValues values = new ContentValues();
 
