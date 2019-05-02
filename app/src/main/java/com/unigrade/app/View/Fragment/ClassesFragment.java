@@ -75,7 +75,7 @@ public class ClassesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_classes, container, false);
 
         Bundle bundle = getArguments();
-        Subject subject = (Subject) bundle.getSerializable("subject");
+        final Subject subject = (Subject) bundle.getSerializable("subject");
 
         tvClassTitle = v.findViewById(R.id.class_title);
         tvClassCredits = v.findViewById(R.id.class_credits);
@@ -87,8 +87,8 @@ public class ClassesFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        SubjectDAO subjectDAO = new SubjectDAO(getActivity());
-        ClassDAO classDAO = new ClassDAO(getActivity());
+        final SubjectDAO subjectDAO = new SubjectDAO(getActivity());
+        final ClassDAO classDAO = new ClassDAO(getActivity());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
@@ -102,13 +102,23 @@ public class ClassesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckBox cb = view.findViewById(R.id.checkbox);
 
-                if(!cb.isChecked())
+                SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
+                sc.setSelected(cb.isChecked());
+
+                if(!cb.isChecked()){
                     cb.setChecked(true);
-                else
+                    subjectDAO.insert(subject);
+                    for(SubjectClass c: classes)
+                        classDAO.insert(c);
+
+                }
+                else {
                     cb.setChecked(false);
+                    subjectDAO.delete(subject);
+                    for(SubjectClass c: classes)
+                        classDAO.delete(c);
 
-
-
+                }
             }
         });
 

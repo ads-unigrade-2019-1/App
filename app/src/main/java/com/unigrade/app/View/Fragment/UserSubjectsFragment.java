@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.unigrade.app.DAO.ClassDAO;
@@ -18,7 +19,10 @@ import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import androidx.navigation.Navigation;
 
 
 /**
@@ -84,6 +88,15 @@ public class UserSubjectsFragment extends Fragment {
 
         ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
         listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));
+
+        listSubjectsUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
+            }
+        });
 
         return view;
     }
