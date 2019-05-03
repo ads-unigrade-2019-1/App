@@ -52,14 +52,13 @@ public class ClassesController {
                 professor = c.getString("teacher");
                 campus = c.getString("campus");
                 schedules = c.getString("time");
-                subjectCode = "123456";
 
                 SubjectClass subjectClass = new SubjectClass(
                         codeLetter,
                         professor,
                         campus,
                         schedules,
-                        subjectCode
+                        null
                 );
                 classes.add(subjectClass);
             }

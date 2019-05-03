@@ -112,22 +112,26 @@ public class ClassesFragment extends Fragment {
                 CheckBox cb = view.findViewById(R.id.checkbox);
 
                 SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
-                sc.setSelected(cb.isChecked());
 
                 if(!cb.isChecked()){
                     cb.setChecked(true);
+                    sc.setSelected(cb.isChecked());
                     subjectDAO.insert(subject);
-                    for(SubjectClass c: classes)
+                    for(SubjectClass c: classes) {
+                        c.setSubjectCode(subject.getCode());
                         classDAO.insert(c);
+                    }
 
-                }
-                else {
+                } else {
                     cb.setChecked(false);
+                    sc.setSelected(cb.isChecked());
                     subjectDAO.delete(subject);
                     for(SubjectClass c: classes)
                         classDAO.delete(c);
 
                 }
+
+                Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
             }
         });
 
