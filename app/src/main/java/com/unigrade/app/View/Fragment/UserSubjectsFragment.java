@@ -93,6 +93,7 @@ public class UserSubjectsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("caller", "usersubjects");
                 bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
                 Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
             }

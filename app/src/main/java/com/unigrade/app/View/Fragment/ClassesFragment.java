@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unigrade.app.Controller.ClassesController;
 import com.unigrade.app.DAO.ClassDAO;
@@ -39,6 +40,7 @@ public class ClassesFragment extends Fragment {
     private Button btnReload;
     private TextView tvClassCredits;
     private TextView tvClassTitle;
+    private String caller;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -75,6 +77,7 @@ public class ClassesFragment extends Fragment {
 
         Bundle bundle = getArguments();
         final Subject subject = (Subject) bundle.getSerializable("subject");
+        caller = (String) bundle.getSerializable("caller");
 
         tvClassTitle = v.findViewById(R.id.class_title);
         tvClassCredits = v.findViewById(R.id.class_credits);
@@ -91,7 +94,11 @@ public class ClassesFragment extends Fragment {
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
-        callServer();
+        if(caller.equals("subjects")){
+            callServer();
+        } else if (caller.equals("usersubjects")){
+            callDatabase();
+        }
 
 
         classesList.setItemsCanFocus(false);
@@ -144,6 +151,10 @@ public class ClassesFragment extends Fragment {
             noInternet.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private void callDatabase(){
+        Toast.makeText(getActivity(),"Banco", Toast.LENGTH_SHORT).show();
     }
 
     public interface OnFragmentInteractionListener {
