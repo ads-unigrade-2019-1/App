@@ -32,7 +32,6 @@ import java.util.ArrayList;
 public class ClassesFragment extends Fragment {
 
     private ArrayList<SubjectClass> classes = new ArrayList<>();
-    private ClassListAdapter adapter;
     private ProgressBar progressBar;
     private LinearLayout noInternet;
     private AsyncTask getClassesTask;
@@ -150,5 +149,14 @@ public class ClassesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(getClassesTask != null && getClassesTask.getStatus() != AsyncTask.Status.FINISHED) {
+            getClassesTask.cancel(true);
+        }
     }
 }
