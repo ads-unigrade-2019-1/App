@@ -16,7 +16,7 @@ public class SubjectClass {
     }
 
     public void setSelected(boolean selected) {
-        isSelected = selected;
+        this.isSelected = selected;
     }
 
     public SubjectClass(String codeLetter, String teacher, String campus, String schedules, String subjectCode){

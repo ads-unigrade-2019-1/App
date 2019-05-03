@@ -135,6 +135,7 @@ public class ClassDAO {
                 subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
                 subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 subjectsClass.add(subjectClass);
             }
@@ -166,7 +167,7 @@ public class ClassDAO {
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
         values.put("schedules", subjectClass.getSchedulesString());
-        values.put("added", subjectClass.isSelected());
+        values.put("added", String.valueOf(subjectClass.isSelected()));
 
         Log.d("ClassDAO ", "get(): " + values.toString());
 
