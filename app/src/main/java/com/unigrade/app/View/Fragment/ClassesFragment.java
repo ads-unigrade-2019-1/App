@@ -41,6 +41,9 @@ public class ClassesFragment extends Fragment {
     private TextView tvClassCredits;
     private TextView tvClassTitle;
     private String caller;
+    private Subject subject;
+    private ClassDAO classDAO;
+    private SubjectDAO subjectDAO;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -76,7 +79,7 @@ public class ClassesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_classes, container, false);
 
         Bundle bundle = getArguments();
-        final Subject subject = (Subject) bundle.getSerializable("subject");
+        subject = (Subject) bundle.getSerializable("subject");
         caller = (String) bundle.getSerializable("caller");
 
         tvClassTitle = v.findViewById(R.id.class_title);
@@ -89,8 +92,8 @@ public class ClassesFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        final SubjectDAO subjectDAO = new SubjectDAO(getActivity());
-        final ClassDAO classDAO = new ClassDAO(getActivity());
+        subjectDAO = new SubjectDAO(getActivity());
+        classDAO = new ClassDAO(getActivity());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
@@ -154,7 +157,12 @@ public class ClassesFragment extends Fragment {
     }
 
     private void callDatabase(){
-        Toast.makeText(getActivity(),"Banco", Toast.LENGTH_SHORT).show();
+        classes = classDAO.getSubjectClasses(subject.getCode());
+        Log.i("N#TURMAS", String.valueOf(classes.size()));
+
+        classesList.setAdapter(
+                new ClassListAdapter(classes, getActivity())
+        );
     }
 
     public interface OnFragmentInteractionListener {
