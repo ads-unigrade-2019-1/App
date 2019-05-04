@@ -103,37 +103,8 @@ public class ClassesFragment extends Fragment {
             callDatabase();
         }
 
-
         classesList.setItemsCanFocus(false);
-
-        classesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckBox cb = view.findViewById(R.id.checkbox);
-
-                SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
-
-                if(!cb.isChecked()){
-                    cb.setChecked(true);
-                    sc.setSelected(cb.isChecked());
-                    subjectDAO.insert(subject);
-                    for(SubjectClass c: classes) {
-                        c.setSubjectCode(subject.getCode());
-                        classDAO.insert(c);
-                    }
-
-                } else {
-                    cb.setChecked(false);
-                    sc.setSelected(cb.isChecked());
-                    subjectDAO.delete(subject);
-                    for(SubjectClass c: classes)
-                        classDAO.delete(c);
-
-                }
-
-                Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
-            }
-        });
+        classesList.setOnItemClickListener(getItemListener());
 
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +138,65 @@ public class ClassesFragment extends Fragment {
         classesList.setAdapter(
                 new ClassListAdapter(classes, getActivity())
         );
+    }
+
+    private AdapterView.OnItemClickListener getItemListener(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox cb = view.findViewById(R.id.checkbox);
+
+                SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
+
+                if (!cb.isChecked()) {
+                    cb.setChecked(true);
+                    sc.setSelected(true);
+                    insertIntoDatabase(sc);
+                    Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
+                } else {
+                    cb.setChecked(false);
+                    removeFromDatabase(sc);
+                    Log.i("REMOVED", sc.getTeacher() + " " + sc.isSelected());
+                }
+
+            }
+        };
+    }
+
+    private void insertIntoDatabase(SubjectClass sc){
+        if (!subjectDAO.isSubjectOnDB(subject)){
+            subjectDAO.insert(subject);
+            for (SubjectClass c : classes) {
+                c.setSubjectCode(subject.getCode());
+                classDAO.insert(c);
+            }
+            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
+        } else {
+            sc.setSelected(true);
+            classDAO.alter(sc);
+            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
+        }
+    }
+
+    private void removeFromDatabase(SubjectClass sc){
+        if (isLonelyAdded(sc)){
+            subjectDAO.delete(subject);
+            for (SubjectClass c : classes)
+                classDAO.delete(c);
+            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
+        } else {
+            sc.setSelected(false);
+            classDAO.alter(sc);
+            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
+        }
+    }
+
+    private boolean isLonelyAdded(SubjectClass sc){
+        for (SubjectClass c : classes)
+            if (c.isSelected() && c != sc)
+                return false;
+
+        return true;
     }
 
     public interface OnFragmentInteractionListener {
