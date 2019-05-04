@@ -88,9 +88,9 @@ public class SubjectDAO {
         return true;
     }
 
-    public boolean isSubjectOnDB(Subject s) {
+    public boolean isSubjectOnDB(String code) {
 
-        String sql = String.format("SELECT * FROM %s WHERE code=%S", table, s.getCode());
+        String sql = String.format("SELECT * FROM %s WHERE code=%s", table, code);
         SQLiteDatabase db;
 
         try{

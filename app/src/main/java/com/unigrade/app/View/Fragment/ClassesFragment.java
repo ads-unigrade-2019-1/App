@@ -123,7 +123,7 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(this).execute();
+            getClassesTask = new GetClasses(this, classDAO, subjectDAO).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -169,7 +169,7 @@ public class ClassesFragment extends Fragment {
     }
 
     private void insertIntoDatabase(SubjectClass sc){
-        if (!subjectDAO.isSubjectOnDB(subject)){
+        if (!subjectDAO.isSubjectOnDB(subject.getCode())){
             subjectDAO.insert(subject);
             for (SubjectClass c : classes)
                 classDAO.insert(c);

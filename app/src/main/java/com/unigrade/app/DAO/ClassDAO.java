@@ -147,6 +147,32 @@ public class ClassDAO {
         return subjectsClass;
     }
 
+    public boolean isClassOnDB(SubjectClass sc) {
+
+        String sql = String.format(
+                "SELECT * FROM %s WHERE subjectCode=%s and codeLetter=%s",
+                table, sc.getSubjectCode(), sc.getCodeLetter()
+        );
+        SQLiteDatabase db;
+
+        try{
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+
+    }
+
     public boolean insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
         for(SubjectClass subjectClass : subjectClassesList){
             try {
