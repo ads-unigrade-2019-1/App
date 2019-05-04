@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.unigrade.app.Model.Subject;
+import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class SubjectDAO {
     }
 
     public ArrayList<Subject> all(){
-        String sql = String.format("SELECT * from %s", table);
+        String sql = String.format("SELECT * FROM %s", table);
         SQLiteDatabase db;
 
         try{
@@ -85,6 +86,29 @@ public class SubjectDAO {
             return false;
         }
         return true;
+    }
+
+    public boolean isSubjectOnDB(Subject s) {
+
+        String sql = String.format("SELECT * FROM %s WHERE code=%S", table, s.getCode());
+        SQLiteDatabase db;
+
+        try{
+            db = dbHelper.getReadableDatabase();
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+
     }
 
     public Subject getSubject(String code){
