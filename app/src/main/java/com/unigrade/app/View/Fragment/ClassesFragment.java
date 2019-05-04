@@ -132,9 +132,10 @@ public class ClassesFragment extends Fragment {
     }
 
     private void callDatabase(){
+        Log.i("CALLDATABASE", "New adapter added");
         classes = classDAO.getSubjectClasses(subject.getCode());
-        Log.i("N#TURMAS", String.valueOf(classes.size()));
-
+        for (SubjectClass sc: classes)
+            Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
         classesList.setAdapter(
                 new ClassListAdapter(classes, getActivity())
         );
@@ -146,6 +147,9 @@ public class ClassesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckBox cb = view.findViewById(R.id.checkbox);
 
+                for (SubjectClass c : classes)
+                    c.setSubjectCode(subject.getCode());
+
                 SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
 
                 if (!cb.isChecked()) {
@@ -155,6 +159,7 @@ public class ClassesFragment extends Fragment {
                     Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
                 } else {
                     cb.setChecked(false);
+                    sc.setSelected(false);
                     removeFromDatabase(sc);
                     Log.i("REMOVED", sc.getTeacher() + " " + sc.isSelected());
                 }
@@ -166,28 +171,24 @@ public class ClassesFragment extends Fragment {
     private void insertIntoDatabase(SubjectClass sc){
         if (!subjectDAO.isSubjectOnDB(subject)){
             subjectDAO.insert(subject);
-            for (SubjectClass c : classes) {
-                c.setSubjectCode(subject.getCode());
+            for (SubjectClass c : classes)
                 classDAO.insert(c);
-            }
-            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
-        } else {
-            sc.setSelected(true);
-            classDAO.alter(sc);
             Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
+        } else {
+            classDAO.alter(sc);
+            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
         }
     }
 
     private void removeFromDatabase(SubjectClass sc){
         if (isLonelyAdded(sc)){
-            subjectDAO.delete(subject);
             for (SubjectClass c : classes)
                 classDAO.delete(c);
-            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
+            subjectDAO.delete(subject);
+            Log.i("LONELY", subject.getCode() + " "+ sc.getTeacher());
         } else {
-            sc.setSelected(false);
             classDAO.alter(sc);
-            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
+            Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeacher());
         }
     }
 
