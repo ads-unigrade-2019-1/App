@@ -97,12 +97,14 @@ public class UserSubjectsFragment extends Fragment {
                 removeSubject = true;
                 for (int j = 0; j < verifyList.size(); j++) {
                     if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
+                        subjectDAO.alter(verifyList.get(j));
                         subjectsList.set(i, verifyList.get(j));
                         removeSubject = false;
                         break;
                     }
                 }
                 if (removeSubject == true) {
+                    subjectDAO.delete(subjectsList.get(i));
                     subjectsList.remove(i);
                 }
             }
