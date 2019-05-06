@@ -85,11 +85,23 @@ public class UserSubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
 
-//        subjectDAO = new SubjectDAO(getActivity());
-//        ArrayList<Subject> subjectsList = subjectDAO.all();
+        subjectDAO = new SubjectDAO(getActivity());
+        ArrayList<Subject> subjectsList = subjectDAO.all();
 
+        try{
+            ArrayList<Subject> verifyList = ((MainActivity) getActivity()).getSubjectsList();
 
-        ArrayList<Subject> subjectsList = ((MainActivity) getActivity()).getSubjectsList();
+            for (int i = 0; i < subjectsList.size(); i++) {
+                for (int j = 0; j < verifyList.size(); j++) {
+                    if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
+                        subjectsList.set(i, verifyList.get(j));
+                        break;
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
         listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));
