@@ -17,7 +17,9 @@ import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
+import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
+import com.unigrade.app.View.AsyncTask.GetSubjects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -83,8 +85,11 @@ public class UserSubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
 
-        subjectDAO = new SubjectDAO(getActivity());
-        ArrayList<Subject> subjectsList = subjectDAO.all();
+//        subjectDAO = new SubjectDAO(getActivity());
+//        ArrayList<Subject> subjectsList = subjectDAO.all();
+
+
+        ArrayList<Subject> subjectsList = ((MainActivity) getActivity()).getSubjectsList();
 
         ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
         listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.SubjectsFragment;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
@@ -24,6 +25,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements SubjectsFragment.OnFragmentInteractionListener,
                     CourseFragment.OnFragmentInteractionListener,
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity
         UserSubjectsFragment.OnFragmentInteractionListener,
         TimetablesFragment.OnFragmentInteractionListener,
                     ClassesFragment.OnFragmentInteractionListener{
+
+    private ArrayList<Subject> subjectsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,4 +97,13 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
     }
+
+    public void setSubjectsList(ArrayList<Subject> list){
+        this.subjectsList = list;
+    }
+
+    public ArrayList<Subject> getSubjectsList(){
+        return this.subjectsList;
+    }
+
 }
