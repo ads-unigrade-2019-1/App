@@ -3,12 +3,28 @@ package com.unigrade.app.View.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import com.unigrade.app.DAO.ClassDAO;
+import com.unigrade.app.DAO.SubjectDAO;
+import com.unigrade.app.Model.Subject;
+import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
+import com.unigrade.app.View.Activity.MainActivity;
+import com.unigrade.app.View.Adapter.SubjectListAdapter;
+import com.unigrade.app.View.AsyncTask.GetSubjects;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import androidx.navigation.Navigation;
 
 
 /**
@@ -31,6 +47,8 @@ public class UserSubjectsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private SubjectDAO subjectDAO;
+
     public UserSubjectsFragment() {
         // Required empty public constructor
     }
@@ -52,7 +70,6 @@ public class UserSubjectsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +80,52 @@ public class UserSubjectsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_subjects, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
+
+        boolean removeSubject;
+
+        subjectDAO = new SubjectDAO(getActivity());
+        ArrayList<Subject> subjectsList = subjectDAO.all();
+
+        try{
+            ArrayList<Subject> verifyList = ((MainActivity) getActivity()).getSubjectsList();
+
+            for (int i = 0; i < subjectsList.size(); i++) {
+                removeSubject = true;
+                for (int j = 0; j < verifyList.size(); j++) {
+                    if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
+                        subjectDAO.alter(verifyList.get(j));
+                        subjectsList.set(i, verifyList.get(j));
+                        removeSubject = false;
+                        break;
+                    }
+                }
+                if (removeSubject == true) {
+                    subjectDAO.delete(subjectsList.get(i));
+                    subjectsList.remove(i);
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
+        listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));
+
+        listSubjectsUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("caller", "usersubjects");
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

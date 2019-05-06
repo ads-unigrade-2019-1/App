@@ -5,26 +5,35 @@ public class SubjectClass {
     private String teacher;
     private String campus;
     private String schedules;
+    private String subjectCode;
     private boolean isSelected;
+
+    public SubjectClass(){
+    }
 
     public boolean isSelected() {
         return isSelected;
     }
 
     public void setSelected(boolean selected) {
-        isSelected = selected;
+        this.isSelected = selected;
     }
 
-    public SubjectClass(String codeLetter, String teacher, String campus, String schedules){
+    public SubjectClass(String codeLetter, String teacher, String campus, String schedules, String subjectCode){
         this.codeLetter = codeLetter;
         this.teacher = teacher;
         this.campus = campus;
         this.schedules = schedules;
+        this.subjectCode = subjectCode;
     }
 
     public String[] getSchedules() {
         String[] parts = schedules.split("[|]|,");
         return parts;
+    }
+
+    public String getSchedulesString() {
+        return schedules;
     }
 
     public void setSchedules(String schedules) {
@@ -55,4 +64,11 @@ public class SubjectClass {
         this.campus = campus;
     }
 
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
 }

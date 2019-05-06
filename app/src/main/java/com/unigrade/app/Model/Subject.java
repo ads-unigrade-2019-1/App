@@ -5,10 +5,15 @@ import java.io.Serializable;
 public class Subject implements Serializable {
     private String code;
     private String name;
+    private String credits;
 
-    public Subject(String code, String name) {
+    public Subject(){
+    }
+
+    public Subject(String code, String name, String credits) {
         this.code = code;
         this.name = name;
+        this.credits = credits;
     }
 
     public String getCode() {
@@ -27,5 +32,11 @@ public class Subject implements Serializable {
         this.name = name;
     }
 
+    public String getCredits() {
+        return credits;
+    }
 
+    public void setCredits(String credits) {
+        this.credits = credits;
+    }
 }

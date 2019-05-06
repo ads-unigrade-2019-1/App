@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import com.unigrade.app.Controller.ClassesController;
+import com.unigrade.app.DAO.ClassDAO;
+import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.View.Adapter.ClassListAdapter;
 import com.unigrade.app.View.Fragment.ClassesFragment;
@@ -14,9 +16,12 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
 
     private ClassesController classesController;
     private ClassesFragment classesFragment;
+    private ClassDAO classDAO;
+    private SubjectDAO subjectDAO;
 
-    public GetClasses(ClassesFragment classesFragment){
+    public GetClasses(ClassesFragment classesFragment, ClassDAO classDAO, SubjectDAO subjectDAO){
         this.classesFragment = classesFragment;
+        this.classDAO = classDAO;
     }
 
     @Override
@@ -27,7 +32,14 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
 
     @Override
     protected ArrayList<SubjectClass> doInBackground(String... params) {
-        return classesController.getSubjectsList();
+        ArrayList<SubjectClass> classes = classesController.getSubjectsList();
+
+//        if(subjectDAO.isSubjectOnDB(classes.get(0).getSubjectCode()))
+//            for (SubjectClass sc: classes)
+//                if(classDAO.isClassOnDB(sc))
+//                    sc.setSelected(true);
+
+        return classes;
     }
 
     @Override

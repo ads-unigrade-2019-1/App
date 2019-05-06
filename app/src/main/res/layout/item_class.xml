@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:orientation="vertical"
 android:layout_gravity="top" >
@@ -17,6 +18,9 @@ android:layout_gravity="top" >
             android:layout_height="45dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
+            android:focusable="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
             android:id="@+id/checkbox" />
         <TextView
             android:id="@+id/class_code"
@@ -55,6 +59,14 @@ android:layout_gravity="top" >
         android:layout_marginTop="5dp"
         android:textColor="#000"
         android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/stretches"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="400dp"
+        android:layout_marginLeft="400dp"
+        android:text=" "/>
 
 
 </LinearLayout>

@@ -43,6 +43,7 @@ public class ClassesController {
             String professor;
             String campus;
             String schedules;
+            String subjectCode;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject c = jsonArray.getJSONObject(i);
@@ -56,7 +57,8 @@ public class ClassesController {
                         codeLetter,
                         professor,
                         campus,
-                        schedules
+                        schedules,
+                        null
                 );
                 classes.add(subjectClass);
             }

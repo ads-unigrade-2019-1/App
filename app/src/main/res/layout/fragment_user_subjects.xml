@@ -6,10 +6,10 @@
     tools:context=".View.Fragment.UserSubjectsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="100sp"
-        android:text="" />
+        android:layout_height="wrap_content"
+        android:id="@+id/user_subjects_list">
+    </ListView>
 
 </FrameLayout>
