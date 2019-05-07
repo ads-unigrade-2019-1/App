@@ -3,7 +3,8 @@ package com.unigrade.app.Controller;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import com.unigrade.app.Model.Subject;
+
+import com.unigrade.app.DAO.GetDAO;
 import com.unigrade.app.Model.Timetable;
 
 import org.json.JSONArray;
@@ -28,10 +29,10 @@ public class TimetablesController {
         return instance;
     }
 
-    public ArrayList<Subject> getTimetablesList(){
+    public ArrayList<Timetable> getTimetablesList(){
         // Returns the list of all subjects from the API
 
-        String result = new PostDAO(URL_ALL_TIMETABLES).get();
+        String result = new GetDAO(URL_ALL_TIMETABLES).post("test");
         ArrayList<Timetable> timetables = new ArrayList<>();
 
         try {
