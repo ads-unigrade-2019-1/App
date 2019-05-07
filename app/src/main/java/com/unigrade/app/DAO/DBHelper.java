@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DAO extends SQLiteOpenHelper{
+public class DBHelper extends SQLiteOpenHelper{
 
-    DAO(Context context) {
+    DBHelper(Context context) {
         super(context, "Unigrade", null, 1);
     }
 

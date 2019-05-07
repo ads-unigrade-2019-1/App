@@ -11,12 +11,12 @@ import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
 
-public class ClassDAO {
+public class ClassDB {
     private String table = "classes";
-    private DAO dbHelper;
+    private DBHelper dbHelper;
 
-    public ClassDAO(Context context) {
-        dbHelper = new DAO(context);
+    public ClassDB(Context context) {
+        dbHelper = new DBHelper(context);
     }
 
     public boolean insert(SubjectClass subjectClass){
@@ -195,7 +195,7 @@ public class ClassDAO {
         values.put("schedules", subjectClass.getSchedulesString());
         values.put("added", String.valueOf(subjectClass.isSelected()));
 
-        Log.d("ClassDAO ", "get(): " + values.toString());
+        Log.d("ClassDB ", "get(): " + values.toString());
 
         return values;
     }

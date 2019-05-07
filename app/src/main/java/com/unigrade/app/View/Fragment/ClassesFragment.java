@@ -15,11 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unigrade.app.Controller.ClassesController;
-import com.unigrade.app.DAO.ClassDAO;
-import com.unigrade.app.DAO.SubjectDAO;
+import com.unigrade.app.DAO.ClassDB;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.View.Activity.MainActivity;
@@ -42,8 +41,8 @@ public class ClassesFragment extends Fragment {
     private TextView tvClassTitle;
     private String caller;
     private Subject subject;
-    private ClassDAO classDAO;
-    private SubjectDAO subjectDAO;
+    private ClassDB classDB;
+    private SubjectDB subjectDB;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -92,8 +91,8 @@ public class ClassesFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        subjectDAO = new SubjectDAO(getActivity());
-        classDAO = new ClassDAO(getActivity());
+        subjectDB = new SubjectDB(getActivity());
+        classDB = new ClassDB(getActivity());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
@@ -123,7 +122,7 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(this, classDAO, subjectDAO).execute();
+            getClassesTask = new GetClasses(this, classDB, subjectDB).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -133,7 +132,7 @@ public class ClassesFragment extends Fragment {
 
     private void callDatabase(){
         Log.i("CALLDATABASE", "New adapter added");
-        classes = classDAO.getSubjectClasses(subject.getCode());
+        classes = classDB.getSubjectClasses(subject.getCode());
         for (SubjectClass sc: classes)
             Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
         classesList.setAdapter(
@@ -169,13 +168,13 @@ public class ClassesFragment extends Fragment {
     }
 
     private void insertIntoDatabase(SubjectClass sc){
-        if (!subjectDAO.isSubjectOnDB(subject.getCode())){
-            subjectDAO.insert(subject);
+        if (!subjectDB.isSubjectOnDB(subject.getCode())){
+            subjectDB.insert(subject);
             for (SubjectClass c : classes)
-                classDAO.insert(c);
+                classDB.insert(c);
             Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
         } else {
-            classDAO.alter(sc);
+            classDB.alter(sc);
             Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
         }
     }
@@ -183,11 +182,11 @@ public class ClassesFragment extends Fragment {
     private void removeFromDatabase(SubjectClass sc){
         if (isLonelyAdded(sc)){
             for (SubjectClass c : classes)
-                classDAO.delete(c);
-            subjectDAO.delete(subject);
+                classDB.delete(c);
+            subjectDB.delete(subject);
             Log.i("LONELY", subject.getCode() + " "+ sc.getTeacher());
         } else {
-            classDAO.alter(sc);
+            classDB.alter(sc);
             Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeacher());
         }
     }
