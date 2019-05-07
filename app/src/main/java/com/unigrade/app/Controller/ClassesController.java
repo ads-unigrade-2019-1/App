@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.unigrade.app.DAO.GetDAO;
+import com.unigrade.app.DAO.Server;
 import com.unigrade.app.Model.SubjectClass;
 
 import org.json.JSONArray;
@@ -33,7 +33,7 @@ public class ClassesController {
     public ArrayList<SubjectClass> getSubjectsList(){
         // Returns the list of all subject classes from the API
 
-        String result = new GetDAO(URL_SUBJECT_CLASSES).get();
+        String result = new Server(URL_SUBJECT_CLASSES).get();
         ArrayList<SubjectClass> classes = new ArrayList<>();
 
         try {
