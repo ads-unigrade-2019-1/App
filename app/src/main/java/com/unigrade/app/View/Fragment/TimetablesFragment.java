@@ -18,6 +18,7 @@ import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
+import com.unigrade.app.View.AsyncTask.GetTimetables;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,10 @@ public class TimetablesFragment extends Fragment {
     private Button btnReload;
     private AsyncTask getTimetablesTask;
     private OnFragmentInteractionListener mListener;
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
 
     public TimetablesFragment() {
         // Required empty public constructor
