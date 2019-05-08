@@ -1,6 +1,5 @@
 package com.unigrade.app.View.Fragment;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,17 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.unigrade.app.Controller.TimetablesController;
-import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetTimetables;
-
-import java.util.ArrayList;
 
 
 public class TimetablesFragment extends Fragment {
