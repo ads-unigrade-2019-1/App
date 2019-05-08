@@ -1,6 +1,7 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.view.View;
 
 import com.unigrade.app.Controller.TimetablesController;
@@ -27,6 +28,7 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
 
     @Override
     protected ArrayList<Timetable> doInBackground(String... params) {
+        SystemClock.sleep(2000);
         return timetablesController.getTimetablesList();
     }
 
