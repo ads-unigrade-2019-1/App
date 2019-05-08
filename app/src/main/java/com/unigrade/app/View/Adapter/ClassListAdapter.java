@@ -48,6 +48,7 @@ public class ClassListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(R.layout.item_class, null);
+        String s;
 
         viewHolder.classCampus = view.findViewById(R.id.class_campus);
         viewHolder.classCode = view.findViewById(R.id.class_code);
@@ -59,7 +60,12 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacher());
         viewHolder.classCampus.setText(((SubjectClass)this.getItem(position)).getCampus());
         String[] schedules = ((SubjectClass)this.getItem(position)).getSchedules();
-        String s = schedules[0] + "\n" + schedules[1];
+        if(schedules.length > 1){
+            s = schedules[0] + "\n" + schedules[1];
+        }
+        else{
+            s = schedules[0];
+        }
         viewHolder.classTime.setText(s);
         viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 
