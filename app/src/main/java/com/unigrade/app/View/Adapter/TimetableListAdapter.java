@@ -44,7 +44,7 @@ public class TimetableListAdapter extends BaseAdapter {
 
         Timetable timetable = (Timetable) this.getItem(position);
 
-        viewHolder.timetableLayout = view.findViewById(R.id.timetableLayout);
+        viewHolder.timetableLayout = view.findViewById(R.id.timetable_layout);
 
         for (int i=1; i < viewHolder.timetableLayout.getChildCount(); i++){ // iterate times
             TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);

@@ -4,9 +4,13 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import com.unigrade.app.Controller.TimetablesController;
+import com.unigrade.app.Model.Timetable;
+import com.unigrade.app.View.Adapter.TimetableListAdapter;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
 
-public class GetTimetables extends AsyncTask<String, Integer, Integer > {
+import java.util.ArrayList;
+
+public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, ArrayList<Timetable> > {
 
     private TimetablesController timetablesController;
     private TimetablesFragment timetablesFragment;
@@ -22,13 +26,17 @@ public class GetTimetables extends AsyncTask<String, Integer, Integer > {
     }
 
     @Override
-    protected Integer doInBackground(String... params) {
-        return 0;
+    protected ArrayList<Timetable> doInBackground(String... params) {
+        return timetablesController.getTimetablesList();
     }
 
     @Override
-    protected void onPostExecute(Integer it) {
-
+    protected void onPostExecute(ArrayList<Timetable> timetables) {
+        timetablesFragment.setSubjects(timetables);
+        timetablesFragment.getSubjectList()
+                .setAdapter(
+                        new TimetableListAdapter(timetables, timetablesFragment.getActivity())
+                );
         timetablesFragment.getProgressBar().setVisibility(View.GONE);
     }
 }
