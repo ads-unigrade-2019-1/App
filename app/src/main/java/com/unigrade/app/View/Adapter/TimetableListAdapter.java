@@ -50,7 +50,7 @@ public class TimetableListAdapter extends BaseAdapter {
             TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
             for(int j=1; j < tr.getChildCount(); j++){// iterate week days
                 TextView classSchedule = (TextView) tr.getChildAt(j);
-                if(j%2 == 0)
+                if(j%2 == 0 || i%2 != 0)
                     classSchedule.setText("*");
             }
 

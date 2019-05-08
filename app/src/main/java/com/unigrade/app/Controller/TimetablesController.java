@@ -117,6 +117,9 @@ public class TimetablesController {
 
         ArrayList<Timetable> timetables = new ArrayList<>();
         timetables.add(new Timetable(week));
+        timetables.add(new Timetable(week));
+        timetables.add(new Timetable(week));
+        timetables.add(new Timetable(week));
         return timetables;
     }
 
