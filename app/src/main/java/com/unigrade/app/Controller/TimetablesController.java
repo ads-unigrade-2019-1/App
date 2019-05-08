@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -42,11 +41,9 @@ public class TimetablesController {
                             "\"8-10\": \"Cálculo\"" +
                             "\"10-12\": \"Apc\"" +
                             "\"12-14\": \"Diac\"" +
-                            "\"14-16\": \"Desen Software\"" +
                             "\"16-18\": \"Compiladores\"" +
                         "}" +
                         "\"tuesday\":{" +
-                            "\"8-10\": \"Cálculo\"" +
                             "\"10-12\": \"Apc\"" +
                             "\"12-14\": \"Diac\"" +
                             "\"14-16\": \"Desen Software\"" +
@@ -56,20 +53,17 @@ public class TimetablesController {
                             "\"8-10\": \"Cálculo\"" +
                             "\"10-12\": \"Apc\"" +
                             "\"12-14\": \"Diac\"" +
-                            "\"14-16\": \"Desen Software\"" +
                             "\"16-18\": \"Compiladores\"" +
                         "}" +
                     "}" +
                     "\"timetable2\":{" +
                         "\"monday\":{" +
                             "\"8-10\": \"Cálculo\"" +
-                            "\"10-12\": \"Apc\"" +
                             "\"12-14\": \"Diac\"" +
                             "\"14-16\": \"Desen Software\"" +
                             "\"16-18\": \"Compiladores\"" +
                         "}" +
                         "\"tuesday\":{" +
-                            "\"8-10\": \"Cálculo\"" +
                             "\"10-12\": \"Apc\"" +
                             "\"12-14\": \"Diac\"" +
                             "\"14-16\": \"Desen Software\"" +
@@ -78,7 +72,6 @@ public class TimetablesController {
                         "\"wednesday\":{" +
                             "\"8-10\": \"Cálculo\"" +
                             "\"10-12\": \"Apc\"" +
-                            "\"12-14\": \"Diac\"" +
                             "\"14-16\": \"Desen Software\"" +
                             "\"16-18\": \"Compiladores\"" +
                         "}" +
@@ -99,11 +92,11 @@ public class TimetablesController {
 
                     JSONObject weekDayJSON =  timetableJSON.getJSONObject(j);
 
-                    weekDay.add(weekDayJSON.getString("8-10"));
-                    weekDay.add(weekDayJSON.getString("10-12"));
-                    weekDay.add(weekDayJSON.getString("12-14"));
-                    weekDay.add(weekDayJSON.getString("14-16"));
-                    weekDay.add(weekDayJSON.getString("16-18"));
+                    weekDay.add(weekDayJSON.optString("8-10"));
+                    weekDay.add(weekDayJSON.optString("10-12"));
+                    weekDay.add(weekDayJSON.optString("12-14"));
+                    weekDay.add(weekDayJSON.optString("14-16"));
+                    weekDay.add(weekDayJSON.optString("16-18"));
 
                     timetableArray.add(weekDay);
                 }
