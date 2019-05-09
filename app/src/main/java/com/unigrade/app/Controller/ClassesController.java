@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.unigrade.app.DAO.Server;
+import com.unigrade.app.DAO.URLs;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 
 import org.json.JSONArray;
@@ -30,35 +32,48 @@ public class ClassesController {
         return instance;
     }
 
-    public ArrayList<SubjectClass> getSubjectsList(){
+    private String getClassURL(Subject subject) {
+        String classURL = URL_SUBJECT_CLASSES + subject.getCode();
+
+        return classURL;
+    }
+
+    public ArrayList<SubjectClass> getClassesList(Subject subject) {
         // Returns the list of all subject classes from the API
 
-        String result = new Server(URL_SUBJECT_CLASSES).get();
+        String result = new Server(getClassURL(subject)).get();
         ArrayList<SubjectClass> classes = new ArrayList<>();
 
         try {
 
             JSONArray jsonArray = new JSONArray(result);
-            String codeLetter;
-            String professor;
-            String campus;
+            String name;
+            ArrayList<String> teachers;
+            int campus;
             String schedules;
             String subjectCode;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject c = jsonArray.getJSONObject(i);
 
-                codeLetter = c.getString("class");
-                professor = c.getString("teacher");
-                campus = c.getString("campus");
-                schedules = c.getString("time");
+                name = c.getString("name");
+
+                teachers = new ArrayList<>();
+                JSONArray teachersArray = c.getJSONArray("teachers");
+                for (int j = 0; j < teachersArray.length(); j++) {
+                    teachers.add(teachersArray.getString(j));
+                }
+
+                campus = c.getInt("campus");
+                schedules = c.getString("meetings");
+                subjectCode = c.getString("discipline");
 
                 SubjectClass subjectClass = new SubjectClass(
-                        codeLetter,
-                        professor,
+                        name,
+                        teachers,
                         campus,
                         schedules,
-                        null
+                        subjectCode
                 );
                 classes.add(subjectClass);
             }

@@ -1,9 +1,10 @@
 package com.unigrade.app.Model;
+import java.util.ArrayList;
 
 public class SubjectClass {
-    private String codeLetter;
-    private String teacher;
-    private String campus;
+    private String name;
+    private ArrayList<String> teachers = new ArrayList<>();
+    private int campus;
     private String schedules;
     private String subjectCode;
     private boolean isSelected;
@@ -19,9 +20,9 @@ public class SubjectClass {
         this.isSelected = selected;
     }
 
-    public SubjectClass(String codeLetter, String teacher, String campus, String schedules, String subjectCode){
-        this.codeLetter = codeLetter;
-        this.teacher = teacher;
+    public SubjectClass(String name, ArrayList<String> teachers, int campus, String schedules, String subjectCode){
+        this.name = name;
+        this.teachers = teachers;
         this.campus = campus;
         this.schedules = schedules;
         this.subjectCode = subjectCode;
@@ -40,27 +41,35 @@ public class SubjectClass {
         this.schedules = schedules;
     }
 
-    public String getCodeLetter() {
-        return codeLetter;
+    public String getName() {
+        return name;
     }
 
-    public void setCodeLetter(String codeLetter) {
-        this.codeLetter = codeLetter;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTeacher() {
-        return teacher;
+    public ArrayList<String> getTeachers() {
+        return teachers;
     }
 
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
+    public void setTeachers(ArrayList<String> teachers) {
+        this.teachers = teachers;
     }
 
     public String getCampus() {
-        return campus;
+        if (campus == 1) {
+            return "Darcy Ribeiro";
+        } else if (campus == 2) {
+            return "Planaltina";
+        } else if (campus == 3) {
+            return "Ceilândia";
+        } else {
+            return "Gama";
+        }
     }
 
-    public void setCampus(String campus) {
+    public void setCampus(int campus) {
         this.campus = campus;
     }
 

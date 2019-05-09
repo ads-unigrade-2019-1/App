@@ -47,9 +47,9 @@ public class ClassDB {
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
             try {
-                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-                subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-                subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+                subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
+                subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+                subjectClass.setTeachers(new ArrayList<String>((cursor.getColumnIndex("teacher"))));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
             } catch (SQLiteException e){
                 e.printStackTrace();
@@ -64,9 +64,9 @@ public class ClassDB {
     public boolean delete(SubjectClass subjectClass){
         try{
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            String[] params = {subjectClass.getCodeLetter(),
+            String[] params = {subjectClass.getName(),
                                subjectClass.getSubjectCode()};
-            db.delete(table, "codeLetter = ? AND subjectCode = ?", params);
+            db.delete(table, "name = ? AND subjectCode = ?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -79,9 +79,9 @@ public class ClassDB {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
 
-            String[] params = {subjectClass.getCodeLetter(), subjectClass.getSubjectCode()};
+            String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
 
-            db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
+            db.update(table, values, "name = ? AND subjectCode = ?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -89,7 +89,7 @@ public class ClassDB {
         return true;
     }
     
-    public SubjectClass getClass(String codeLetter, String subjectCode){
+    public SubjectClass getClass(String name, String subjectCode){
         SQLiteDatabase db;
         try {
             db = dbHelper.getReadableDatabase();
@@ -98,14 +98,14 @@ public class ClassDB {
             return null;
         }
 
-        Cursor cursor = db.query(table, null, "subjectCode=? AND codeLetter=?", new String[]{subjectCode, codeLetter}, null, null, null);
+        Cursor cursor = db.query(table, null, "subjectCode=? AND name=?", new String[]{subjectCode, name}, null, null, null);
         cursor.moveToFirst();
 
         SubjectClass subjectClass = new SubjectClass();
         try {
-            subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-            subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-            subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+            subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
+            subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+            //subjectClass.setTeachers(cursor.getString(cursor.getColumnIndex("teacher")));
             subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
         } catch (SQLiteException e){
             e.printStackTrace();
@@ -131,9 +131,12 @@ public class ClassDB {
             cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);
             while (cursor.moveToNext()){
                 SubjectClass subjectClass = new SubjectClass();
-                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-                subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-                subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
+                subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
+                subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+
+
+
+                //subjectClass.setTeachers(cursor.getString(cursor.getColumnIndex("teachers")));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
@@ -150,8 +153,8 @@ public class ClassDB {
     public boolean isClassOnDB(SubjectClass sc) {
 
         String sql = String.format(
-                "SELECT * FROM %s WHERE subjectCode=%s and codeLetter=%s",
-                table, sc.getSubjectCode(), sc.getCodeLetter()
+                "SELECT * FROM %s WHERE subjectCode=%s and name=%s",
+                table, sc.getSubjectCode(), sc.getName()
         );
         SQLiteDatabase db;
 
@@ -188,8 +191,13 @@ public class ClassDB {
     private ContentValues getClassAttribute(SubjectClass subjectClass){
         ContentValues values = new ContentValues();
 
-        values.put("codeLetter", subjectClass.getCodeLetter());
-        values.put("teacher", subjectClass.getTeacher());
+        values.put("name", subjectClass.getName());
+
+        ArrayList<String> teachersArray = subjectClass.getTeachers();
+        for(String teacher : teachersArray) {
+            values.put("teachers", teacher);
+        }
+
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
         values.put("schedules", subjectClass.getSchedulesString());

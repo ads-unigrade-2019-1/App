@@ -22,13 +22,13 @@ public class DBHelper extends SQLiteOpenHelper{
             db.execSQL(createSubjectTableSql);
 
             String createClassTableSql = "CREATE TABLE classes (" +
-                    "codeLetter VARCHAR(255) NOT NULL, " +
+                    "name VARCHAR(255) NOT NULL, " +
                     "teacher VARCHAR(255) NOT NULL, " +
                     "campus VARCHAR(255) NOT NULL, " +
                     "subjectCode VARCHAR(255) NOT NULL, " +
                     "schedules VARCHAR(255) NOT NULL, " +
                     "added BOOLEAN NOT NULL DEFAULT 0, " +
-                    "CONSTRAINT classes_pk PRIMARY KEY (codeLetter, subjectCode), " +
+                    "CONSTRAINT classes_pk PRIMARY KEY (name, subjectCode), " +
                     "CONSTRAINT classes_subject_FK FOREIGN KEY (subjectCode) " +
                     "REFERENCES subject(code))";
             db.execSQL(createClassTableSql);

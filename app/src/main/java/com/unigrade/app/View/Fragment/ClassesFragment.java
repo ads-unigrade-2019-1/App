@@ -122,7 +122,7 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(this, classDB, subjectDB).execute();
+            getClassesTask = new GetClasses(this, classDB, subjectDB, subject).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -155,12 +155,12 @@ public class ClassesFragment extends Fragment {
                     cb.setChecked(true);
                     sc.setSelected(true);
                     insertIntoDatabase(sc);
-                    Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
+                    Log.i("ADDED", sc.getTeachers() + " " + sc.isSelected());
                 } else {
                     cb.setChecked(false);
                     sc.setSelected(false);
                     removeFromDatabase(sc);
-                    Log.i("REMOVED", sc.getTeacher() + " " + sc.isSelected());
+                    Log.i("REMOVED", sc.getTeachers() + " " + sc.isSelected());
                 }
 
             }
@@ -172,10 +172,10 @@ public class ClassesFragment extends Fragment {
             subjectDB.insert(subject);
             for (SubjectClass c : classes)
                 classDB.insert(c);
-            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
+            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeachers());
         } else {
             classDB.alter(sc);
-            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
+            Log.i("ONDB", subject.getCode() + " "+ sc.getTeachers());
         }
     }
 
@@ -184,10 +184,10 @@ public class ClassesFragment extends Fragment {
             for (SubjectClass c : classes)
                 classDB.delete(c);
             subjectDB.delete(subject);
-            Log.i("LONELY", subject.getCode() + " "+ sc.getTeacher());
+            Log.i("LONELY", subject.getCode() + " "+ sc.getTeachers());
         } else {
             classDB.alter(sc);
-            Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeacher());
+            Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeachers());
         }
     }
 

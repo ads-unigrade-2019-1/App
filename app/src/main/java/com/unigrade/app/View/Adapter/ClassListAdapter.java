@@ -55,8 +55,16 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTime = view.findViewById(R.id.class_time);
         viewHolder.checkbox = view.findViewById(R.id.checkbox);
 
-        viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getCodeLetter());
-        viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacher());
+        viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getName());
+        ArrayList<String> teachersArray = ((SubjectClass)this.getItem(position)).getTeachers();
+        StringBuilder teachers = new StringBuilder();
+
+        for(String teacher : teachersArray) {
+            teachers.append(teacher + "\n");
+        }
+
+        viewHolder.classTeacher.setText(teachers);
+
         viewHolder.classCampus.setText(((SubjectClass)this.getItem(position)).getCampus());
         String[] schedules = ((SubjectClass)this.getItem(position)).getSchedules();
         String s = schedules[0] + "\n" + schedules[1];
