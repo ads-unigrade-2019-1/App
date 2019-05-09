@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -31,95 +32,84 @@ public class TimetablesController {
 
     public ArrayList<Timetable> getTimetablesList(){
         // Returns the list of all subjects from the API
-
-//        //String result = new GetDAO(URL_ALL_TIMETABLES).post("test");
-//        ArrayList<Timetable> timetables = new ArrayList<>();
-//        String result = "{" +
-//                "\"timetables\":{" +
-//                    "\"timetable1\":{" +
-//                        "\"monday\":{" +
-//                            "\"8-10\": \"Cálculo\"" +
-//                            "\"10-12\": \"Apc\"" +
-//                            "\"12-14\": \"Diac\"" +
-//                            "\"16-18\": \"Compiladores\"" +
-//                        "}" +
-//                        "\"tuesday\":{" +
-//                            "\"10-12\": \"Apc\"" +
-//                            "\"12-14\": \"Diac\"" +
-//                            "\"14-16\": \"Desen Software\"" +
-//                            "\"16-18\": \"Compiladores\"" +
-//                        "}" +
-//                        "\"wednesday\":{" +
-//                            "\"8-10\": \"Cálculo\"" +
-//                            "\"10-12\": \"Apc\"" +
-//                            "\"12-14\": \"Diac\"" +
-//                            "\"16-18\": \"Compiladores\"" +
-//                        "}" +
-//                    "}" +
-//                    "\"timetable2\":{" +
-//                        "\"monday\":{" +
-//                            "\"8-10\": \"Cálculo\"" +
-//                            "\"12-14\": \"Diac\"" +
-//                            "\"14-16\": \"Desen Software\"" +
-//                            "\"16-18\": \"Compiladores\"" +
-//                        "}" +
-//                        "\"tuesday\":{" +
-//                            "\"10-12\": \"Apc\"" +
-//                            "\"12-14\": \"Diac\"" +
-//                            "\"14-16\": \"Desen Software\"" +
-//                            "\"16-18\": \"Compiladores\"" +
-//                        "}" +
-//                        "\"wednesday\":{" +
-//                            "\"8-10\": \"Cálculo\"" +
-//                            "\"10-12\": \"Apc\"" +
-//                            "\"14-16\": \"Desen Software\"" +
-//                            "\"16-18\": \"Compiladores\"" +
-//                        "}" +
-//                    "}" +
-//                "}";
-//
-//        try {
-//
-//            JSONArray timetablesJSON = new JSONArray(result);
-//
-//            for (int i = 0; i < timetablesJSON.length(); i++) {
-//                JSONArray timetableJSON = timetablesJSON.getJSONArray(i);
-//                ArrayList<ArrayList<String>> timetableArray = new ArrayList<>();
-//
-//                for (int j = 0; j < timetableJSON.length(); j++){
-//                    //De segunda a sábado
-//                    ArrayList<String> weekDay = new ArrayList<>();
-//
-//                    JSONObject weekDayJSON =  timetableJSON.getJSONObject(j);
-//
-//                    weekDay.add(weekDayJSON.optString("8-10"));
-//                    weekDay.add(weekDayJSON.optString("10-12"));
-//                    weekDay.add(weekDayJSON.optString("12-14"));
-//                    weekDay.add(weekDayJSON.optString("14-16"));
-//                    weekDay.add(weekDayJSON.optString("16-18"));
-//
-//                    timetableArray.add(weekDay);
-//                }
-//                Timetable timetable = new Timetable(timetableArray);
-//                timetables.add(timetable);
-//            }
-//
-//        } catch (
-//                JSONException e) {
-//            e.printStackTrace();
-//        }
-
-        ArrayList<ArrayList<String>> week = new ArrayList<>();
-        ArrayList<String> day = new ArrayList<>();
-        day.add("Test");
-        day.add("Test2");
-        week.add(day);
-
+        //String result = new GetDAO(URL_ALL_TIMETABLES).post("test");
         ArrayList<Timetable> timetables = new ArrayList<>();
-        timetables.add(new Timetable(week));
-        timetables.add(new Timetable(week));
-        timetables.add(new Timetable(week));
-        timetables.add(new Timetable(week));
+        String result = "[" +
+            "[" +
+                "{" +
+                    "\"campus\":\"Gama\"," +
+                    "\"class\":\"L\"," +
+                    "\"teacher\":\"Rafael\"," +
+                    "\"day\":[\"Seg\", \"Qua\", \"Seg\"]," +
+                    "\"time\":[\"10h\", \"10h\", \"12h\"]" +
+                "}," +
+                "{" +
+                    "\"campus\":\"Gama\"," +
+                    "\"class\":\"B\"," +
+                    "\"teacher\":\"Geovana\"," +
+                    "\"day\":[\"Seg\", \"Sex\"]," +
+                    "\"time\":[\"8h\", \"8h\"]" +
+                "}," +
+                "{" +
+                    "\"campus\":\"Gama\"," +
+                    "\"class\":\"C\"," +
+                    "\"teacher\":\"Gabriela\"," +
+                    "\"day\":[\"Ter\", \"Qui\"]," +
+                    "\"time\":[\"14h\", \"14h\"]" +
+                "}," +
+                "{" +
+                    "\"campus\":\"Gama\"," +
+                    "\"class\":\"D\"," +
+                    "\"teacher\":\"Guilherme\"," +
+                    "\"day\":[\"Ter\", \"Qui\"]," +
+                    "\"time\":[\"16h\", \"16h\"]" +
+                "}" +
+            "]" +
+        "]";
+
+        try {
+            JSONArray timetablesJSON = new JSONArray(result);
+
+            for (int i = 0; i < timetablesJSON.length(); i++) {
+                JSONArray timetableJSON = timetablesJSON.getJSONArray(i);
+                HashMap<String, ArrayList<String>> week = new HashMap<>();
+
+                for(int j = 0; j < timetableJSON.length(); j++){
+                    JSONObject subjectClass = timetableJSON.getJSONObject(j);
+                    JSONArray daysJSON = subjectClass.getJSONArray("day");
+                    JSONArray startTimeJSON = subjectClass.getJSONArray("time");
+
+                    for (int k = 0; k < daysJSON.length(); k++){
+                        if (week.containsKey(daysJSON.getString(k))){
+                            week.get(daysJSON.getString(k)).add(startTimeJSON.getString(k));
+                        }
+                        else {
+                            ArrayList<String> newTime = new ArrayList<>();
+                            newTime.add(startTimeJSON.getString(k));
+                            week.put(daysJSON.getString(k), newTime);
+                        }
+                    }
+                }
+                Timetable timetable = new Timetable(week);
+                timetable.printTimetable();
+                timetables.add(timetable);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//
+//        ArrayList<ArrayList<String>> week = new ArrayList<>();
+//        ArrayList<String> day = new ArrayList<>();
+//        day.add("Test");
+//        day.add("Test2");
+//        week.add(day);
+//
+//        ArrayList<Timetable> timetables = new ArrayList<>();
+//        timetables.add(new Timetable(week));
+//        timetables.add(new Timetable(week));
+//        timetables.add(new Timetable(week));
+//        timetables.add(new Timetable(week));
         return timetables;
     }
 
