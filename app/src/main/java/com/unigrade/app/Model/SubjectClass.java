@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class SubjectClass {
     private String name;
-    private ArrayList<String> teachers = new ArrayList<>();
+    private ArrayList<String> teacher = new ArrayList<>();
     private int campus;
     private String schedules;
     private String subjectCode;
@@ -20,9 +20,9 @@ public class SubjectClass {
         this.isSelected = selected;
     }
 
-    public SubjectClass(String name, ArrayList<String> teachers, int campus, String schedules, String subjectCode){
+    public SubjectClass(String name, ArrayList<String> teacher, int campus, String schedules, String subjectCode){
         this.name = name;
-        this.teachers = teachers;
+        this.teacher = teacher;
         this.campus = campus;
         this.schedules = schedules;
         this.subjectCode = subjectCode;
@@ -49,12 +49,12 @@ public class SubjectClass {
         this.name = name;
     }
 
-    public ArrayList<String> getTeachers() {
-        return teachers;
+    public ArrayList<String> getTeacher() {
+        return teacher;
     }
 
-    public void setTeachers(ArrayList<String> teachers) {
-        this.teachers = teachers;
+    public void setTeacher(ArrayList<String> teacher) {
+        this.teacher = teacher;
     }
 
     public String getCampus() {

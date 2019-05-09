@@ -56,10 +56,10 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.checkbox = view.findViewById(R.id.checkbox);
 
         viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getName());
-        ArrayList<String> teachersArray = ((SubjectClass)this.getItem(position)).getTeachers();
+        ArrayList<String> teacherArray = ((SubjectClass)this.getItem(position)).getTeacher();
         StringBuilder teachers = new StringBuilder();
 
-        for(String teacher : teachersArray) {
+        for(String teacher : teacherArray) {
             teachers.append(teacher + "\n");
         }
 

@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper{
             String createClassTableSql = "CREATE TABLE classes (" +
                     "name VARCHAR(255) NOT NULL, " +
                     "teacher VARCHAR(255) NOT NULL, " +
-                    "campus VARCHAR(255) NOT NULL, " +
+                    "campus INTEGER(1) NOT NULL, " +
                     "subjectCode VARCHAR(255) NOT NULL, " +
                     "schedules VARCHAR(255) NOT NULL, " +
                     "added BOOLEAN NOT NULL DEFAULT 0, " +

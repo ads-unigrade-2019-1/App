@@ -48,7 +48,7 @@ public class ClassesController {
 
             JSONArray jsonArray = new JSONArray(result);
             String name;
-            ArrayList<String> teachers;
+            ArrayList<String> teacher;
             int campus;
             String schedules;
             String subjectCode;
@@ -58,10 +58,10 @@ public class ClassesController {
 
                 name = c.getString("name");
 
-                teachers = new ArrayList<>();
-                JSONArray teachersArray = c.getJSONArray("teachers");
-                for (int j = 0; j < teachersArray.length(); j++) {
-                    teachers.add(teachersArray.getString(j));
+                teacher = new ArrayList<>();
+                JSONArray teacherArray = c.getJSONArray("teachers");
+                for (int j = 0; j < teacherArray.length(); j++) {
+                    teacher.add(teacherArray.getString(j));
                 }
 
                 campus = c.getInt("campus");
@@ -70,7 +70,7 @@ public class ClassesController {
 
                 SubjectClass subjectClass = new SubjectClass(
                         name,
-                        teachers,
+                        teacher,
                         campus,
                         schedules,
                         subjectCode

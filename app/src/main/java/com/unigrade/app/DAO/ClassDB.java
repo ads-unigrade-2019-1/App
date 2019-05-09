@@ -10,6 +10,8 @@ import android.util.Log;
 import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ClassDB {
     private String table = "classes";
@@ -49,7 +51,7 @@ public class ClassDB {
             try {
                 subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
-                subjectClass.setTeachers(new ArrayList<String>((cursor.getColumnIndex("teacher"))));
+                subjectClass.setTeacher(new ArrayList<String>((cursor.getColumnIndex("teacher"))));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
             } catch (SQLiteException e){
                 e.printStackTrace();
@@ -105,7 +107,13 @@ public class ClassDB {
         try {
             subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
-            //subjectClass.setTeachers(cursor.getString(cursor.getColumnIndex("teacher")));
+
+            String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+            String[] teachersArray = teachersString.split(";");
+            List<String> teachers = Arrays.asList(teachersArray);
+
+            subjectClass.setTeacher((ArrayList<String>) teachers);
+
             subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
         } catch (SQLiteException e){
             e.printStackTrace();
@@ -134,9 +142,13 @@ public class ClassDB {
                 subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
 
+                String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+                String[] teachersArray = teachersString.split(";");
+                ArrayList<String> teachers = new ArrayList<>();
+                teachers.addAll(Arrays.asList(teachersArray));
 
+                subjectClass.setTeacher(teachers);
 
-                //subjectClass.setTeachers(cursor.getString(cursor.getColumnIndex("teachers")));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
@@ -193,10 +205,14 @@ public class ClassDB {
 
         values.put("name", subjectClass.getName());
 
-        ArrayList<String> teachersArray = subjectClass.getTeachers();
-        for(String teacher : teachersArray) {
-            values.put("teachers", teacher);
+        StringBuilder teachers = new StringBuilder();
+
+        for(String teacher : subjectClass.getTeacher()) {
+            teachers.append(teacher);
+            teachers.append(";");
         }
+
+        values.put("teacher", teachers.toString());
 
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
