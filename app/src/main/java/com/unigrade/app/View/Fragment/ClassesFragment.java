@@ -84,7 +84,7 @@ public class ClassesFragment extends Fragment {
         tvClassTitle = v.findViewById(R.id.class_title);
         tvClassCredits = v.findViewById(R.id.class_credits);
         tvClassTitle.setText(subject.getName());
-        tvClassCredits.setText("11-11-11-11");
+        tvClassCredits.setText(subject.getCredits());
 
         progressBar = v.findViewById(R.id.progress_bar);
         classesList = v.findViewById(R.id.class_list);

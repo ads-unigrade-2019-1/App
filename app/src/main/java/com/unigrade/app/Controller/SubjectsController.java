@@ -48,8 +48,7 @@ public class SubjectsController {
 
                 name = c.getString("name");
                 code = c.getString("code");
-                //TODO Puxar da API
-                credits = "002-003-004-005";
+                credits = c.getString("credits");
 
                 Subject subject = new Subject(code, name, credits);
                 subjects.add(subject);
