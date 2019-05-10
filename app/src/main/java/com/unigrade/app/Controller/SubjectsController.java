@@ -29,7 +29,7 @@ public class SubjectsController extends Controller {
     public ArrayList<Subject> getSubjectsList(){
         // Returns the list of all subjects from the API
 
-        String result = new ServerHelper(URL_ALL_SUBJECTS).get();
+        String result = new ServerHelper (URL_ALL_SUBJECTS).get();
         ArrayList<Subject> subjects = new ArrayList<>();
 
         try {

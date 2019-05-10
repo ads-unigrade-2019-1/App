@@ -8,6 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper{
 
+    private static DBHelper instance;
+
+    public static DBHelper getInstance(Context context) {
+        if(instance == null){
+            instance = new DBHelper(context);
+        }
+        return instance;
+    }
+
     DBHelper(Context context) {
         super(context, "Unigrade", null, 1);
     }

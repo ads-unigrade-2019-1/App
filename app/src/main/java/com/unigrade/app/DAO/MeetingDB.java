@@ -16,8 +16,17 @@ public class MeetingDB {
     private String table = "meetings";
     private DBHelper dbHelper;
 
+    private static MeetingDB instance;
+
+    public static MeetingDB getInstance(Context context) {
+        if(instance == null){
+            instance = new MeetingDB(context);
+        }
+        return instance;
+    }
+
     public MeetingDB(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public boolean insert(ClassMeeting classMeeting, SubjectClass subjectClass){

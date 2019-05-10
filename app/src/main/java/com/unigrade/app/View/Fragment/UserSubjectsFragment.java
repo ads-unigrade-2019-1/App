@@ -83,7 +83,7 @@ public class UserSubjectsFragment extends Fragment {
 
         boolean removeSubject;
 
-        subjectDB = new SubjectDB(getActivity());
+        subjectDB = SubjectDB.getInstance(getActivity());
         ArrayList<Subject> subjectsList = subjectDB.all();
 
         try{

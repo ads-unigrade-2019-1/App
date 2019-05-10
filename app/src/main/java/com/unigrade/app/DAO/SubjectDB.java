@@ -14,8 +14,17 @@ public class SubjectDB {
     private String table = "subjects";
     private DBHelper dbHelper;
 
+    private static SubjectDB instance;
+
+    public static SubjectDB getInstance(Context context) {
+        if(instance == null){
+            instance = new SubjectDB(context);
+        }
+        return instance;
+    }
+
     public SubjectDB(Context context){
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public boolean insert(Subject subject){

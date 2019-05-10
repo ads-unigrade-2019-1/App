@@ -37,7 +37,7 @@ public class ClassesController extends Controller {
     public ArrayList<SubjectClass> getClassesList(Subject subject) {
         // Returns the list of all subject classes from the API
 
-        String result = new ServerHelper(getClassURL(subject)).get();
+        String result = new ServerHelper (getClassURL(subject)).get();
         ArrayList<SubjectClass> classes = new ArrayList<>();
 
         try {

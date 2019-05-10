@@ -91,8 +91,8 @@ public class ClassesFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        subjectDB = new SubjectDB(getActivity());
-        classDB = new ClassDB(getActivity());
+        subjectDB = SubjectDB.getInstance(getActivity());
+        classDB = ClassDB.getInstance(getActivity());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
