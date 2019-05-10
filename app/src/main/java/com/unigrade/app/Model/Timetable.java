@@ -17,8 +17,11 @@ public class Timetable {
 
     public void printTimetable(){
         //test method
+        for (int i=0; i<timetableClass.size(); i++){
+            Log.d("Timetable", timetableClass.get(i).getCodeLetter());
+            Log.d("Timetable", timetableClass.get(i).getSubjectCode());
+        }
 
-        Log.d("Timetable", timetableClass.toString());
     }
 
 

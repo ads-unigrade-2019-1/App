@@ -103,6 +103,7 @@ public class ClassDAO {
 
         SubjectClass subjectClass = new SubjectClass();
         try {
+            subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
             subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
