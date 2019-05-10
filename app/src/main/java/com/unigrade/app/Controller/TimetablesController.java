@@ -3,6 +3,7 @@ package com.unigrade.app.Controller;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.unigrade.app.DAO.ClassDAO;
 import com.unigrade.app.DAO.GetDAO;
@@ -19,6 +20,7 @@ import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
 public class TimetablesController {
     private static TimetablesController instance;
+    private ClassDAO classDAO;
 
     private TimetablesController(){
         //Empty constructor
@@ -33,49 +35,56 @@ public class TimetablesController {
 
     public ArrayList<Timetable> getTimetablesList(Context context){
         // Returns the list of all subjects from the API
-        //String result = new GetDAO(URL_ALL_TIMETABLES).post("test");
+        ClassDAO classDAO = new ClassDAO(context);
 
-        ArrayList<Timetable> timetables = new ArrayList<>();
+//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.all()).toString());
+//        TODO
+//         excluir essa chamada de função
+//         descomentar o post
+//         excluir string result feita à mão
+        arrayToJSON(classDAO.allSelecteds());
 
         String result = "" +
-        "[" +
-            "[" +
-                "{" +
-                    "\"discipline\":\"120642\"," +
-                    "\"name\":\"L\"" +
-                "}," +
-                "{" +
-                    "\"discipline\":\"120642\"," +
-                    "\"name\":\"B\"" +
-                "}," +
-                "{" +
-                    "\"discipline\":\"113040\"," +
-                    "\"name\":\"C\"" +
-                "}," +
-                "{" +
-                    "\"discipline\":\"208213\"," +
-                    "\"name\":\"L\"" +
-                "}" +
-            "]," +
-            "[" +
-                "{" +
-                    "\"discipline\":\"120642\"," +
-                    "\"name\":\"L\"" +
-                "}," +
-                "{" +
-                    "\"discipline\":\"120642\"," +
-                    "\"name\":\"B\"" +
-                "}," +
-                "{" +
-                    "\"discipline\":\"113040\"," +
-                    "\"name\":\"C\"" +
-                "}," +
-                "{" +
-                    "\"discipline\":\"208213\"," +
-                    "\"name\":\"L\"" +
-                "}" +
-            "]" +
-        "]";
+                "[" +
+                    "[" +
+                        "{" +
+                            "\"discipline\":\"120642\"," +
+                            "\"name\":\"L\"" +
+                        "}," +
+                        "{" +
+                            "\"discipline\":\"120642\"," +
+                            "\"name\":\"B\"" +
+                        "}," +
+                        "{" +
+                            "\"discipline\":\"113040\"," +
+                            "\"name\":\"C\"" +
+                        "}," +
+                        "{" +
+                            "\"discipline\":\"208213\"," +
+                            "\"name\":\"L\"" +
+                        "}" +
+                    "]," +
+                    "[" +
+                        "{" +
+                            "\"discipline\":\"120642\"," +
+                                "\"name\":\"L\"" +
+                        "}," +
+                        "{" +
+                            "\"discipline\":\"120642\"," +
+                            "\"name\":\"B\"" +
+                        "}," +
+                        "{" +
+                            "\"discipline\":\"113040\"," +
+                            "\"name\":\"C\"" +
+                        "}," +
+                        "{" +
+                            "\"discipline\":\"208213\"," +
+                            "\"name\":\"L\"" +
+                        "}" +
+                    "]" +
+                "]";
+
+        ArrayList<Timetable> timetables = new ArrayList<>();
 
         try {
             JSONArray timetablesJSON = new JSONArray(result);
@@ -86,7 +95,6 @@ public class TimetablesController {
 
                 for(int j = 0; j < timetableJSON.length(); j++){
                     JSONObject classJSON = timetableJSON.getJSONObject(j);
-                    ClassDAO classDAO = new ClassDAO(context);
 
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
@@ -104,7 +112,43 @@ public class TimetablesController {
         return timetables;
     }
 
+    private JSONArray arrayToJSON(ArrayList<SubjectClass> subjectClasses){
+        JSONArray subjectsJSON = new JSONArray();
+        for(SubjectClass subjectClass : subjectClasses){
+            JSONObject subjectJSON = new JSONObject();
+            try {
 
+//              TODO criar JSONArray para os professores
+//              JSONArray teachersJSON = new JSONArray()
+//              for(String teacher : subjectClass.getTeachers())
+//                teachersJSON.put(teacher);
+//              timetableJSON.put("teachers", teachersJSON);
+                subjectJSON.put("teachers", subjectClass.getTeacher());
+
+//             TODO criar JSONArray para os horários a partir do obj schedule
+                JSONArray meetingsJSON = new JSONArray();
+                for(String schedule : subjectClass.getSchedules()) {
+//                   JSONObject scheduleJSON = new JSONObject()
+//
+//                   scheduleJSON.put("room", schedule.getRoom());
+//                   scheduleJSON.put("day", schedule.getDay());
+//                   scheduleJSON.put("init_hour", schedule.getInitHour());
+//                   scheduleJSON.put("final_hour", schedule.getFinalHour());
+                    meetingsJSON.put(schedule);
+                }
+                subjectJSON.put("meetings", meetingsJSON);
+                subjectJSON.put("name", subjectClass.getCodeLetter());
+                subjectJSON.put("discipline", subjectClass.getSubjectCode());
+                subjectJSON.put("campus", subjectClass.getCampus());
+
+                subjectsJSON.put(subjectJSON);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.d("JSONString", subjectsJSON.toString());
+        return subjectsJSON;
+    }
 
     public boolean isConnectedToNetwork(Context context) {
         ConnectivityManager connectivityManager =
