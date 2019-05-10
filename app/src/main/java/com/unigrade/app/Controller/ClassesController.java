@@ -49,7 +49,7 @@ public class ClassesController {
             JSONArray jsonArray = new JSONArray(result);
             String name;
             ArrayList<String> teacher;
-            int campus;
+            String campus;
             String schedules;
             String subjectCode;
 
@@ -64,7 +64,7 @@ public class ClassesController {
                     teacher.add(teacherArray.getString(j));
                 }
 
-                campus = c.getInt("campus");
+                campus = c.getString("campus");
                 schedules = c.getString("meetings");
                 subjectCode = c.getString("discipline");
 

@@ -49,7 +49,7 @@ public class ClassDB {
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
             try {
-                subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
+                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
                 subjectClass.setTeacher(new ArrayList<String>((cursor.getColumnIndex("teacher"))));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
@@ -105,7 +105,7 @@ public class ClassDB {
 
         SubjectClass subjectClass = new SubjectClass();
         try {
-            subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
+            subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
 
             String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
@@ -139,7 +139,7 @@ public class ClassDB {
             cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);
             while (cursor.moveToNext()){
                 SubjectClass subjectClass = new SubjectClass();
-                subjectClass.setCampus(cursor.getInt(cursor.getColumnIndex("campus")));
+                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
 
                 String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));

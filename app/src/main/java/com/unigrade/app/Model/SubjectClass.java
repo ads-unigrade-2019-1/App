@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class SubjectClass {
     private String name;
     private ArrayList<String> teacher = new ArrayList<>();
-    private int campus;
+    private String campus;
     private String schedules;
     private String subjectCode;
     private boolean isSelected;
@@ -20,7 +20,17 @@ public class SubjectClass {
         this.isSelected = selected;
     }
 
-    public SubjectClass(String name, ArrayList<String> teacher, int campus, String schedules, String subjectCode){
+    public SubjectClass(String name, ArrayList<String> teacher, String campus, String schedules, String subjectCode){
+        int campi = Integer.parseInt(campus);
+        if (campi == 1) campus = "Darcy Ribeiro";
+        else if (campi == 2) {
+            campus = "Plantaltina";
+        } else if (campi == 3) {
+            campus = "Ceilândia";
+        } else {
+            campus = "Gama";
+        }
+
         this.name = name;
         this.teacher = teacher;
         this.campus = campus;
@@ -58,18 +68,10 @@ public class SubjectClass {
     }
 
     public String getCampus() {
-        if (campus == 1) {
-            return "Darcy Ribeiro";
-        } else if (campus == 2) {
-            return "Planaltina";
-        } else if (campus == 3) {
-            return "Ceilândia";
-        } else {
-            return "Gama";
-        }
+        return campus;
     }
 
-    public void setCampus(int campus) {
+    public void setCampus(String campus) {
         this.campus = campus;
     }
 
