@@ -58,6 +58,14 @@ public class SubjectClass {
         return teacher;
     }
 
+    public String getTeacherString(char c) {
+        StringBuilder s = new StringBuilder();
+        for(String teacher : this.teacher) {
+            s.append(teacher + c);
+        }
+        return s.toString();
+    }
+
     public void setTeacher(ArrayList<String> teacher) {
         this.teacher = teacher;
     }

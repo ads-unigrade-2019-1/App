@@ -29,7 +29,7 @@ public class ClassMeeting {
         return init_hour;
     }
 
-    public void setInit_hour() {
+    public void setInit_hour(String init_hour) {
         this.init_hour = init_hour;
     }
 

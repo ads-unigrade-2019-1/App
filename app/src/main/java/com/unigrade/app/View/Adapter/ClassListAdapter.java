@@ -58,14 +58,7 @@ public class ClassListAdapter extends BaseAdapter {
 
         viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getName());
 
-        ArrayList<String> teacherArray = ((SubjectClass)this.getItem(position)).getTeacher();
-        StringBuilder teachers = new StringBuilder();
-
-        for(String teacher : teacherArray) {
-            teachers.append(teacher + "\n");
-        }
-
-        viewHolder.classTeacher.setText(teachers);
+        viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacherString('\n'));
 
         viewHolder.classCampus.setText(((SubjectClass)this.getItem(position)).getCampus());
 
@@ -73,14 +66,10 @@ public class ClassListAdapter extends BaseAdapter {
         StringBuilder schedules = new StringBuilder();
 
         for(ClassMeeting schedule : schedulesArray) {
-            schedules.append(schedule + "\n");
+            schedules.append(schedule.getDay() + " " + schedule.getInit_hour() + "h - " + schedule.getFinal_hour() + "h " + schedule.getRoom() + "\n");
         }
 
-        //viewHolder.classTeacher.setText(schedules);
-
-        //String[] schedules = ((SubjectClass)this.getItem(position)).getSchedules();
-        //String s = schedules[0] + "\n" + schedules[1];
-        //viewHolder.classTime.setText(s);
+        viewHolder.classTime.setText(schedules);
 
         viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 

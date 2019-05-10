@@ -4,8 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.unigrade.app.DAO.Server;
-import com.unigrade.app.DAO.URLs;
+import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
@@ -42,7 +41,7 @@ public class ClassesController {
     public ArrayList<SubjectClass> getClassesList(Subject subject) {
         // Returns the list of all subject classes from the API
 
-        String result = new Server(getClassURL(subject)).get();
+        String result = new ServerHelper(getClassURL(subject)).get();
         ArrayList<SubjectClass> classes = new ArrayList<>();
 
         try {

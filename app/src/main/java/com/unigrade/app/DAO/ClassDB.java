@@ -17,9 +17,11 @@ import java.util.List;
 public class ClassDB {
     private String table = "classes";
     private DBHelper dbHelper;
+    private Context context;
 
     public ClassDB(Context context) {
-        dbHelper = new DBHelper(context);
+        this.context = context;
+        dbHelper = new DBHelper(this.context);
     }
 
     public boolean insert(SubjectClass subjectClass){
@@ -27,6 +29,9 @@ public class ClassDB {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
             db.insert(table, null, values);
+
+
+
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -58,6 +63,10 @@ public class ClassDB {
                 List<String> teachers = Arrays.asList(teachersArray);
                 subjectClass.setTeacher((ArrayList<String>) teachers);
 
+                MeetingDB meetingDB = new MeetingDB(this.context);
+                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectClass.getSubjectCode());
+
+                subjectClass.setSchedules(schedules);
                 //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
             } catch (SQLiteException e){
                 e.printStackTrace();
@@ -120,7 +129,11 @@ public class ClassDB {
 
             subjectClass.setTeacher((ArrayList<String>) teachers);
 
-            //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+            MeetingDB meetingDB = new MeetingDB(this.context);
+            ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
+
+            subjectClass.setSchedules(schedules);
+
         } catch (SQLiteException e){
             e.printStackTrace();
             return null;
@@ -155,8 +168,11 @@ public class ClassDB {
 
                 subjectClass.setTeacher(teachers);
 
-                //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+                MeetingDB meetingDB = new MeetingDB(this.context);
+                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
 
+                subjectClass.setSchedules(schedules)
+                ;
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 subjectsClass.add(subjectClass);
@@ -212,28 +228,15 @@ public class ClassDB {
 
         values.put("name", subjectClass.getName());
 
-        StringBuilder teachers = new StringBuilder();
-
-        for(String teacher : subjectClass.getTeacher()) {
-            teachers.append(teacher);
-            teachers.append(";");
-        }
-
-        values.put("teacher", teachers.toString());
+        values.put("teacher", subjectClass.getTeacherString(';'));
 
         values.put("campus", subjectClass.getCampus());
+
         values.put("subjectCode", subjectClass.getSubjectCode());
-
-        StringBuilder schedules = new StringBuilder();
-
-        for(ClassMeeting schedule : subjectClass.getSchedules()) {
-            schedules.append(schedule);
-            schedules.append(";");
+        MeetingDB meetingDB = new MeetingDB(this.context);
+        for(ClassMeeting meeting : subjectClass.getSchedules()) {
+            meetingDB.insert(meeting, subjectClass);
         }
-
-        values.put("schedules", schedules.toString());
-
-        //values.put("schedules", subjectClass.getSchedules());
 
         values.put("added", String.valueOf(subjectClass.isSelected()));
 
