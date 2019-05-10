@@ -67,7 +67,7 @@ public class ClassDB {
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectClass.getSubjectCode());
 
                 subjectClass.setSchedules(schedules);
-                //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
             } catch (SQLiteException e){
                 e.printStackTrace();
                 return null;
@@ -80,6 +80,9 @@ public class ClassDB {
 
     public boolean delete(SubjectClass subjectClass){
         try{
+            MeetingDB meetingDB = new MeetingDB(this.context);
+            meetingDB.delete(subjectClass);
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
                                subjectClass.getSubjectCode()};

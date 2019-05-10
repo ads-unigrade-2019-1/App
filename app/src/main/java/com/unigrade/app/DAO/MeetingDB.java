@@ -83,4 +83,32 @@ public class MeetingDB {
         cursor.close();
         return classMeetings;
     }
+
+    public boolean delete(SubjectClass subjectClass){
+        try{
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            String[] params = {subjectClass.getName(),
+                    subjectClass.getSubjectCode()};
+            db.delete(table, "name = ? AND subjectCode = ?", params);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean alter(SubjectClass subjectClass, ClassMeeting classMeeting) {
+        try{
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
+
+            String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
+
+            db.update(table, values, "name = ? AND subjectCode = ?", params);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
