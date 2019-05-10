@@ -29,7 +29,7 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
     @Override
     protected ArrayList<Timetable> doInBackground(String... params) {
         SystemClock.sleep(2000);
-        return timetablesController.getTimetablesList();
+        return timetablesController.getTimetablesList(timetablesFragment.getContext());
     }
 
     @Override

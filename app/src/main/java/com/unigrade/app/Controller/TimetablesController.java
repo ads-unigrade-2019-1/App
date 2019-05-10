@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.unigrade.app.DAO.ClassDAO;
 import com.unigrade.app.DAO.GetDAO;
+import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 
 import org.json.JSONArray;
@@ -12,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -30,39 +31,48 @@ public class TimetablesController {
         return instance;
     }
 
-    public ArrayList<Timetable> getTimetablesList(){
+    public ArrayList<Timetable> getTimetablesList(Context context){
         // Returns the list of all subjects from the API
         //String result = new GetDAO(URL_ALL_TIMETABLES).post("test");
+
         ArrayList<Timetable> timetables = new ArrayList<>();
-        String result = "[" +
+
+        String result = "" +
+        "[" +
             "[" +
                 "{" +
-                    "\"campus\":\"Gama\"," +
-                    "\"class\":\"L\"," +
-                    "\"teacher\":\"Rafael\"," +
-                    "\"day\":[\"Seg\", \"Qua\", \"Seg\"]," +
-                    "\"time\":[\"10h\", \"10h\", \"12h\"]" +
+                    "\"discipline\":\"120642\"," +
+                    "\"name\":\"L\"" +
                 "}," +
                 "{" +
-                    "\"campus\":\"Gama\"," +
-                    "\"class\":\"B\"," +
-                    "\"teacher\":\"Geovana\"," +
-                    "\"day\":[\"Seg\", \"Sex\"]," +
-                    "\"time\":[\"8h\", \"8h\"]" +
+                    "\"discipline\":\"120642\"," +
+                    "\"name\":\"B\"" +
                 "}," +
                 "{" +
-                    "\"campus\":\"Gama\"," +
-                    "\"class\":\"C\"," +
-                    "\"teacher\":\"Gabriela\"," +
-                    "\"day\":[\"Ter\", \"Qui\"]," +
-                    "\"time\":[\"14h\", \"14h\"]" +
+                    "\"discipline\":\"113040\"," +
+                    "\"name\":\"C\"" +
                 "}," +
                 "{" +
-                    "\"campus\":\"Gama\"," +
-                    "\"class\":\"D\"," +
-                    "\"teacher\":\"Guilherme\"," +
-                    "\"day\":[\"Ter\", \"Qui\"]," +
-                    "\"time\":[\"16h\", \"16h\"]" +
+                    "\"discipline\":\"208213\"," +
+                    "\"name\":\"L\"" +
+                "}" +
+            "]," +
+            "[" +
+                "{" +
+                    "\"discipline\":\"120642\"," +
+                    "\"name\":\"L\"" +
+                "}," +
+                "{" +
+                    "\"discipline\":\"120642\"," +
+                    "\"name\":\"B\"" +
+                "}," +
+                "{" +
+                    "\"discipline\":\"113040\"," +
+                    "\"name\":\"C\"" +
+                "}," +
+                "{" +
+                    "\"discipline\":\"208213\"," +
+                    "\"name\":\"L\"" +
                 "}" +
             "]" +
         "]";
@@ -70,46 +80,27 @@ public class TimetablesController {
         try {
             JSONArray timetablesJSON = new JSONArray(result);
 
-            for (int i = 0; i < timetablesJSON.length(); i++) {
+            for(int i = 0; i < timetablesJSON.length(); i++){
                 JSONArray timetableJSON = timetablesJSON.getJSONArray(i);
-                HashMap<String, ArrayList<String>> week = new HashMap<>();
+                ArrayList<SubjectClass> timetableClass = new ArrayList<>();
 
                 for(int j = 0; j < timetableJSON.length(); j++){
-                    JSONObject subjectClass = timetableJSON.getJSONObject(j);
-                    JSONArray daysJSON = subjectClass.getJSONArray("day");
-                    JSONArray startTimeJSON = subjectClass.getJSONArray("time");
+                    JSONObject classJSON = timetableJSON.getJSONObject(j);
+                    ClassDAO classDAO = new ClassDAO(context);
 
-                    for (int k = 0; k < daysJSON.length(); k++){
-                        if (week.containsKey(daysJSON.getString(k))){
-                            week.get(daysJSON.getString(k)).add(startTimeJSON.getString(k));
-                        }
-                        else {
-                            ArrayList<String> newTime = new ArrayList<>();
-                            newTime.add(startTimeJSON.getString(k));
-                            week.put(daysJSON.getString(k), newTime);
-                        }
-                    }
+                    String name = classJSON.getString("name");
+                    String discipline = classJSON.getString("discipline");
+
+                    timetableClass.add(classDAO.getClass(name, discipline));
                 }
-                Timetable timetable = new Timetable(week);
-                timetable.printTimetable();
+                Timetable timetable = new Timetable(timetableClass);
                 timetables.add(timetable);
+                timetable.printTimetable();
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//
-//        ArrayList<ArrayList<String>> week = new ArrayList<>();
-//        ArrayList<String> day = new ArrayList<>();
-//        day.add("Test");
-//        day.add("Test2");
-//        week.add(day);
-//
-//        ArrayList<Timetable> timetables = new ArrayList<>();
-//        timetables.add(new Timetable(week));
-//        timetables.add(new Timetable(week));
-//        timetables.add(new Timetable(week));
-//        timetables.add(new Timetable(week));
         return timetables;
     }
 
