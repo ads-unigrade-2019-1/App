@@ -1,9 +1,5 @@
 package com.unigrade.app.Controller;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
@@ -17,7 +13,7 @@ import java.util.ArrayList;
 
 import static com.unigrade.app.DAO.URLs.URL_SUBJECT_CLASSES;
 
-public class ClassesController {
+public class ClassesController extends Controller {
 
     private static ClassesController instance;
 
@@ -100,19 +96,6 @@ public class ClassesController {
         }
 
         return classes;
-    }
-
-    public boolean isConnectedToNetwork(Context context) {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        boolean isConnected = false;
-        if (connectivityManager != null) {
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
-        }
-
-        return isConnected;
     }
 
 }

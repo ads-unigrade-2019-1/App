@@ -80,13 +80,13 @@ public class ClassDB {
 
     public boolean delete(SubjectClass subjectClass){
         try{
-            MeetingDB meetingDB = new MeetingDB(this.context);
-            meetingDB.delete(subjectClass);
-
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
                                subjectClass.getSubjectCode()};
-            db.delete(table, "name = ? AND subjectCode = ?", params);
+            db.delete(table, "name=? AND subjectCode=?", params);
+
+            MeetingDB meetingDB = new MeetingDB(this.context);
+            meetingDB.delete(subjectClass);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -96,12 +96,17 @@ public class ClassDB {
 
     public boolean alter(SubjectClass subjectClass) {
         try{
+            MeetingDB meetingDB = new MeetingDB(this.context);
+            for(ClassMeeting schedule : subjectClass.getSchedules()) {
+                meetingDB.alter(subjectClass, schedule);
+            }
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
 
             String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
 
-            db.update(table, values, "name = ? AND subjectCode = ?", params);
+            db.update(table, values, "name=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -174,8 +179,8 @@ public class ClassDB {
                 MeetingDB meetingDB = new MeetingDB(this.context);
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
 
-                subjectClass.setSchedules(schedules)
-                ;
+                subjectClass.setSchedules(schedules);
+
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 subjectsClass.add(subjectClass);
@@ -191,7 +196,7 @@ public class ClassDB {
     public boolean isClassOnDB(SubjectClass sc) {
 
         String sql = String.format(
-                "SELECT * FROM %s WHERE subjectCode=%s and name=%s",
+                "SELECT * FROM %s WHERE subjectCode=%s and name='%s'",
                 table, sc.getSubjectCode(), sc.getName()
         );
         SQLiteDatabase db;

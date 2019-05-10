@@ -25,6 +25,7 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
         this.classesFragment = classesFragment;
         this.classDB = classDB;
         this.subject = subject;
+        this.subjectDB = subjectDB;
     }
 
     @Override
@@ -37,10 +38,13 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
     protected ArrayList<SubjectClass> doInBackground(String... params) {
         ArrayList<SubjectClass> classes = classesController.getClassesList(subject);
 
-//        if(subjectDB.isSubjectOnDB(classes.get(0).getSubjectCode()))
-//            for (SubjectClass sc: classes)
-//                if(classDB.isClassOnDB(sc))
-//                    sc.setSelected(true);
+        if(subjectDB.isSubjectOnDB(subject.getCode())) {
+            for (SubjectClass sc: classes) {
+                if(classDB.isClassOnDB(sc)) {
+                    sc.setSelected(true);
+                }
+            }
+        }
 
         return classes;
     }

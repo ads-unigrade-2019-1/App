@@ -47,7 +47,7 @@ public class MeetingDB {
 
         values.put("subjectCode", subjectClass.getSubjectCode());
 
-        Log.d("ClassDB ", "get(): " + values.toString());
+        Log.d("MeetingDB ", "get(): " + values.toString());
 
         return values;
     }
@@ -89,7 +89,7 @@ public class MeetingDB {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
                     subjectClass.getSubjectCode()};
-            db.delete(table, "name = ? AND subjectCode = ?", params);
+            db.delete(table, "className = ? AND subjectCode = ?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
