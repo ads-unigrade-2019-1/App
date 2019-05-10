@@ -31,9 +31,9 @@ public class ClassDAO {
         return true;
     }
 
-    public ArrayList<SubjectClass> all(){
-        String sql = String.format("SELECT * from %s", table);
+    public ArrayList<SubjectClass> allSelecteds(){
         SQLiteDatabase db;
+        Cursor cursor;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
@@ -41,21 +41,24 @@ public class ClassDAO {
             return null;
         }
 
-        Cursor cursor = db.rawQuery(sql, null);
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
 
-        while (cursor.moveToNext()){
-            SubjectClass subjectClass = new SubjectClass();
-            try {
+        try{
+            cursor = db.query(table, null, "added=?", new String[]{"true"}, null, null, null);
+            while (cursor.moveToNext()){
+                SubjectClass subjectClass = new SubjectClass();
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
                 subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
-            } catch (SQLiteException e){
-                e.printStackTrace();
-                return null;
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
+                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
+
+                subjectsClass.add(subjectClass);
             }
-            subjectsClass.add(subjectClass);
+        } catch (SQLiteException e){
+            e.printStackTrace();
+            return null;
         }
         cursor.close();
         return subjectsClass;
@@ -136,6 +139,7 @@ public class ClassDAO {
                 subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
                 subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
                 subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 subjectsClass.add(subjectClass);
