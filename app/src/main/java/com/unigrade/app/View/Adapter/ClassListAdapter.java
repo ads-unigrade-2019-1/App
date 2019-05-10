@@ -66,7 +66,7 @@ public class ClassListAdapter extends BaseAdapter {
         StringBuilder schedules = new StringBuilder();
 
         for(ClassMeeting schedule : schedulesArray) {
-            schedules.append(schedule.getDay() + " " + schedule.getInit_hour() + "h - " + schedule.getFinal_hour() + "h " + schedule.getRoom() + "\n");
+            schedules.append(schedule.formattedClassMeeting() + "\n");
         }
 
         viewHolder.classTime.setText(schedules);

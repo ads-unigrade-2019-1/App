@@ -48,4 +48,8 @@ public class ClassMeeting {
     public void setRoom(String room) {
         this.room = room;
     }
+
+    public String formattedClassMeeting() {
+        return day + " " + init_hour + "h - " + final_hour + "h " + room;
+    }
 }
