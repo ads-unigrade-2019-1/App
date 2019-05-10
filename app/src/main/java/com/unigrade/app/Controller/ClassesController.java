@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 import com.unigrade.app.DAO.Server;
 import com.unigrade.app.DAO.URLs;
+import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 
@@ -50,7 +51,7 @@ public class ClassesController {
             String name;
             ArrayList<String> teacher;
             String campus;
-            String schedules;
+            ArrayList<ClassMeeting> schedules;
             String subjectCode;
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -65,7 +66,23 @@ public class ClassesController {
                 }
 
                 campus = c.getString("campus");
-                schedules = c.getString("meetings");
+
+                schedules = new ArrayList<>();
+                String day;
+                String init_hour;
+                String final_hour;
+                String room;
+                JSONArray schedulesArray = c.getJSONArray("meetings");
+                for (int z = 0; z < schedulesArray.length(); z++) {
+                    JSONObject d = schedulesArray.getJSONObject(z);
+                    day = d.getString("day");
+                    init_hour = d.getString("init_hour");
+                    final_hour = d.getString("final_hour");
+                    room = d.getString("room");
+                    ClassMeeting classMeeting = new ClassMeeting(day, init_hour, final_hour, room);
+                    schedules.add(classMeeting);
+                }
+
                 subjectCode = c.getString("discipline");
 
                 SubjectClass subjectClass = new SubjectClass(

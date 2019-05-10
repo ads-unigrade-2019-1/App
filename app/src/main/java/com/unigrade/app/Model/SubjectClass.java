@@ -5,7 +5,7 @@ public class SubjectClass {
     private String name;
     private ArrayList<String> teacher = new ArrayList<>();
     private String campus;
-    private String schedules;
+    private ArrayList<ClassMeeting> schedules = new ArrayList<>();
     private String subjectCode;
     private boolean isSelected;
 
@@ -20,7 +20,7 @@ public class SubjectClass {
         this.isSelected = selected;
     }
 
-    public SubjectClass(String name, ArrayList<String> teacher, String campus, String schedules, String subjectCode){
+    public SubjectClass(String name, ArrayList<String> teacher, String campus, ArrayList<ClassMeeting> schedules, String subjectCode){
         int campi = Integer.parseInt(campus);
         if (campi == 1) campus = "Darcy Ribeiro";
         else if (campi == 2) {
@@ -38,16 +38,11 @@ public class SubjectClass {
         this.subjectCode = subjectCode;
     }
 
-    public String[] getSchedules() {
-        String[] parts = schedules.split("[|]|,");
-        return parts;
-    }
-
-    public String getSchedulesString() {
+    public ArrayList<ClassMeeting> getSchedules() {
         return schedules;
     }
 
-    public void setSchedules(String schedules) {
+    public void setSchedules(ArrayList<ClassMeeting> schedules) {
         this.schedules = schedules;
     }
 

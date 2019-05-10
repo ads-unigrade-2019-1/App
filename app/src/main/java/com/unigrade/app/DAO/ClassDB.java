@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
@@ -51,8 +52,13 @@ public class ClassDB {
             try {
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
-                subjectClass.setTeacher(new ArrayList<String>((cursor.getColumnIndex("teacher"))));
-                subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
+                String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+                String[] teachersArray = teachersString.split(";");
+                List<String> teachers = Arrays.asList(teachersArray);
+                subjectClass.setTeacher((ArrayList<String>) teachers);
+
+                //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
             } catch (SQLiteException e){
                 e.printStackTrace();
                 return null;
@@ -114,7 +120,7 @@ public class ClassDB {
 
             subjectClass.setTeacher((ArrayList<String>) teachers);
 
-            subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+            //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
         } catch (SQLiteException e){
             e.printStackTrace();
             return null;
@@ -149,7 +155,8 @@ public class ClassDB {
 
                 subjectClass.setTeacher(teachers);
 
-                subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+                //subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 subjectsClass.add(subjectClass);
@@ -216,7 +223,18 @@ public class ClassDB {
 
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
-        values.put("schedules", subjectClass.getSchedulesString());
+
+        StringBuilder schedules = new StringBuilder();
+
+        for(ClassMeeting schedule : subjectClass.getSchedules()) {
+            schedules.append(schedule);
+            schedules.append(";");
+        }
+
+        values.put("schedules", schedules.toString());
+
+        //values.put("schedules", subjectClass.getSchedules());
+
         values.put("added", String.valueOf(subjectClass.isSelected()));
 
         Log.d("ClassDB ", "get(): " + values.toString());
