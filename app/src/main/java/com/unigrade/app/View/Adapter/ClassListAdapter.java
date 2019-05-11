@@ -10,9 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.unigrade.app.DAO.ClassDAO;
+import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
@@ -24,16 +28,24 @@ public class ClassListAdapter extends BaseAdapter {
 
     private HashMap classItem;
     private ArrayList<SubjectClass> classes = new ArrayList<>();
+    private Context context;
+    private Subject subject;
 
     private static LayoutInflater inflater = null;
     //private View v;
     private Activity act;
     private ViewHolder viewHolder = new ViewHolder();
     private String priority;
+    private ClassDAO classDAO;
+    private SubjectDAO subjectDAO;
 
-    public ClassListAdapter(ArrayList<SubjectClass> classes, Context context) {
+        public ClassListAdapter(ArrayList<SubjectClass> classes, Context context, Subject subject) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.classes = classes;
+        this.context = context;
+        this.subject = subject;
+        this.subjectDAO = new SubjectDAO(context);
+        this.classDAO = new ClassDAO(context);
     }
 
     @Override
@@ -52,8 +64,10 @@ public class ClassListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(R.layout.item_class, null);
+
+
 
         viewHolder.classCampus = view.findViewById(R.id.class_campus);
         viewHolder.classCode = view.findViewById(R.id.class_code);
@@ -61,8 +75,6 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTime = view.findViewById(R.id.class_time);
         viewHolder.checkbox = view.findViewById(R.id.checkbox);
         viewHolder.spinner = view.findViewById(R.id.priori);
-
-
 
         viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getCodeLetter());
         viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacher());
@@ -72,17 +84,67 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTime.setText(s);
         viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 
-        viewHolder.spinner.setOnItemSelectedListener(getItemListener());
-        //((SubjectClass) this.getItem(position)).setPriority(priority);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(inflater.getContext(),
-                R.array.classes_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewHolder.spinner.setAdapter(adapter);
+        viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ListView lv = (ListView) buttonView.getParent().getParent().getParent();
+
+                for (SubjectClass c : classes)
+                    c.setSubjectCode(subject.getCode());
+
+                SubjectClass sc = (SubjectClass) lv.getItemAtPosition(position);
+
+                if(isChecked){
+                    sc.setSelected(true);
+                    insertIntoDatabase(sc);
+                    Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
+                }else {
+                    sc.setSelected(false);
+                    removeFromDatabase(sc);
+                    Log.i("REMOVED", sc.getTeacher() + " " + sc.isSelected());
+                }
+            }
+        });
+
+
 
 
         return view;
     }
+
+    private void insertIntoDatabase(SubjectClass sc){
+        if (!subjectDAO.isSubjectOnDB(subject.getCode())){
+            subjectDAO.insert(subject);
+            for (SubjectClass c : classes)
+                classDAO.insert(c);
+            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
+        } else {
+            classDAO.alter(sc);
+            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
+        }
+    }
+
+    private void removeFromDatabase(SubjectClass sc){
+        if (isLonelyAdded(sc)){
+            for (SubjectClass c : classes)
+                classDAO.delete(c);
+            subjectDAO.delete(subject);
+            Log.i("LONELY", subject.getCode() + " "+ sc.getTeacher());
+        } else {
+            classDAO.alter(sc);
+            Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeacher());
+        }
+    }
+
+    private boolean isLonelyAdded(SubjectClass sc){
+        for (SubjectClass c : classes)
+            if (c.isSelected() && c != sc)
+                return false;
+
+        return true;
+    }
+
 
     private AdapterView.OnItemSelectedListener getItemListener(){
         return new AdapterView.OnItemSelectedListener() {
