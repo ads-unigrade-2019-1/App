@@ -2,6 +2,7 @@ package com.unigrade.app.View.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.unigrade.app.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ClassListAdapter extends BaseAdapter {
 
@@ -38,12 +40,14 @@ public class ClassListAdapter extends BaseAdapter {
     private String priority;
     private ClassDAO classDAO;
     private SubjectDAO subjectDAO;
+    private HashMap<Integer,String> mapSpinner = new HashMap<Integer, String>();
 
         public ClassListAdapter(ArrayList<SubjectClass> classes, Context context, Subject subject) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.classes = classes;
         this.context = context;
         this.subject = subject;
+
         this.subjectDAO = new SubjectDAO(context);
         this.classDAO = new ClassDAO(context);
     }
@@ -64,9 +68,8 @@ public class ClassListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
         View view = inflater.inflate(R.layout.item_class, null);
-
 
 
         viewHolder.classCampus = view.findViewById(R.id.class_campus);
@@ -85,10 +88,11 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 
 
+
         viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ListView lv = (ListView) buttonView.getParent().getParent().getParent();
+                ListView lv = (ListView) buttonView.getParent().getParent().getParent(); // Isso vai pro ListView
 
                 for (SubjectClass c : classes)
                     c.setSubjectCode(subject.getCode());
@@ -107,8 +111,36 @@ public class ClassListAdapter extends BaseAdapter {
             }
         });
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,R.array.classes_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        viewHolder.spinner.setAdapter(adapter);
+
+        if (mapSpinner.containsKey(position)) {
+            viewHolder.spinner.setSelection(Integer.parseInt(mapSpinner.get(position)) -1,false);
+        }
+        viewHolder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                ListView lv = (ListView) view.getParent().getParent().getParent().getParent();
+
+                SubjectClass sc = (SubjectClass) lv.getItemAtPosition(position);
+
+                mapSpinner.put(position,parent.getItemAtPosition(pos).toString());
+                System.out.println("Valor da Chave "+position+ " = "+mapSpinner.get(position));
 
 
+                if(sc.isSelected()){
+                    sc.setPriority(parent.getItemAtPosition(pos).toString());
+                    Log.i("SPINNER",sc.getTeacher() + " --- " + sc.getPriority());
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return view;
     }
@@ -143,26 +175,6 @@ public class ClassListAdapter extends BaseAdapter {
                 return false;
 
         return true;
-    }
-
-
-    private AdapterView.OnItemSelectedListener getItemListener(){
-        return new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-                Spinner sp = view.findViewById(R.id.priori);
-
-
-
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-
-        };
     }
 
     private class ViewHolder{
