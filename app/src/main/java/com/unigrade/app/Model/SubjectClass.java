@@ -6,6 +6,7 @@ public class SubjectClass {
     private String campus;
     private String schedules;
     private String subjectCode;
+    private String priority;
     private boolean isSelected;
 
     public SubjectClass(){
@@ -70,5 +71,13 @@ public class SubjectClass {
 
     public void setSubjectCode(String subjectCode) {
         this.subjectCode = subjectCode;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 }

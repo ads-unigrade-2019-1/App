@@ -92,14 +92,6 @@ public class ClassesFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        //Spinner spinner = v.findViewById(R.id.priori);
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-        //        R.array.classes_array, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //spinner.setAdapter(adapter);
-
-
-
         subjectDAO = new SubjectDAO(getActivity());
         classDAO = new ClassDAO(getActivity());
 
