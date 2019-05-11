@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 
@@ -55,12 +56,21 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTime = view.findViewById(R.id.class_time);
         viewHolder.checkbox = view.findViewById(R.id.checkbox);
 
-        viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getCodeLetter());
-        viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacher());
+        viewHolder.classCode.setText(((SubjectClass)this.getItem(position)).getName());
+
+        viewHolder.classTeacher.setText(((SubjectClass)this.getItem(position)).getTeacherString('\n'));
+
         viewHolder.classCampus.setText(((SubjectClass)this.getItem(position)).getCampus());
-        String[] schedules = ((SubjectClass)this.getItem(position)).getSchedules();
-        String s = schedules[0] + "\n" + schedules[1];
-        viewHolder.classTime.setText(s);
+
+        ArrayList<ClassMeeting> schedulesArray = ((SubjectClass)this.getItem(position)).getSchedules();
+        StringBuilder schedules = new StringBuilder();
+
+        for(ClassMeeting schedule : schedulesArray) {
+            schedules.append(schedule.formattedClassMeeting() + "\n");
+        }
+
+        viewHolder.classTime.setText(schedules);
+
         viewHolder.checkbox.setChecked(((SubjectClass)this.getItem(position)).isSelected());
 
         return view;

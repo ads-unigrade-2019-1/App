@@ -7,16 +7,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.unigrade.app.Model.Subject;
-import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
 
-public class SubjectDAO {
+public class SubjectDB {
     private String table = "subjects";
-    private DAO dbHelper;
+    private DBHelper dbHelper;
 
-    public SubjectDAO(Context context){
-        dbHelper = new DAO(context);
+    private static SubjectDB instance;
+
+    public static SubjectDB getInstance(Context context) {
+        if(instance == null){
+            instance = new SubjectDB(context);
+        }
+        return instance;
+    }
+
+    public SubjectDB(Context context){
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public boolean insert(Subject subject){

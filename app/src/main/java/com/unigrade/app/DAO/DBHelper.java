@@ -6,9 +6,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DAO extends SQLiteOpenHelper{
+public class DBHelper extends SQLiteOpenHelper{
 
-    DAO(Context context) {
+    private static DBHelper instance;
+
+    public static DBHelper getInstance(Context context) {
+        if(instance == null){
+            instance = new DBHelper(context);
+        }
+        return instance;
+    }
+
+    DBHelper(Context context) {
         super(context, "Unigrade", null, 1);
     }
 
@@ -22,16 +31,27 @@ public class DAO extends SQLiteOpenHelper{
             db.execSQL(createSubjectTableSql);
 
             String createClassTableSql = "CREATE TABLE classes (" +
-                    "codeLetter VARCHAR(255) NOT NULL, " +
+                    "name VARCHAR(255) NOT NULL, " +
                     "teacher VARCHAR(255) NOT NULL, " +
                     "campus VARCHAR(255) NOT NULL, " +
                     "subjectCode VARCHAR(255) NOT NULL, " +
-                    "schedules VARCHAR(255) NOT NULL, " +
                     "added BOOLEAN NOT NULL DEFAULT 0, " +
-                    "CONSTRAINT classes_pk PRIMARY KEY (codeLetter, subjectCode), " +
+                    "CONSTRAINT classes_pk PRIMARY KEY (name, subjectCode), " +
                     "CONSTRAINT classes_subject_FK FOREIGN KEY (subjectCode) " +
                     "REFERENCES subject(code))";
             db.execSQL(createClassTableSql);
+
+            String createMeetingTableSql = "CREATE TABLE meetings(" +
+                    "day VARCHAR(255) NOT NULL, " +
+                    "initHour VARCHAR(255) NOT NULL, " +
+                    "finalHour VARCHAR(255) NOT NULL, " +
+                    "room VARCHAR(255) NOT NULL, " +
+                    "className VARCHAR(255) NOT NULL, " +
+                    "subjectCode VARCHAR(255) NOT NULL, " +
+                    "CONSTRAINT meeting_class_FK FOREIGN KEY (className, subjectCode) " +
+                    "REFERENCES classes(name, subjectCode))";
+            db.execSQL(createMeetingTableSql);
+
         }catch(SQLiteException e){
             e.printStackTrace();
         }
@@ -45,6 +65,9 @@ public class DAO extends SQLiteOpenHelper{
 
             String sqlDropSubjectTable = "DROP TABLE IF EXISTS subjects";
             db.execSQL(sqlDropSubjectTable);
+
+            String sqlDropMeetingTable = "DROP TABLE IF EXISTS subjects";
+            db.execSQL(sqlDropMeetingTable);
 
             onCreate(db);
         }catch(SQLiteException e){

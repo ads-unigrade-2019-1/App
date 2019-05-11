@@ -1,10 +1,6 @@
 package com.unigrade.app.Controller;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
-import com.unigrade.app.DAO.GetDAO;
+import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.Subject;
 
 import org.json.JSONArray;
@@ -15,7 +11,7 @@ import java.util.ArrayList;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_SUBJECTS;
 
-public class SubjectsController {
+public class SubjectsController extends Controller {
 
     private static SubjectsController instance;
 
@@ -33,7 +29,7 @@ public class SubjectsController {
     public ArrayList<Subject> getSubjectsList(){
         // Returns the list of all subjects from the API
 
-        String result = new GetDAO(URL_ALL_SUBJECTS).get();
+        String result = new ServerHelper (URL_ALL_SUBJECTS).get();
         ArrayList<Subject> subjects = new ArrayList<>();
 
         try {
@@ -48,8 +44,7 @@ public class SubjectsController {
 
                 name = c.getString("name");
                 code = c.getString("code");
-                //TODO Puxar da API
-                credits = "002-003-004-005";
+                credits = c.getString("credits");
 
                 Subject subject = new Subject(code, name, credits);
                 subjects.add(subject);
@@ -63,18 +58,4 @@ public class SubjectsController {
         return subjects;
     }
 
-    
-
-    public boolean isConnectedToNetwork(Context context) {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        boolean isConnected = false;
-        if (connectivityManager != null) {
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
-        }
-
-        return isConnected;
-    }
 }
