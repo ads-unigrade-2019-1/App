@@ -17,11 +17,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unigrade.app.Controller.ClassesController;
-import com.unigrade.app.DAO.ClassDAO;
-import com.unigrade.app.DAO.SubjectDAO;
+import com.unigrade.app.DAO.ClassDB;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.View.Activity.MainActivity;
@@ -43,12 +42,9 @@ public class ClassesFragment extends Fragment {
     private TextView tvClassCredits;
     private TextView tvClassTitle;
     private String caller;
-
-
     private Subject subject;
-
-    private ClassDAO classDAO;
-    private SubjectDAO subjectDAO;
+    private ClassDB classDB;
+    private SubjectDB subjectDB;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -91,15 +87,15 @@ public class ClassesFragment extends Fragment {
         tvClassTitle = v.findViewById(R.id.class_title);
         tvClassCredits = v.findViewById(R.id.class_credits);
         tvClassTitle.setText(subject.getName());
-        tvClassCredits.setText("11-11-11-11");
+        tvClassCredits.setText(subject.getCredits());
 
         progressBar = v.findViewById(R.id.progress_bar);
         classesList = v.findViewById(R.id.class_list);
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        subjectDAO = new SubjectDAO(getActivity());
-        classDAO = new ClassDAO(getActivity());
+        subjectDB = SubjectDB.getInstance(getActivity());
+        classDB = ClassDB.getInstance(getActivity());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
@@ -128,7 +124,7 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(this, classDAO, subjectDAO).execute();
+            getClassesTask = new GetClasses(this, classDB, subjectDB, subject).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -138,15 +134,13 @@ public class ClassesFragment extends Fragment {
 
     private void callDatabase(){
         Log.i("CALLDATABASE", "New adapter added");
-        classes = classDAO.getSubjectClasses(subject.getCode());
+        classes = classDB.getSubjectClasses(subject.getCode());
         for (SubjectClass sc: classes)
             Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
         classesList.setAdapter(
                 new ClassListAdapter(classes, getActivity(), subject)
         );
     }
-
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

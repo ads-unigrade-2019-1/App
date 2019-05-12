@@ -21,7 +21,8 @@ android:layout_gravity="top" >
             android:scaleX="1.4"
             android:scaleY="1.4"
             android:buttonTint="@color/colorPrimary"
-            android:id="@+id/checkbox" />
+            android:id="@+id/class_checkbox" />
+
         <TextView
             android:id="@+id/class_code"
             android:layout_width="30dp"
@@ -44,8 +45,7 @@ android:layout_gravity="top" >
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="top"
-        >
+        android:layout_gravity="top">
 
         <TextView
             android:id="@+id/class_campus"
@@ -58,7 +58,7 @@ android:layout_gravity="top" >
             android:textSize="15sp" />
 
         <Spinner
-            android:id="@+id/priori"
+            android:id="@+id/class_priority"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_marginStart="15dp"

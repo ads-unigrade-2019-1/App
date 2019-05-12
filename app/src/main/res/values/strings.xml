@@ -2,7 +2,7 @@
     <string name="app_name">Unigrade</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="campus">
+    <string-array name="campus_array">
         <item>Selecione</item>
         <item>Gama</item>
         <item>Ceilândia</item>

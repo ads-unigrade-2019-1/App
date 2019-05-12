@@ -7,16 +7,30 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class ClassDAO {
+public class ClassDB {
     private String table = "classes";
-    private DAO dbHelper;
+    private DBHelper dbHelper;
+    private Context context;
 
-    public ClassDAO(Context context) {
-        dbHelper = new DAO(context);
+    private static ClassDB instance;
+
+    public static ClassDB getInstance(Context context) {
+        if(instance == null){
+            instance = new ClassDB(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    public ClassDB(Context context) {
+        this.context = context;
+        dbHelper = DBHelper.getInstance(this.context);
     }
 
     public boolean insert(SubjectClass subjectClass){
@@ -24,6 +38,7 @@ public class ClassDAO {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
             db.insert(table, null, values);
+
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -48,9 +63,18 @@ public class ClassDAO {
             SubjectClass subjectClass = new SubjectClass();
             try {
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-                subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-                subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
-                subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+                subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+
+                String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+                String[] teachersArray = teachersString.split(";");
+                List<String> teachers = Arrays.asList(teachersArray);
+                subjectClass.setTeacher((ArrayList<String>) teachers);
+
+                MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectClass.getSubjectCode());
+
+                subjectClass.setSchedules(schedules);
+
             } catch (SQLiteException e){
                 e.printStackTrace();
                 return null;
@@ -64,9 +88,12 @@ public class ClassDAO {
     public boolean delete(SubjectClass subjectClass){
         try{
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            String[] params = {subjectClass.getCodeLetter(),
+            String[] params = {subjectClass.getName(),
                                subjectClass.getSubjectCode()};
-            db.delete(table, "codeLetter = ? AND subjectCode = ?", params);
+            db.delete(table, "name=? AND subjectCode=?", params);
+
+            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+            meetingDB.delete(subjectClass);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -76,12 +103,17 @@ public class ClassDAO {
 
     public boolean alter(SubjectClass subjectClass) {
         try{
+            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+            for(ClassMeeting schedule : subjectClass.getSchedules()) {
+                meetingDB.alter(subjectClass, schedule);
+            }
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
 
-            String[] params = {subjectClass.getCodeLetter(), subjectClass.getSubjectCode()};
+            String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
 
-            db.update(table, values, "codeLetter = ? AND subjectCode = ?", params);
+            db.update(table, values, "name=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -89,7 +121,7 @@ public class ClassDAO {
         return true;
     }
     
-    public SubjectClass getClass(String codeLetter, String subjectCode){
+    public SubjectClass getClass(String name, String subjectCode){
         SQLiteDatabase db;
         try {
             db = dbHelper.getReadableDatabase();
@@ -98,15 +130,25 @@ public class ClassDAO {
             return null;
         }
 
-        Cursor cursor = db.query(table, null, "subjectCode=? AND codeLetter=?", new String[]{subjectCode, codeLetter}, null, null, null);
+        Cursor cursor = db.query(table, null, "subjectCode=? AND name=?", new String[]{subjectCode, name}, null, null, null);
         cursor.moveToFirst();
 
         SubjectClass subjectClass = new SubjectClass();
         try {
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-            subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-            subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
-            subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+            subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+
+            String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+            String[] teachersArray = teachersString.split(";");
+            List<String> teachers = Arrays.asList(teachersArray);
+
+            subjectClass.setTeacher((ArrayList<String>) teachers);
+
+            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+            ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
+
+            subjectClass.setSchedules(schedules);
+
         } catch (SQLiteException e){
             e.printStackTrace();
             return null;
@@ -132,9 +174,20 @@ public class ClassDAO {
             while (cursor.moveToNext()){
                 SubjectClass subjectClass = new SubjectClass();
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-                subjectClass.setCodeLetter(cursor.getString(cursor.getColumnIndex("codeLetter")));
-                subjectClass.setTeacher(cursor.getString(cursor.getColumnIndex("teacher")));
-                subjectClass.setSchedules(cursor.getString(cursor.getColumnIndex("schedules")));
+                subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+
+                String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+                String[] teachersArray = teachersString.split(";");
+                ArrayList<String> teachers = new ArrayList<>();
+                teachers.addAll(Arrays.asList(teachersArray));
+
+                subjectClass.setTeacher(teachers);
+
+                MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
+
+                subjectClass.setSchedules(schedules);
+
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 subjectsClass.add(subjectClass);
@@ -150,8 +203,8 @@ public class ClassDAO {
     public boolean isClassOnDB(SubjectClass sc) {
 
         String sql = String.format(
-                "SELECT * FROM %s WHERE subjectCode=%s and codeLetter=%s",
-                table, sc.getSubjectCode(), sc.getCodeLetter()
+                "SELECT * FROM %s WHERE subjectCode=%s and name='%s'",
+                table, sc.getSubjectCode(), sc.getName()
         );
         SQLiteDatabase db;
 
@@ -188,14 +241,21 @@ public class ClassDAO {
     private ContentValues getClassAttribute(SubjectClass subjectClass){
         ContentValues values = new ContentValues();
 
-        values.put("codeLetter", subjectClass.getCodeLetter());
-        values.put("teacher", subjectClass.getTeacher());
+        values.put("name", subjectClass.getName());
+
+        values.put("teacher", subjectClass.getTeacherString(';'));
+
         values.put("campus", subjectClass.getCampus());
+
         values.put("subjectCode", subjectClass.getSubjectCode());
-        values.put("schedules", subjectClass.getSchedulesString());
+        MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+        for(ClassMeeting meeting : subjectClass.getSchedules()) {
+            meetingDB.insert(meeting, subjectClass);
+        }
+
         values.put("added", String.valueOf(subjectClass.isSelected()));
 
-        Log.d("ClassDAO ", "get(): " + values.toString());
+        Log.d("ClassDB ", "get(): " + values.toString());
 
         return values;
     }
