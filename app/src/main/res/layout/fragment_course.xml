@@ -39,7 +39,7 @@
         android:layout_height="50sp"
         android:layout_marginRight="30sp"
         android:layout_marginLeft="30sp"
-        android:entries="@array/campus"/>
+        android:entries="@array/campus_array"/>
 
     <TextView
         android:layout_marginTop="40sp"

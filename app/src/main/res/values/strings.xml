@@ -2,7 +2,7 @@
     <string name="app_name">Unigrade</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="campus">
+    <string-array name="campus_array">
         <item>Selecione</item>
         <item>Gama</item>
         <item>Ceilândia</item>
@@ -21,6 +21,15 @@
         <item>Engenharia Civil</item>
         <item>Turismo</item>
     </string-array>
+
+    <string-array name="classes_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

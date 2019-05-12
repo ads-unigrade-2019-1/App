@@ -55,7 +55,7 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
         classesFragment.setClasses(classes);
         classesFragment.getClassesList()
                 .setAdapter(
-                        new ClassListAdapter(classesFragment.getClasses(), classesFragment.getActivity())
+                        new ClassListAdapter(classesFragment.getClasses(), classesFragment.getActivity(), classesFragment.getSubject())
                 );
         classesFragment.getProgressBar().setVisibility(View.GONE);
     }

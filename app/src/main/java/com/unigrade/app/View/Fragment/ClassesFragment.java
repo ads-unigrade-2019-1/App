@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.unigrade.app.Controller.ClassesController;
@@ -48,6 +50,9 @@ public class ClassesFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public Subject getSubject() {
+        return subject;
+    }
 
     public void setClasses(ArrayList<SubjectClass> classes){
         this.classes = classes;
@@ -74,9 +79,7 @@ public class ClassesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_classes, container, false);
-
         Bundle bundle = getArguments();
         subject = (Subject) bundle.getSerializable("subject");
         caller = (String) bundle.getSerializable("caller");
@@ -103,7 +106,6 @@ public class ClassesFragment extends Fragment {
         }
 
         classesList.setItemsCanFocus(false);
-        classesList.setOnItemClickListener(getItemListener());
 
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,67 +138,8 @@ public class ClassesFragment extends Fragment {
         for (SubjectClass sc: classes)
             Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
         classesList.setAdapter(
-                new ClassListAdapter(classes, getActivity())
+                new ClassListAdapter(classes, getActivity(), subject)
         );
-    }
-
-    private AdapterView.OnItemClickListener getItemListener(){
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckBox cb = view.findViewById(R.id.checkbox);
-
-                for (SubjectClass c : classes)
-                    c.setSubjectCode(subject.getCode());
-
-                SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
-
-                if (!cb.isChecked()) {
-                    cb.setChecked(true);
-                    sc.setSelected(true);
-                    insertIntoDatabase(sc);
-                    Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
-                } else {
-                    cb.setChecked(false);
-                    sc.setSelected(false);
-                    removeFromDatabase(sc);
-                    Log.i("REMOVED", sc.getTeacher() + " " + sc.isSelected());
-                }
-
-            }
-        };
-    }
-
-    private void insertIntoDatabase(SubjectClass sc){
-        if (!subjectDB.isSubjectOnDB(subject.getCode())){
-            subjectDB.insert(subject);
-            for (SubjectClass c : classes)
-                classDB.insert(c);
-            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
-        } else {
-            classDB.alter(sc);
-            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
-        }
-    }
-
-    private void removeFromDatabase(SubjectClass sc){
-        if (isLonelyAdded(sc)){
-            for (SubjectClass c : classes)
-                classDB.delete(c);
-            subjectDB.delete(subject);
-            Log.i("LONELY", subject.getCode() + " "+ sc.getTeacher());
-        } else {
-            classDB.alter(sc);
-            Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeacher());
-        }
-    }
-
-    private boolean isLonelyAdded(SubjectClass sc){
-        for (SubjectClass c : classes)
-            if (c.isSelected() && c != sc)
-                return false;
-
-        return true;
     }
 
     public interface OnFragmentInteractionListener {
