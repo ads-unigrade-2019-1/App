@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.DAO.ClassDAO;
@@ -43,10 +45,14 @@ public class UserSubjectsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ArrayList<Subject> subjects = new ArrayList<>();
+    private ArrayList<Subject> subjects;
+    private ArrayList<Subject> subjectsListDao;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
+    private ProgressBar progressBar;
+    private Button btnReload;
     private LinearLayout noInternet;
+    private SubjectDAO subjectDAO;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -54,22 +60,8 @@ public class UserSubjectsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private SubjectDAO subjectDAO;
-
     public UserSubjectsFragment() {
         // Required empty public constructor
-    }
-
-    public void setSubjects(ArrayList<Subject> subjects){
-        this.subjects = subjects;
-    }
-
-    public ArrayList<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public ListView getSubjectList() {
-        return subjectList;
     }
 
     /**
@@ -89,6 +81,39 @@ public class UserSubjectsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    public void setSubjects(ArrayList<Subject> subjects){
+        this.subjects = subjects;
+    }
+
+    public ArrayList<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjectsListDao(ArrayList<Subject> subjectsListDao){
+        this.subjectsListDao = subjectsListDao;
+    }
+
+    public ArrayList<Subject> getSubjectsListDao(){
+        return subjectsListDao;
+    }
+
+    public void setSubjectDao(SubjectDAO subjectDAO){
+        this.subjectDAO = subjectDAO;
+    }
+
+    public SubjectDAO getSubjectDAO(){
+        return subjectDAO;
+    }
+
+    public ListView getSubjectList() {
+        return subjectList;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,42 +129,17 @@ public class UserSubjectsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
 
-        boolean removeSubject;
+        subjectList = view.findViewById(R.id.user_subjects_list);
+        progressBar = view.findViewById(R.id.progress_bar);
+        noInternet = view.findViewById(R.id.no_internet);
+        btnReload = view.findViewById(R.id.reload);
 
         callServer();
 
-        subjectDAO = new SubjectDAO(getActivity());
-        ArrayList<Subject> subjectsList = subjectDAO.all();
+        //ListView subjectList = view.findViewById(R.id.user_subjects_list);
+        //subjectList.setAdapter(new SubjectListAdapter(subjectsListDao, getActivity()));
 
-        try{
-            ArrayList<Subject> verifyList = this.getSubjects();
-
-            if(verifyList.isEmpty() == true) {
-            }else{
-                for (int i = 0; i < subjectsList.size(); i++) {
-                    removeSubject = true;
-                    for (int j = 0; j < verifyList.size(); j++) {
-                        if (verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
-                            subjectDAO.alter(verifyList.get(j));
-                            subjectsList.set(i, verifyList.get(j));
-                            removeSubject = false;
-                            break;
-                        }
-                    }
-                    if (removeSubject == true) {
-                        subjectDAO.delete(subjectsList.get(i));
-                        subjectsList.remove(i);
-                    }
-                }
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
-        listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));
-
-        listSubjectsUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
@@ -149,6 +149,14 @@ public class UserSubjectsFragment extends Fragment {
             }
         });
 
+//        btnReload.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                callServer();
+//            }
+//        });
+
+
         return view;
     }
 
@@ -157,7 +165,7 @@ public class UserSubjectsFragment extends Fragment {
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
            // subjectList.setVisibility(View.VISIBLE);
-            //noInternet.setVisibility(View.GONE);
+           // noInternet.setVisibility(View.GONE);
             getSubjectsTask = new RefreshUserSubjectsFragment(this).execute();
         } else {
             //subjectList.setVisibility(View.GONE);
