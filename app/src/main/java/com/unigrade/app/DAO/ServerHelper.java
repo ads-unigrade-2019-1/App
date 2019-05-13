@@ -8,13 +8,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
-public class GetDAO {
+public class ServerHelper {
+    public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 15000;
     private String url;
     private String result;
 
-    public GetDAO(String url){
+    public ServerHelper(String url){
         this.url = url;
     }
 

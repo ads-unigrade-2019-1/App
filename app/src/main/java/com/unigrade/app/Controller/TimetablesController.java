@@ -5,8 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.unigrade.app.DAO.ClassDAO;
-import com.unigrade.app.DAO.GetDAO;
+import com.unigrade.app.DAO.ClassDB;
+import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 
@@ -18,9 +19,8 @@ import java.util.ArrayList;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
-public class TimetablesController {
+public class TimetablesController extends Controller{
     private static TimetablesController instance;
-    private ClassDAO classDAO;
 
     private TimetablesController(){
         //Empty constructor
@@ -35,14 +35,14 @@ public class TimetablesController {
 
     public ArrayList<Timetable> getTimetablesList(Context context){
         // Returns the list of all subjects from the API
-        ClassDAO classDAO = new ClassDAO(context);
+        ClassDB classDB = new ClassDB(context);
 
 //        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.all()).toString());
 //        TODO
 //         excluir essa chamada de função
 //         descomentar o post
 //         excluir string result feita à mão
-        arrayToJSON(classDAO.allSelecteds());
+        arrayToJSON(classDB.allSelecteds());
 
         String result = "" +
                 "[" +
@@ -99,7 +99,7 @@ public class TimetablesController {
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
 
-                    timetableClass.add(classDAO.getClass(name, discipline));
+                    timetableClass.add(classDB.getClass(name, discipline));
                 }
                 Timetable timetable = new Timetable(timetableClass);
                 timetables.add(timetable);
@@ -127,7 +127,7 @@ public class TimetablesController {
 
 //             TODO criar JSONArray para os horários a partir do obj schedule
                 JSONArray meetingsJSON = new JSONArray();
-                for(String schedule : subjectClass.getSchedules()) {
+                for(ClassMeeting schedule : subjectClass.getSchedules()) {
 //                   JSONObject scheduleJSON = new JSONObject()
 //
 //                   scheduleJSON.put("room", schedule.getRoom());
@@ -137,7 +137,7 @@ public class TimetablesController {
                     meetingsJSON.put(schedule);
                 }
                 subjectJSON.put("meetings", meetingsJSON);
-                subjectJSON.put("name", subjectClass.getCodeLetter());
+                subjectJSON.put("name", subjectClass.getName());
                 subjectJSON.put("discipline", subjectClass.getSubjectCode());
                 subjectJSON.put("campus", subjectClass.getCampus());
 
@@ -150,16 +150,4 @@ public class TimetablesController {
         return subjectsJSON;
     }
 
-    public boolean isConnectedToNetwork(Context context) {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        boolean isConnected = false;
-        if (connectivityManager != null) {
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
-        }
-
-        return isConnected;
-    }
 }

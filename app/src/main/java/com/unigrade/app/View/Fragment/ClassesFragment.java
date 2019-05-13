@@ -9,17 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.unigrade.app.Controller.ClassesController;
-import com.unigrade.app.DAO.ClassDAO;
-import com.unigrade.app.DAO.SubjectDAO;
+import com.unigrade.app.DAO.ClassDB;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.View.Activity.MainActivity;
@@ -42,13 +43,16 @@ public class ClassesFragment extends Fragment {
     private TextView tvClassTitle;
     private String caller;
     private Subject subject;
-    private ClassDAO classDAO;
-    private SubjectDAO subjectDAO;
+    private ClassDB classDB;
+    private SubjectDB subjectDB;
 
     public ClassesFragment() {
         // Required empty public constructor
     }
 
+    public Subject getSubject() {
+        return subject;
+    }
 
     public void setClasses(ArrayList<SubjectClass> classes){
         this.classes = classes;
@@ -75,9 +79,7 @@ public class ClassesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_classes, container, false);
-
         Bundle bundle = getArguments();
         subject = (Subject) bundle.getSerializable("subject");
         caller = (String) bundle.getSerializable("caller");
@@ -85,15 +87,15 @@ public class ClassesFragment extends Fragment {
         tvClassTitle = v.findViewById(R.id.class_title);
         tvClassCredits = v.findViewById(R.id.class_credits);
         tvClassTitle.setText(subject.getName());
-        tvClassCredits.setText("11-11-11-11");
+        tvClassCredits.setText(subject.getCredits());
 
         progressBar = v.findViewById(R.id.progress_bar);
         classesList = v.findViewById(R.id.class_list);
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        subjectDAO = new SubjectDAO(getActivity());
-        classDAO = new ClassDAO(getActivity());
+        subjectDB = SubjectDB.getInstance(getActivity());
+        classDB = ClassDB.getInstance(getActivity());
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
@@ -104,7 +106,6 @@ public class ClassesFragment extends Fragment {
         }
 
         classesList.setItemsCanFocus(false);
-        classesList.setOnItemClickListener(getItemListener());
 
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +124,7 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(this, classDAO, subjectDAO).execute();
+            getClassesTask = new GetClasses(this, classDB, subjectDB, subject).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -133,71 +134,12 @@ public class ClassesFragment extends Fragment {
 
     private void callDatabase(){
         Log.i("CALLDATABASE", "New adapter added");
-        classes = classDAO.getSubjectClasses(subject.getCode());
+        classes = classDB.getSubjectClasses(subject.getCode());
         for (SubjectClass sc: classes)
             Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
         classesList.setAdapter(
-                new ClassListAdapter(classes, getActivity())
+                new ClassListAdapter(classes, getActivity(), subject)
         );
-    }
-
-    private AdapterView.OnItemClickListener getItemListener(){
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckBox cb = view.findViewById(R.id.checkbox);
-
-                for (SubjectClass c : classes)
-                    c.setSubjectCode(subject.getCode());
-
-                SubjectClass sc = (SubjectClass) parent.getItemAtPosition(position);
-
-                if (!cb.isChecked()) {
-                    cb.setChecked(true);
-                    sc.setSelected(true);
-                    insertIntoDatabase(sc);
-                    Log.i("ADDED", sc.getTeacher() + " " + sc.isSelected());
-                } else {
-                    cb.setChecked(false);
-                    sc.setSelected(false);
-                    removeFromDatabase(sc);
-                    Log.i("REMOVED", sc.getTeacher() + " " + sc.isSelected());
-                }
-
-            }
-        };
-    }
-
-    private void insertIntoDatabase(SubjectClass sc){
-        if (!subjectDAO.isSubjectOnDB(subject.getCode())){
-            subjectDAO.insert(subject);
-            for (SubjectClass c : classes)
-                classDAO.insert(c);
-            Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
-        } else {
-            classDAO.alter(sc);
-            Log.i("ONDB", subject.getCode() + " "+ sc.getTeacher());
-        }
-    }
-
-    private void removeFromDatabase(SubjectClass sc){
-        if (isLonelyAdded(sc)){
-            for (SubjectClass c : classes)
-                classDAO.delete(c);
-            subjectDAO.delete(subject);
-            Log.i("LONELY", subject.getCode() + " "+ sc.getTeacher());
-        } else {
-            classDAO.alter(sc);
-            Log.i("NOTLONELY", subject.getCode() + " "+ sc.getTeacher());
-        }
-    }
-
-    private boolean isLonelyAdded(SubjectClass sc){
-        for (SubjectClass c : classes)
-            if (c.isSelected() && c != sc)
-                return false;
-
-        return true;
     }
 
     public interface OnFragmentInteractionListener {

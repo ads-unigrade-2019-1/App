@@ -42,32 +42,6 @@
             android:background="@color/colorAccent"
             android:textAlignment="center"
             android:id="@+id/viewlinebar" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="top" >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
-                android:text="Prioridade da matéria"
-                android:textSize="18sp" />
-            <Spinner
-                android:id="@+id/spinnerprioridades"
-                android:layout_width="90dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:dropDownWidth="70dp"
-                android:spinnerMode="dropdown" />
-
-        </LinearLayout>
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

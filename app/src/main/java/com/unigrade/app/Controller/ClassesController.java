@@ -1,10 +1,8 @@
 package com.unigrade.app.Controller;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
-import com.unigrade.app.DAO.GetDAO;
+import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.Model.ClassMeeting;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 
 import org.json.JSONArray;
@@ -15,7 +13,7 @@ import java.util.ArrayList;
 
 import static com.unigrade.app.DAO.URLs.URL_SUBJECT_CLASSES;
 
-public class ClassesController {
+public class ClassesController extends Controller {
 
     private static ClassesController instance;
 
@@ -30,35 +28,64 @@ public class ClassesController {
         return instance;
     }
 
-    public ArrayList<SubjectClass> getSubjectsList(){
+    private String getClassURL(Subject subject) {
+        String classURL = URL_SUBJECT_CLASSES + subject.getCode();
+
+        return classURL;
+    }
+
+    public ArrayList<SubjectClass> getClassesList(Subject subject) {
         // Returns the list of all subject classes from the API
 
-        String result = new GetDAO(URL_SUBJECT_CLASSES).get();
+        String result = new ServerHelper (getClassURL(subject)).get();
         ArrayList<SubjectClass> classes = new ArrayList<>();
 
         try {
 
             JSONArray jsonArray = new JSONArray(result);
-            String codeLetter;
-            String professor;
+            String name;
+            ArrayList<String> teacher;
             String campus;
-            String schedules;
+            ArrayList<ClassMeeting> schedules;
             String subjectCode;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject c = jsonArray.getJSONObject(i);
 
-                codeLetter = c.getString("class");
-                professor = c.getString("teacher");
+                name = c.getString("name");
+
+                teacher = new ArrayList<>();
+                JSONArray teacherArray = c.getJSONArray("teachers");
+                for (int j = 0; j < teacherArray.length(); j++) {
+                    teacher.add(teacherArray.getString(j));
+                }
+
                 campus = c.getString("campus");
-                schedules = c.getString("time");
+
+                schedules = new ArrayList<>();
+                String day;
+                String init_hour;
+                String final_hour;
+                String room;
+                JSONArray schedulesArray = c.getJSONArray("meetings");
+                for (int z = 0; z < schedulesArray.length(); z++) {
+                    JSONObject d = schedulesArray.getJSONObject(z);
+                    day = d.getString("day");
+                    init_hour = d.getString("init_hour");
+                    final_hour = d.getString("final_hour");
+                    room = d.getString("room");
+                    ClassMeeting classMeeting = new ClassMeeting(day, init_hour, final_hour, room);
+                    schedules.add(classMeeting);
+                }
+
+                subjectCode = c.getString("discipline");
 
                 SubjectClass subjectClass = new SubjectClass(
-                        codeLetter,
-                        professor,
+                        name,
+                        teacher,
                         campus,
                         schedules,
-                        null
+                        subjectCode
                 );
                 classes.add(subjectClass);
             }
@@ -69,19 +96,6 @@ public class ClassesController {
         }
 
         return classes;
-    }
-
-    public boolean isConnectedToNetwork(Context context) {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        boolean isConnected = false;
-        if (connectivityManager != null) {
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
-        }
-
-        return isConnected;
     }
 
 }

@@ -5,21 +5,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.unigrade.app.DAO.ClassDAO;
-import com.unigrade.app.DAO.SubjectDAO;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
-import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
-import com.unigrade.app.View.AsyncTask.GetSubjects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +43,7 @@ public class UserSubjectsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private SubjectDAO subjectDAO;
+    private SubjectDB subjectDB;
 
     public UserSubjectsFragment() {
         // Required empty public constructor
@@ -87,8 +83,8 @@ public class UserSubjectsFragment extends Fragment {
 
         boolean removeSubject;
 
-        subjectDAO = new SubjectDAO(getActivity());
-        ArrayList<Subject> subjectsList = subjectDAO.all();
+        subjectDB = SubjectDB.getInstance(getActivity());
+        ArrayList<Subject> subjectsList = subjectDB.all();
 
         try{
             ArrayList<Subject> verifyList = ((MainActivity) getActivity()).getSubjectsList();
@@ -97,14 +93,14 @@ public class UserSubjectsFragment extends Fragment {
                 removeSubject = true;
                 for (int j = 0; j < verifyList.size(); j++) {
                     if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
-                        subjectDAO.alter(verifyList.get(j));
+                        subjectDB.alter(verifyList.get(j));
                         subjectsList.set(i, verifyList.get(j));
                         removeSubject = false;
                         break;
                     }
                 }
                 if (removeSubject == true) {
-                    subjectDAO.delete(subjectsList.get(i));
+                    subjectDB.delete(subjectsList.get(i));
                     subjectsList.remove(i);
                 }
             }
