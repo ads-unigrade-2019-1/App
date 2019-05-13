@@ -6,24 +6,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.unigrade.app.Controller.SubjectsController;
-import com.unigrade.app.DAO.ClassDAO;
-import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
-import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
-import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.RefreshUserSubjectsFragment;
 
 import java.io.Serializable;
@@ -45,14 +36,10 @@ public class UserSubjectsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ArrayList<Subject> subjects;
     private ArrayList<Subject> subjectsListDao;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
-    private ProgressBar progressBar;
-    private Button btnReload;
-    private LinearLayout noInternet;
-    private SubjectDAO subjectDAO;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -82,14 +69,6 @@ public class UserSubjectsFragment extends Fragment {
         return fragment;
     }
 
-    public void setSubjects(ArrayList<Subject> subjects){
-        this.subjects = subjects;
-    }
-
-    public ArrayList<Subject> getSubjects() {
-        return subjects;
-    }
-
     public void setSubjectsListDao(ArrayList<Subject> subjectsListDao){
         this.subjectsListDao = subjectsListDao;
     }
@@ -98,20 +77,8 @@ public class UserSubjectsFragment extends Fragment {
         return subjectsListDao;
     }
 
-    public void setSubjectDao(SubjectDAO subjectDAO){
-        this.subjectDAO = subjectDAO;
-    }
-
-    public SubjectDAO getSubjectDAO(){
-        return subjectDAO;
-    }
-
     public ListView getSubjectList() {
         return subjectList;
-    }
-
-    public ProgressBar getProgressBar() {
-        return progressBar;
     }
 
     @Override
@@ -130,14 +97,8 @@ public class UserSubjectsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_subjects, container, false);
 
         subjectList = view.findViewById(R.id.user_subjects_list);
-        progressBar = view.findViewById(R.id.progress_bar);
-        noInternet = view.findViewById(R.id.no_internet);
-        btnReload = view.findViewById(R.id.reload);
 
         callServer();
-
-        //ListView subjectList = view.findViewById(R.id.user_subjects_list);
-        //subjectList.setAdapter(new SubjectListAdapter(subjectsListDao, getActivity()));
 
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -148,14 +109,6 @@ public class UserSubjectsFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
             }
         });
-
-//        btnReload.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                callServer();
-//            }
-//        });
-
 
         return view;
     }
