@@ -35,7 +35,7 @@ public class TimetablesController extends Controller{
 
     public ArrayList<Timetable> getTimetablesList(Context context){
         // Returns the list of all subjects from the API
-        ClassDB classDB = new ClassDB(context);
+        ClassDB classDB = ClassDB.getInstance(context);
 
 //        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.all()).toString());
 //        TODO
