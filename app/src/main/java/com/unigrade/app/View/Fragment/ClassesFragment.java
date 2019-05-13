@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class ClassesFragment extends Fragment {
 
     private ArrayList<SubjectClass> classes = new ArrayList<>();
+    private ArrayList<SubjectClass> classesListDao;
     private ProgressBar progressBar;
     private LinearLayout noInternet;
     private AsyncTask getClassesTask;
@@ -52,6 +53,14 @@ public class ClassesFragment extends Fragment {
 
     public void setClasses(ArrayList<SubjectClass> classes){
         this.classes = classes;
+    }
+
+    public void setClassesListDao(ArrayList<SubjectClass> classesListDao){
+        this.classesListDao = classesListDao;
+    }
+
+    public ArrayList<SubjectClass> getClassesListDao(){
+        return classesListDao;
     }
 
     public ProgressBar getProgressBar() {

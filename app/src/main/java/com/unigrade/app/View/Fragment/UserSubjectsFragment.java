@@ -117,12 +117,7 @@ public class UserSubjectsFragment extends Fragment {
         SubjectsController subjectsController = SubjectsController.getInstance();
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
-           // subjectList.setVisibility(View.VISIBLE);
-           // noInternet.setVisibility(View.GONE);
             getSubjectsTask = new RefreshUserSubjectsFragment(this).execute();
-        } else {
-            //subjectList.setVisibility(View.GONE);
-            //noInternet.setVisibility(View.VISIBLE);
         }
 
     }
