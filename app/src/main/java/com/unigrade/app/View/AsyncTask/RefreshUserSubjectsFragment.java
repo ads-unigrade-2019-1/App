@@ -1,12 +1,10 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
-import android.view.View;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
-import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.Fragment.UserSubjectsFragment;
 
@@ -25,7 +23,6 @@ public class RefreshUserSubjectsFragment extends AsyncTask<String, Integer, Arra
     @Override
     protected void onPreExecute() {
         subjectsController =  SubjectsController.getInstance();
-        //userSubjectsFragment.getProgressBar().setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -59,18 +56,15 @@ public class RefreshUserSubjectsFragment extends AsyncTask<String, Integer, Arra
             e.printStackTrace();
         }
         return subjectsListDao;
-        //return subjectsController.getSubjectsList();
     }
 
     @Override
     protected void onPostExecute(ArrayList<Subject> subjects) {
-        //((MainActivity) userSubjectsFragment.getActivity()).setSubjectsList(subjects);
         userSubjectsFragment.setSubjectsListDao(subjects);
         userSubjectsFragment.getSubjectList()
                 .setAdapter(
                         new SubjectListAdapter(userSubjectsFragment.getSubjectsListDao(), userSubjectsFragment.getActivity())
                 );
-       // userSubjectsFragment.getProgressBar().setVisibility(View.GONE);
     }
 }
 
