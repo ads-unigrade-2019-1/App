@@ -46,9 +46,9 @@ public class ClassDB {
         return true;
     }
 
-    public ArrayList<SubjectClass> all(){
-        String sql = String.format("SELECT * from %s", table);
+    public ArrayList<SubjectClass> allSelecteds(){
         SQLiteDatabase db;
+        Cursor cursor;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
@@ -56,8 +56,8 @@ public class ClassDB {
             return null;
         }
 
-        Cursor cursor = db.rawQuery(sql, null);
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
+        cursor = db.query(table, null, "added=?", new String[]{"true"}, null, null, null);
 
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
@@ -135,6 +135,7 @@ public class ClassDB {
 
         SubjectClass subjectClass = new SubjectClass();
         try {
+            subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
 

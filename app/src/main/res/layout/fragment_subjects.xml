@@ -20,8 +20,7 @@
         <ListView
             android:id="@+id/subjects_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_nav">
+            android:layout_height="match_parent">
         </ListView>
 
     </LinearLayout>

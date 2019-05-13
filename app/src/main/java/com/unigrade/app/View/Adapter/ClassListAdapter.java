@@ -59,7 +59,7 @@ public class ClassListAdapter extends BaseAdapter {
     }
 
     @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_class, null);
 
         SubjectClass sc = (SubjectClass)this.getItem(position);
