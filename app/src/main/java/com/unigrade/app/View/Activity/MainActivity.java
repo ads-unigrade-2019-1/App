@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         TimetablesFragment.OnFragmentInteractionListener,
                     ClassesFragment.OnFragmentInteractionListener{
 
-    private ArrayList<Subject> subjectsList;
+   // private ArrayList<Subject> subjectsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +98,12 @@ public class MainActivity extends AppCompatActivity
         //you can leave it empty
     }
 
-    public void setSubjectsList(ArrayList<Subject> list){
+    /*public void setSubjectsList(ArrayList<Subject> list){
         this.subjectsList = list;
     }
 
     public ArrayList<Subject> getSubjectsList(){
         return this.subjectsList;
     }
-
+    */
 }

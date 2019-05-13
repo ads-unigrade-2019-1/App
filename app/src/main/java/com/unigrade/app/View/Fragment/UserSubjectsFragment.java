@@ -2,6 +2,7 @@ package com.unigrade.app.View.Fragment;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.DAO.ClassDAO;
 import com.unigrade.app.DAO.SubjectDAO;
 import com.unigrade.app.Model.Subject;
@@ -20,6 +22,7 @@ import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
+import com.unigrade.app.View.AsyncTask.RefreshUserSubjectsFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,6 +43,9 @@ public class UserSubjectsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private ArrayList<Subject> subjects = new ArrayList<>();
+    private ListView subjectList;
+    private AsyncTask getSubjectsTask;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -51,6 +57,18 @@ public class UserSubjectsFragment extends Fragment {
 
     public UserSubjectsFragment() {
         // Required empty public constructor
+    }
+
+    public void setSubjects(ArrayList<Subject> subjects){
+        this.subjects = subjects;
+    }
+
+    public ArrayList<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public ListView getSubjectList() {
+        return subjectList;
     }
 
     /**
@@ -87,11 +105,13 @@ public class UserSubjectsFragment extends Fragment {
 
         boolean removeSubject;
 
+        callServer();
+
         subjectDAO = new SubjectDAO(getActivity());
         ArrayList<Subject> subjectsList = subjectDAO.all();
 
         try{
-            ArrayList<Subject> verifyList = ((MainActivity) getActivity()).getSubjectsList();
+            ArrayList<Subject> verifyList = this.getSubjects();
 
             for (int i = 0; i < subjectsList.size(); i++) {
                 removeSubject = true;
@@ -126,6 +146,20 @@ public class UserSubjectsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void callServer(){
+        SubjectsController subjectsController = SubjectsController.getInstance();
+
+        if(subjectsController.isConnectedToNetwork(getActivity())){
+            //subjectList.setVisibility(View.VISIBLE);
+            //noInternet.setVisibility(View.GONE);
+            getSubjectsTask = new RefreshUserSubjectsFragment(this).execute();
+        } else {
+            subjectList.setVisibility(View.GONE);
+            //noInternet.setVisibility(View.VISIBLE);
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

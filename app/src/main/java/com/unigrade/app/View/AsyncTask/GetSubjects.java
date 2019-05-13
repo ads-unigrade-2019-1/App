@@ -37,7 +37,7 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
     @Override
     protected void onPostExecute(ArrayList<Subject> subjects) {
 
-        ((MainActivity) subjectsFragment.getActivity()).setSubjectsList(subjects);
+        //((MainActivity) subjectsFragment.getActivity()).setSubjectsList(subjects);
         subjectsFragment.setSubjects(subjects);
         subjectsFragment.getSubjectList()
                 .setAdapter(
