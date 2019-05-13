@@ -66,7 +66,7 @@ public class DBHelper extends SQLiteOpenHelper{
             String sqlDropSubjectTable = "DROP TABLE IF EXISTS subjects";
             db.execSQL(sqlDropSubjectTable);
 
-            String sqlDropMeetingTable = "DROP TABLE IF EXISTS subjects";
+            String sqlDropMeetingTable = "DROP TABLE IF EXISTS meetings";
             db.execSQL(sqlDropMeetingTable);
 
             onCreate(db);
