@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.unigrade.app.Controller.SubjectsController;
@@ -21,7 +22,6 @@ import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
-import com.unigrade.app.View.AsyncTask.GetSubjects;
 import com.unigrade.app.View.AsyncTask.RefreshUserSubjectsFragment;
 
 import java.io.Serializable;
@@ -46,6 +46,7 @@ public class UserSubjectsFragment extends Fragment {
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
+    private LinearLayout noInternet;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -113,19 +114,22 @@ public class UserSubjectsFragment extends Fragment {
         try{
             ArrayList<Subject> verifyList = this.getSubjects();
 
-            for (int i = 0; i < subjectsList.size(); i++) {
-                removeSubject = true;
-                for (int j = 0; j < verifyList.size(); j++) {
-                    if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
-                        subjectDAO.alter(verifyList.get(j));
-                        subjectsList.set(i, verifyList.get(j));
-                        removeSubject = false;
-                        break;
+            if(verifyList.isEmpty() == true) {
+            }else{
+                for (int i = 0; i < subjectsList.size(); i++) {
+                    removeSubject = true;
+                    for (int j = 0; j < verifyList.size(); j++) {
+                        if (verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
+                            subjectDAO.alter(verifyList.get(j));
+                            subjectsList.set(i, verifyList.get(j));
+                            removeSubject = false;
+                            break;
+                        }
                     }
-                }
-                if (removeSubject == true) {
-                    subjectDAO.delete(subjectsList.get(i));
-                    subjectsList.remove(i);
+                    if (removeSubject == true) {
+                        subjectDAO.delete(subjectsList.get(i));
+                        subjectsList.remove(i);
+                    }
                 }
             }
         }catch(Exception e){
@@ -152,11 +156,11 @@ public class UserSubjectsFragment extends Fragment {
         SubjectsController subjectsController = SubjectsController.getInstance();
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
-            //subjectList.setVisibility(View.VISIBLE);
+           // subjectList.setVisibility(View.VISIBLE);
             //noInternet.setVisibility(View.GONE);
             getSubjectsTask = new RefreshUserSubjectsFragment(this).execute();
         } else {
-            subjectList.setVisibility(View.GONE);
+            //subjectList.setVisibility(View.GONE);
             //noInternet.setVisibility(View.VISIBLE);
         }
 
@@ -199,5 +203,14 @@ public class UserSubjectsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(getSubjectsTask != null && getSubjectsTask.getStatus() != AsyncTask.Status.FINISHED) {
+            getSubjectsTask.cancel(true);
+        }
     }
 }

@@ -12,7 +12,7 @@ import com.unigrade.app.View.Fragment.UserSubjectsFragment;
 import java.util.ArrayList;
 
 
-public class RefreshUserSubjectsFragment extends AsyncTask<String, Integer, ArrayList<Subject>> {
+public class RefreshUserSubjectsFragment extends AsyncTask<String, Integer, ArrayList<Subject> > {
 
     private SubjectsController subjectsController;
     private UserSubjectsFragment userSubjectsFragment;
@@ -37,10 +37,10 @@ public class RefreshUserSubjectsFragment extends AsyncTask<String, Integer, Arra
 
         //((MainActivity) userSubjectsFragment.getActivity()).setSubjectsList(subjects);
         userSubjectsFragment.setSubjects(subjects);
-        userSubjectsFragment.getSubjectList()
-                .setAdapter(
-                        new SubjectListAdapter(userSubjectsFragment.getSubjects(), userSubjectsFragment.getActivity())
-                );
+        //userSubjectsFragment.getSubjectList()
+          //      .setAdapter(
+            //            new SubjectListAdapter(userSubjectsFragment.getSubjects(), userSubjectsFragment.getActivity())
+              //  );
         //userSubjectsFragment.getProgressBar().setVisibility(View.GONE);
     }
 }
