@@ -26,6 +26,7 @@ import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.ClassListAdapter;
 import com.unigrade.app.R;
 import com.unigrade.app.View.AsyncTask.GetClasses;
+import com.unigrade.app.View.AsyncTask.RefreshClassesFragment;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,7 @@ public class ClassesFragment extends Fragment {
     private Subject subject;
     private ClassDAO classDAO;
     private SubjectDAO subjectDAO;
+    private AsyncTask getSubjectsTask;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -61,6 +63,10 @@ public class ClassesFragment extends Fragment {
 
     public ArrayList<SubjectClass> getClassesListDao(){
         return classesListDao;
+    }
+
+    public Subject getSubject(){
+        return subject;
     }
 
     public ProgressBar getProgressBar() {
@@ -143,11 +149,12 @@ public class ClassesFragment extends Fragment {
     private void callDatabase(){
         Log.i("CALLDATABASE", "New adapter added");
         classes = classDAO.getSubjectClasses(subject.getCode());
-        for (SubjectClass sc: classes)
-            Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
-        classesList.setAdapter(
-                new ClassListAdapter(classes, getActivity())
-        );
+//        for (SubjectClass sc: classes)
+//            Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
+//        classesList.setAdapter(
+//                new ClassListAdapter(classes, getActivity())
+//        );
+        getSubjectsTask = new RefreshClassesFragment(this).execute();
     }
 
     private AdapterView.OnItemClickListener getItemListener(){

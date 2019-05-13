@@ -1,6 +1,7 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.unigrade.app.Controller.ClassesController;
@@ -14,6 +15,7 @@ import com.unigrade.app.View.Fragment.ClassesFragment;
 import java.util.ArrayList;
 
 public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList<SubjectClass> > {
+
     private ClassesController classesController;
     private ClassesFragment classesFragment;
 
@@ -30,54 +32,60 @@ public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList
 
     @Override
     protected ArrayList<SubjectClass> doInBackground(String... params) {
-        ArrayList<SubjectClass> classes = classesController.getSubjectsList();
 
-        boolean removeSubject;
-        ClassDAO classDAO = new ClassDAO(ClassesFragment.getActivity());
-        ArrayList<SubjectClass> classesListDao = classDAO.all();
+        ClassDAO classDAO = new ClassDAO(classesFragment.getActivity());
+        Log.i("CALLDATABASE", "New adapter added");
+        ArrayList<SubjectClass> classesListDao = classDAO.getSubjectClasses(classesFragment.getSubject().getCode());
+
         try{
             ArrayList<SubjectClass> verifyList = classesController.getSubjectsList();
 
             if(verifyList.isEmpty() == true) {
             }else{
                 for (int i = 0; i < classesListDao.size(); i++) {
-                    removeSubject = true;
-                    for (int j = 0; j < verifyList.size(); j++) {
-                        if (verifyList.get(j).getCode().contains(classesListDao.get(i).getCode())) {
-                            classDAO.alter(verifyList.get(j));
-                            classesListDao.set(i, verifyList.get(j));
-                            removeSubject = false;
-                            break;
+                    if (verifyList.get(i) != null) {
+                        classDAO.alter(verifyList.get(i));
+                        if (classesListDao.get(i).isSelected() == true){
+                            classDAO.getSubjectClasses(classesFragment.getSubject().getCode()).get(i).setSelected(true);
+                            classesListDao.set(i, verifyList.get(i));
+                            classesListDao.get(i).setSelected(true);
                         }
-                    }
-                    if (removeSubject == true) {
+                        classesListDao.set(i, verifyList.get(i));
+                        break;
+                    }else{
                         classDAO.delete(classesListDao.get(i));
                         classesListDao.remove(i);
+                    }
+                }
+                if (verifyList.size() > classesListDao.size()){
+                    for (int i = classesListDao.size(); i < verifyList.size(); i++){
+                        classDAO.insert(verifyList.get(i));
                     }
                 }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        for (SubjectClass sc: classesListDao)
+            Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
+
         return classesListDao;
 
 //        if(subjectDAO.isSubjectOnDB(classes.get(0).getSubjectCode()))
 //            for (SubjectClass sc: classes)
 //                if(classDAO.isClassOnDB(sc))
 //                    sc.setSelected(true);
-
-        //return classes;
     }
 
     @Override
     protected void onPostExecute(ArrayList<SubjectClass> classes) {
 
-        classesFragment.setClasses(classes);
+        classesFragment.setClassesListDao(classes);
         classesFragment.getClassesList()
                 .setAdapter(
-                        new ClassListAdapter(classesFragment.getClasses(), classesFragment.getActivity())
+                        new ClassListAdapter(classesFragment.getClassesListDao(), classesFragment.getActivity())
                 );
         //classesFragment.getProgressBar().setVisibility(View.GONE);
     }
-}
 }
