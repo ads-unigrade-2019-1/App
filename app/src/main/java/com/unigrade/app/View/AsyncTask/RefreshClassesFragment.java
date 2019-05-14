@@ -21,7 +21,6 @@ public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList
 
     public RefreshClassesFragment(ClassesFragment classesFragment){
         this.classesFragment = classesFragment;
-        //this.classDAO = classDAO;
     }
 
     @Override
@@ -34,8 +33,9 @@ public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList
     protected ArrayList<SubjectClass> doInBackground(String... params) {
 
         ClassDAO classDAO = new ClassDAO(classesFragment.getActivity());
-        Log.i("CALLDATABASE", "New adapter added");
-        ArrayList<SubjectClass> classesListDao = classDAO.getSubjectClasses(classesFragment.getSubject().getCode());
+       // Log.i("CALLDATABASE", "New adapter added");
+        ArrayList<SubjectClass> classesListDao = classDAO.getSubjectClasses(
+                classesFragment.getSubject().getCode());
 
         try{
             ArrayList<SubjectClass> verifyList = classesController.getSubjectsList();
@@ -46,12 +46,12 @@ public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList
                     if (verifyList.get(i) != null) {
                         classDAO.alter(verifyList.get(i));
                         if (classesListDao.get(i).isSelected() == true){
-                            classDAO.getSubjectClasses(classesFragment.getSubject().getCode()).get(i).setSelected(true);
+                            classDAO.getSubjectClasses(classesFragment.getSubject().getCode())
+                                    .get(i).setSelected(true);
                             classesListDao.set(i, verifyList.get(i));
                             classesListDao.get(i).setSelected(true);
                         }
                         classesListDao.set(i, verifyList.get(i));
-                        break;
                     }else{
                         classDAO.delete(classesListDao.get(i));
                         classesListDao.remove(i);
@@ -66,9 +66,6 @@ public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList
         }catch(Exception e){
             e.printStackTrace();
         }
-
-        for (SubjectClass sc: classesListDao)
-            Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
 
         return classesListDao;
 
@@ -86,6 +83,5 @@ public class RefreshClassesFragment extends AsyncTask<String, Integer, ArrayList
                 .setAdapter(
                         new ClassListAdapter(classesFragment.getClassesListDao(), classesFragment.getActivity())
                 );
-        //classesFragment.getProgressBar().setVisibility(View.GONE);
     }
 }

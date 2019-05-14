@@ -46,7 +46,6 @@ public class ClassesFragment extends Fragment {
     private Subject subject;
     private ClassDAO classDAO;
     private SubjectDAO subjectDAO;
-    private AsyncTask getSubjectsTask;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -147,14 +146,17 @@ public class ClassesFragment extends Fragment {
     }
 
     private void callDatabase(){
-        Log.i("CALLDATABASE", "New adapter added");
-        classes = classDAO.getSubjectClasses(subject.getCode());
-//        for (SubjectClass sc: classes)
-//            Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
-//        classesList.setAdapter(
-//                new ClassListAdapter(classes, getActivity())
-//        );
-        getSubjectsTask = new RefreshClassesFragment(this).execute();
+        ClassesController classesController = ClassesController.getInstance();
+
+        if (classesController.isConnectedToNetwork(getActivity())){
+            getClassesTask = new RefreshClassesFragment(this).execute();
+        }else {
+            Log.i("CALLDATABASE", "New adapter added");
+            classes = classDAO.getSubjectClasses(subject.getCode());
+            for (SubjectClass sc: classes)
+                Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
+            classesList.setAdapter(new ClassListAdapter(classes, getActivity()));
+        }
     }
 
     private AdapterView.OnItemClickListener getItemListener(){
