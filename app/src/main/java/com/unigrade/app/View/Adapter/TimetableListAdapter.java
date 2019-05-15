@@ -40,7 +40,7 @@ public class TimetableListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_timetable, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_card, parent, false);
 
         Timetable timetable = (Timetable) this.getItem(position);
 
