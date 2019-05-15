@@ -1,6 +1,7 @@
 package com.unigrade.app.View.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,8 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
-
 import java.util.ArrayList;
 
 public class TimetableListAdapter extends BaseAdapter {
@@ -41,17 +40,29 @@ public class TimetableListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
+        ViewHolder viewHolder;
 
-        if(view == null){
-            view = LayoutInflater.from(
+        if(convertView == null){
+            convertView = LayoutInflater.from(
                     context).inflate(R.layout.item_card, parent, false
             );
-            viewHolder.timetableLayout = view.findViewById(R.id.timetable_layout);
-            viewHolder.timetableType = view.findViewById(R.id.timetable_type);
-            viewHolder.btnVisualize = view.findViewById(R.id.btn_visualize);
-            viewHolder.btnDownload = view.findViewById(R.id.btn_download);
+
+            viewHolder = new ViewHolder();
+            viewHolder.timetableLayout = convertView.findViewById(R.id.timetable_layout);
+            viewHolder.timetableType = convertView.findViewById(R.id.timetable_type);
+            viewHolder.btnVisualize = convertView.findViewById(R.id.btn_visualize);
+            viewHolder.btnDownload = convertView.findViewById(R.id.btn_download);
+            convertView.setTag(viewHolder);
+
+            viewHolder.btnVisualize.setOnClickListener(visualizeListener());
+            viewHolder.btnDownload.setOnClickListener(downloadListener(viewHolder.timetableLayout));
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        viewHolder.btnVisualize.setTag(position);
+        viewHolder.btnDownload.setTag(position);
 
         Timetable timetable = (Timetable) this.getItem(position);
 
@@ -65,14 +76,34 @@ public class TimetableListAdapter extends BaseAdapter {
 
         }
 
-        return view;
+        return convertView;
     }
 
-    private class ViewHolder{
+    static class ViewHolder{
         TableLayout timetableLayout;
         TextView timetableType;
         Button btnVisualize;
         Button btnDownload;
+    }
 
+    private View.OnClickListener visualizeListener(){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (Integer) v.getTag();
+                Log.d("VISUALIZAR", String.valueOf(position));
+            }
+        };
+    }
+
+    private View.OnClickListener downloadListener(final TableLayout tableLayout){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (Integer) v.getTag();
+                Log.d("DOWNLOAD", String.valueOf(position));
+
+            }
+        };
     }
 }
