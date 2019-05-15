@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -40,11 +41,19 @@ public class TimetableListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_card, parent, false);
+        View view = convertView;
+
+        if(view == null){
+            view = LayoutInflater.from(
+                    context).inflate(R.layout.item_card, parent, false
+            );
+            viewHolder.timetableLayout = view.findViewById(R.id.timetable_layout);
+            viewHolder.timetableType = view.findViewById(R.id.timetable_type);
+            viewHolder.btnVisualize = view.findViewById(R.id.btn_visualize);
+            viewHolder.btnDownload = view.findViewById(R.id.btn_download);
+        }
 
         Timetable timetable = (Timetable) this.getItem(position);
-
-        viewHolder.timetableLayout = view.findViewById(R.id.timetable_layout);
 
         for (int i=1; i < viewHolder.timetableLayout.getChildCount(); i++){ // iterate times
             TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
@@ -54,7 +63,6 @@ public class TimetableListAdapter extends BaseAdapter {
                     classSchedule.setText("*");
             }
 
-
         }
 
         return view;
@@ -62,5 +70,9 @@ public class TimetableListAdapter extends BaseAdapter {
 
     private class ViewHolder{
         TableLayout timetableLayout;
+        TextView timetableType;
+        Button btnVisualize;
+        Button btnDownload;
+
     }
 }
