@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity
                     CourseFragment.OnFragmentInteractionListener,
                     FlowFragment.OnFragmentInteractionListener,
         UserSubjectsFragment.OnFragmentInteractionListener,
-        TimetablesFragment.OnFragmentInteractionListener,
                     ClassesFragment.OnFragmentInteractionListener{
 
     private ArrayList<Subject> subjectsList;

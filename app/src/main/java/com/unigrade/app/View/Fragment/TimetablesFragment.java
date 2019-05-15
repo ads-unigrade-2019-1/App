@@ -16,12 +16,13 @@ import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
+import com.unigrade.app.View.Adapter.TimetableListAdapter;
 import com.unigrade.app.View.AsyncTask.GetTimetables;
 
 import java.util.ArrayList;
 
 
-public class TimetablesFragment extends Fragment {
+public class TimetablesFragment extends Fragment implements TimetableListAdapter.Callback {
 
     private ArrayList<Timetable> timetables = new ArrayList<>();
     private ProgressBar progressBar;
@@ -29,7 +30,6 @@ public class TimetablesFragment extends Fragment {
     private Button btnReload;
     private AsyncTask getTimetablesTask;
     private ListView timetablesList;
-    private OnFragmentInteractionListener mListener;
 
     public ProgressBar getProgressBar() {
         return progressBar;
@@ -87,9 +87,9 @@ public class TimetablesFragment extends Fragment {
     }
 
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void expandTimetable(Timetable timetable){
+        //you can leave it empty
     }
 
     @Override

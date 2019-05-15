@@ -1,6 +1,10 @@
 package com.unigrade.app.View.Adapter;
 
+import android.animation.Animator;
 import android.content.Context;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +16,20 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
+import com.unigrade.app.View.Fragment.TimetablesFragment;
+
 import java.util.ArrayList;
 
 public class TimetableListAdapter extends BaseAdapter {
-    private ArrayList<Timetable> timetables;
-    private Context context;
-    private ViewHolder viewHolder = new ViewHolder();
 
-    public TimetableListAdapter(ArrayList<Timetable> timetables, Context context){
+    private ArrayList<Timetable> timetables;
+    private TimetablesFragment fragment;
+    private Context context;
+
+    public TimetableListAdapter(ArrayList<Timetable> timetables, TimetablesFragment fragment){
         this.timetables = timetables;
-        this.context = context;
+        this.context = fragment.getContext();
+        this.fragment = fragment;
     }
     @Override
     public int getCount() {
@@ -55,7 +63,7 @@ public class TimetableListAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
 
             viewHolder.btnVisualize.setOnClickListener(visualizeListener());
-            viewHolder.btnDownload.setOnClickListener(downloadListener(viewHolder.timetableLayout));
+            viewHolder.btnDownload.setOnClickListener(downloadListener());
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -92,11 +100,12 @@ public class TimetableListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
                 Log.d("VISUALIZAR", String.valueOf(position));
+                fragment.expandTimetable((Timetable) getItem(position));
             }
         };
     }
 
-    private View.OnClickListener downloadListener(final TableLayout tableLayout){
+    private View.OnClickListener downloadListener(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,4 +115,9 @@ public class TimetableListAdapter extends BaseAdapter {
             }
         };
     }
+
+    public interface Callback {
+        void expandTimetable(Timetable timetable);
+    }
+
 }

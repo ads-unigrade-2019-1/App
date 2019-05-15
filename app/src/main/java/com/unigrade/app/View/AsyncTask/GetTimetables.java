@@ -36,7 +36,7 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
         timetablesFragment.setSubjects(timetables);
         timetablesFragment.getSubjectList()
                 .setAdapter(
-                        new TimetableListAdapter(timetables, timetablesFragment.getActivity())
+                        new TimetableListAdapter(timetables, timetablesFragment)
                 );
         timetablesFragment.getProgressBar().setVisibility(View.GONE);
     }
