@@ -6,9 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Timetable {
+public class Timetable implements Serializable {
     //TODO Pegar da classe Horário
     ArrayList<SubjectClass> timetableClass;
 

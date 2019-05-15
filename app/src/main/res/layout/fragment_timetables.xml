@@ -26,10 +26,6 @@
 
     </LinearLayout>
 
-    <include
-        layout="@layout/item_timetable"
-        android:visibility="invisible"/>
-
     <include layout="@layout/content_no_internet"/>
 
 </FrameLayout>

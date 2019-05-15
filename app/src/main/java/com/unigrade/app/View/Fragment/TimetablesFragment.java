@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import androidx.navigation.Navigation;
+
 import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
@@ -19,6 +21,7 @@ import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.TimetableListAdapter;
 import com.unigrade.app.View.AsyncTask.GetTimetables;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -89,7 +92,9 @@ public class TimetablesFragment extends Fragment implements TimetableListAdapter
 
     @Override
     public void expandTimetable(Timetable timetable){
-        //you can leave it empty
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("timetable", (Serializable) timetable);
+        Navigation.findNavController(getView()).navigate(R.id.expandedTimetableFragment, bundle);
     }
 
     @Override

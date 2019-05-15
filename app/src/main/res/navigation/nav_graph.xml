@@ -32,7 +32,11 @@
         android:id="@+id/timetablesFragment"
         android:name="com.unigrade.app.View.Fragment.TimetablesFragment"
         android:label="fragment_timetables"
-        tools:layout="@layout/fragment_timetables" />
+        tools:layout="@layout/fragment_timetables" >
+        <action
+            android:id="@+id/action_timetablesFragment_to_expandedTimetableFragment"
+            app:destination="@id/expandedTimetableFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userSubjectsFragment"
         android:name="com.unigrade.app.View.Fragment.UserSubjectsFragment"
@@ -42,6 +46,11 @@
         android:id="@+id/classesFragment"
         android:name="com.unigrade.app.View.Fragment.ClassesFragment"
         android:label="ClassesFragment" />
+    <fragment
+        android:id="@+id/expandedTimetableFragment"
+        android:name="com.unigrade.app.View.Fragment.ExpandedTimetableFragment"
+        android:label="fragment_expanded_timetable"
+        tools:layout="@layout/fragment_expanded_timetable" />
 
 
 </navigation>
