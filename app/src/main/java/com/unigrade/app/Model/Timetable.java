@@ -26,10 +26,10 @@ public class Timetable implements Serializable {
 
     public void printTimetable(){
         //test method
-        for (int i=0; i<timetableClass.size(); i++){
-            Log.d("Timetable", timetableClass.get(i).getName());
-            Log.d("Timetable", timetableClass.get(i).getSubjectCode());
-        }
+//        for (int i=0; i<timetableClass.size(); i++){
+//            Log.d("Timetable", timetableClass.get(i).getName());
+//            Log.d("Timetable", timetableClass.get(i).getSubjectCode());
+//        }
 
     }
 }

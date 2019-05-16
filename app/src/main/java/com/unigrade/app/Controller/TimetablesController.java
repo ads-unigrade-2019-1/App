@@ -37,7 +37,7 @@ public class TimetablesController extends Controller{
         // Returns the list of all subjects from the API
         ClassDB classDB = ClassDB.getInstance(context);
 
-//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.all()).toString());
+//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.allSelecteds()).toString());
 //        TODO
 //         excluir essa chamada de função
 //         descomentar o post
@@ -46,42 +46,42 @@ public class TimetablesController extends Controller{
 
         String result = "" +
                 "[" +
-                    "[" +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                            "\"name\":\"L\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                            "\"name\":\"B\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"113040\"," +
-                            "\"name\":\"C\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"208213\"," +
-                            "\"name\":\"L\"" +
-                        "}" +
-                    "]," +
-                    "[" +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                                "\"name\":\"L\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                            "\"name\":\"B\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"113040\"," +
-                            "\"name\":\"C\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"208213\"," +
-                            "\"name\":\"L\"" +
-                        "}" +
-                    "]" +
+                "[" +
+                "{" +
+                "\"discipline\":\"128121\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"B\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"129852\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"A\"" +
+                "}" +
+                "]," +
+                "[" +
+                "{" +
+                "\"discipline\":\"128121\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"B\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"129852\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"A\"" +
+                "}" +
+                "]" +
                 "]";
 
         ArrayList<Timetable> timetables = new ArrayList<>();
@@ -117,25 +117,23 @@ public class TimetablesController extends Controller{
         for(SubjectClass subjectClass : subjectClasses){
             JSONObject subjectJSON = new JSONObject();
             try {
+                JSONArray teachersJSON = new JSONArray();
+                for(String teacher : subjectClass.getTeacher()){
+                    teachersJSON.put(teacher);
+                }
 
-//              TODO criar JSONArray para os professores
-//              JSONArray teachersJSON = new JSONArray()
-//              for(String teacher : subjectClass.getTeachers())
-//                teachersJSON.put(teacher);
-//              timetableJSON.put("teachers", teachersJSON);
-                subjectJSON.put("teachers", subjectClass.getTeacher());
-
-//             TODO criar JSONArray para os horários a partir do obj schedule
                 JSONArray meetingsJSON = new JSONArray();
                 for(ClassMeeting schedule : subjectClass.getSchedules()) {
-//                   JSONObject scheduleJSON = new JSONObject()
-//
-//                   scheduleJSON.put("room", schedule.getRoom());
-//                   scheduleJSON.put("day", schedule.getDay());
-//                   scheduleJSON.put("init_hour", schedule.getInitHour());
-//                   scheduleJSON.put("final_hour", schedule.getFinalHour());
-                    meetingsJSON.put(schedule);
+                    JSONObject scheduleJSON = new JSONObject();
+
+                    scheduleJSON.put("room", schedule.getRoom());
+                    scheduleJSON.put("day", schedule.getDay());
+                    scheduleJSON.put("init_hour", schedule.getInit_hour());
+                    scheduleJSON.put("final_hour", schedule.getFinal_hour());
+                    meetingsJSON.put(scheduleJSON);
                 }
+
+                subjectJSON.put("teachers", teachersJSON);
                 subjectJSON.put("meetings", meetingsJSON);
                 subjectJSON.put("name", subjectClass.getName());
                 subjectJSON.put("discipline", subjectClass.getSubjectCode());

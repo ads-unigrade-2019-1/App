@@ -33,7 +33,6 @@ public class SubjectsController extends Controller {
         ArrayList<Subject> subjects = new ArrayList<>();
 
         try {
-
             JSONArray jsonArray = new JSONArray(result);
             String name;
             String code;
