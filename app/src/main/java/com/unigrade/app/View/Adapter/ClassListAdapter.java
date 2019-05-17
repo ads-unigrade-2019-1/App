@@ -128,9 +128,13 @@ public class ClassListAdapter extends BaseAdapter {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 ListView lv = (ListView) view.getParent().getParent().getParent().getParent();
 
-                SubjectClass sc = (SubjectClass) lv.getItemAtPosition(position);
+                for (SubjectClass c : classes)
+                    c.setSubjectCode(subject.getCode());
 
-                mapSpinner.put(position,parent.getItemAtPosition(pos).toString());
+                SubjectClass sc = (SubjectClass) lv.getItemAtPosition(position);
+                Log.d("Timetable ", "SC NameCode:" + sc.getName() + " " + sc.getSubjectCode());
+
+                mapSpinner.put(position, parent.getItemAtPosition(pos).toString());
                 System.out.println("Valor da Chave "+position+ " = "+mapSpinner.get(position));
 
                 if(sc.isSelected()){
@@ -152,7 +156,7 @@ public class ClassListAdapter extends BaseAdapter {
             subjectDB.insert(subject);
             for (SubjectClass c : classes) {
                 if(c.getPriority() == null)
-                    c.setPriority("0");
+                    c.setPriority("1");
                 Log.d("timetable", "PrioridadeAdapter: " + c.getPriority());
                 classDB.insert(c);
             }
