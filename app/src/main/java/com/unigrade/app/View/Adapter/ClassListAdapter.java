@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.unigrade.app.Controller.ClassesController;
 import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
@@ -30,17 +31,15 @@ public class ClassListAdapter extends BaseAdapter {
     private ArrayList<SubjectClass> classes;
     private Context context;
     private Subject subject;
+    private ClassesController classesController;
     private ViewHolder viewHolder = new ViewHolder();
-    private ClassDB classDB;
-    private SubjectDB subjectDB;
     private HashMap<Integer,String> mapSpinner = new HashMap<Integer, String>();
 
     public ClassListAdapter(ArrayList<SubjectClass> classes, Context context, Subject subject) {
         this.classes = classes;
         this.context = context;
         this.subject = subject;
-        this.subjectDB = new SubjectDB(context);
-        this.classDB = new ClassDB(context);
+        this.classesController = ClassesController.getInstance();
     }
 
     @Override
@@ -103,12 +102,10 @@ public class ClassListAdapter extends BaseAdapter {
 
                 SubjectClass subjectClass = (SubjectClass) listView.getItemAtPosition(position);
                 if(isChecked){
-                    subjectClass.setSelected(true);
-                    insertIntoDatabase(subjectClass);
+                    classesController.insertIntoDatabase(subjectClass, context, subject, classes);
                     Log.i("ADDED", subjectClass.getTeacherString(';'));
                 }else {
-                    subjectClass.setSelected(false);
-                    removeFromDatabase(subjectClass);
+                    classesController.removeFromDatabase(subjectClass, context, classes);
                     Log.i("REMOVED", subjectClass.getTeacherString(';'));
                 }
             }
@@ -129,6 +126,7 @@ public class ClassListAdapter extends BaseAdapter {
 
                 if(subjectClass.isSelected()){
                     subjectClass.setPriority(parent.getItemAtPosition(pos).toString());
+                    ClassDB classDB = ClassDB.getInstance(context);
                     classDB.alter(subjectClass);
                     Log.i("SPINNER",subjectClass.getTeacher() + " --- " + subjectClass.getPriority());
                 }
@@ -139,42 +137,6 @@ public class ClassListAdapter extends BaseAdapter {
 
             }
         };
-    }
-
-    private void insertIntoDatabase(SubjectClass subjectClass){
-        if (!subjectDB.isSubjectOnDB(subject.getCode())){
-            subjectDB.insert(subject);
-            for (SubjectClass c : classes) {
-                if(c.getPriority() == null)
-                    c.setPriority("1");
-                Log.d("timetable", "PrioridadeAdapter: " + c.getPriority());
-                classDB.insert(c);
-            }
-            Log.i("OUTSIDEDB", subject.getCode() + " "+ subjectClass.getTeacher());
-        } else {
-            classDB.alter(subjectClass);
-            Log.i("ONDB", subject.getCode() + " "+ subjectClass.getTeacher());
-        }
-    }
-
-    private void removeFromDatabase(SubjectClass subjectClass){
-        if (isLonelyAdded(subjectClass)){
-            for (SubjectClass c : classes)
-                classDB.delete(c);
-            subjectDB.delete(subject);
-            Log.i("LONELY", subject.getCode() + " "+ subjectClass.getTeacher());
-        } else {
-            classDB.alter(subjectClass);
-            Log.i("NOTLONELY", subject.getCode() + " "+ subjectClass.getTeacher());
-        }
-    }
-
-    private boolean isLonelyAdded(SubjectClass subjectClass){
-        for (SubjectClass c : classes)
-            if (c.isSelected() && c != subjectClass)
-                return false;
-
-        return true;
     }
 
     private class ViewHolder{
