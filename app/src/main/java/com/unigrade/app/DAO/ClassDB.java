@@ -188,17 +188,17 @@ public class ClassDB {
                 String[] teachersArray = teachersString.split(";");
                 ArrayList<String> teachers = new ArrayList<>();
                 teachers.addAll(Arrays.asList(teachersArray));
-
                 subjectClass.setTeacher(teachers);
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
-
                 subjectClass.setSchedules(schedules);
 
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
+                subjectClass.setSubjectCode(subjectCode);
 
                 subjectsClass.add(subjectClass);
+
             }
         } catch (SQLiteException e){
             e.printStackTrace();
