@@ -116,20 +116,18 @@ public class ClassListAdapter extends BaseAdapter {
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                ListView lv = (ListView) view.getParent().getParent().getParent().getParent();
+                ListView listView = (ListView) view.getParent().getParent().getParent().getParent();
 
-                SubjectClass subjectClass = (SubjectClass) lv.getItemAtPosition(position);
+                SubjectClass subjectClass = (SubjectClass) listView.getItemAtPosition(position);
                 Log.d("Timetable ", "SC NameCode:" + subjectClass.getName() + " " + subjectClass.getSubjectCode());
 
                 mapSpinner.put(position, parent.getItemAtPosition(pos).toString());
                 System.out.println("Valor da Chave "+position+ " = "+mapSpinner.get(position));
 
-                if(subjectClass.isSelected()){
-                    subjectClass.setPriority(parent.getItemAtPosition(pos).toString());
-                    ClassDB classDB = ClassDB.getInstance(context);
-                    classDB.alter(subjectClass);
-                    Log.i("SPINNER",subjectClass.getTeacher() + " --- " + subjectClass.getPriority());
-                }
+                subjectClass.setPriority(parent.getItemAtPosition(pos).toString());
+                ClassDB classDB = ClassDB.getInstance(context);
+                classDB.alter(subjectClass);
+                Log.i("SPINNER",subjectClass.getTeacher() + " --- " + subjectClass.getPriority());
             }
 
             @Override
