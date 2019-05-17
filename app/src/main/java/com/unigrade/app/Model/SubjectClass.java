@@ -43,6 +43,14 @@ public class SubjectClass {
         return schedules;
     }
 
+    public String getSchedulesString(){
+        StringBuilder schedulesString = new StringBuilder();
+        for(ClassMeeting schedule : this.schedules) {
+            schedulesString.append(schedule.formattedClassMeeting() + "\n");
+        }
+        return schedulesString.toString();
+    }
+
     public void setSchedules(ArrayList<ClassMeeting> schedules) {
         this.schedules = schedules;
     }
@@ -60,11 +68,11 @@ public class SubjectClass {
     }
 
     public String getTeacherString(char c) {
-        StringBuilder s = new StringBuilder();
+        StringBuilder teacherString = new StringBuilder();
         for(String teacher : this.teacher) {
-            s.append(teacher + c);
+            teacherString.append(teacher + c);
         }
-        return s.toString();
+        return teacherString.toString();
     }
 
     public void setTeacher(ArrayList<String> teacher) {
