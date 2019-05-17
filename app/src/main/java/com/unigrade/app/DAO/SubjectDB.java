@@ -69,10 +69,10 @@ public class SubjectDB {
         return subjects;
     }
 
-    public boolean delete(Subject subject){
+    public boolean delete(String subjectCode){
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            String[] params = {subject.getCode()};
+            String[] params = {subjectCode};
             db.delete(table, "code = ?", params);
         } catch (SQLiteException e){
             e.printStackTrace();

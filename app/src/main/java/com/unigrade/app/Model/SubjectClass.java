@@ -37,6 +37,7 @@ public class SubjectClass {
         this.campus = campus;
         this.schedules = schedules;
         this.subjectCode = subjectCode;
+        this.priority = "1";
     }
 
     public ArrayList<ClassMeeting> getSchedules() {

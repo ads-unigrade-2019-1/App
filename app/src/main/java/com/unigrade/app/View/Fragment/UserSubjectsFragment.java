@@ -99,8 +99,8 @@ public class UserSubjectsFragment extends Fragment {
                         break;
                     }
                 }
-                if (removeSubject == true) {
-                    subjectDB.delete(subjectsList.get(i));
+                if (removeSubject) {
+                    subjectDB.delete(subjectsList.get(i).getCode());
                     subjectsList.remove(i);
                 }
             }
