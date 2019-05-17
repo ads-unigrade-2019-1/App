@@ -35,6 +35,7 @@ public class ClassDB {
     }
 
     public boolean insert(SubjectClass subjectClass){
+        Log.d("timetable", "PrioridadeDBInsert: " + subjectClass.getPriority());
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
@@ -63,9 +64,11 @@ public class ClassDB {
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
             try {
+                Log.d("timetable", "PrioridadeDB: " + cursor.getString(cursor.getColumnIndex("priority")));
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
                 subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
+                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
 
                 String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
                 String[] teachersArray = teachersString.split(";");
@@ -140,6 +143,7 @@ public class ClassDB {
             subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+            subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
 
             String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
             String[] teachersArray = teachersString.split(";");
@@ -249,14 +253,13 @@ public class ClassDB {
         values.put("teacher", subjectClass.getTeacherString(';'));
         values.put("campus", subjectClass.getCampus());
         values.put("subjectCode", subjectClass.getSubjectCode());
+        values.put("priority", subjectClass.getPriority());
         values.put("added", String.valueOf(subjectClass.isSelected()));
 
         MeetingDB meetingDB = MeetingDB.getInstance(this.context);
         for(ClassMeeting meeting : subjectClass.getSchedules()) {
             meetingDB.insert(meeting, subjectClass);
         }
-
-        Log.d("ClassDB ", "get(): " + values.toString());
 
         return values;
     }

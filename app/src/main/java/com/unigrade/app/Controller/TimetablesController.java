@@ -98,7 +98,7 @@ public class TimetablesController extends Controller{
 
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
-
+                    Log.d("timetable", "Prioridade: " + classDB.getClass(name, discipline).getPriority());
                     timetableClass.add(classDB.getClass(name, discipline));
                 }
                 Timetable timetable = new Timetable(timetableClass);
@@ -138,6 +138,7 @@ public class TimetablesController extends Controller{
                 subjectJSON.put("name", subjectClass.getName());
                 subjectJSON.put("discipline", subjectClass.getSubjectCode());
                 subjectJSON.put("campus", subjectClass.getCampus());
+                subjectJSON.put("priority", subjectClass.getPriority());
 
                 subjectsJSON.put(subjectJSON);
             } catch (JSONException e) {

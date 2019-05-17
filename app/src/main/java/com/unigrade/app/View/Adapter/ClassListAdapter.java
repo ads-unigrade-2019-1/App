@@ -69,7 +69,7 @@ public class ClassListAdapter extends BaseAdapter {
         viewHolder.classTeacher = view.findViewById(R.id.class_teacher);
         viewHolder.classTime = view.findViewById(R.id.class_time);
         viewHolder.checkbox = view.findViewById(R.id.class_checkbox);
-        viewHolder.spinner = view.findViewById(R.id.class_priority);
+        viewHolder.classPriority = view.findViewById(R.id.class_priority);
 
         viewHolder.classCode.setText(sc.getName());
         viewHolder.classTeacher.setText(sc.getTeacherString('\n'));
@@ -87,14 +87,14 @@ public class ClassListAdapter extends BaseAdapter {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.classes_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewHolder.spinner.setAdapter(adapter);
+        viewHolder.classPriority.setAdapter(adapter);
 
         if (mapSpinner.containsKey(position)) {
-            viewHolder.spinner.setSelection(Integer.parseInt(mapSpinner.get(position)) -1,false);
+            viewHolder.classPriority.setSelection(Integer.parseInt(mapSpinner.get(position)) -1,false);
         }
 
         viewHolder.checkbox.setOnCheckedChangeListener(checkboxListener(position));
-        viewHolder.spinner.setOnItemSelectedListener(spinnerListener(position));
+        viewHolder.classPriority.setOnItemSelectedListener(spinnerListener(position));
 
         return view;
     }
@@ -109,7 +109,6 @@ public class ClassListAdapter extends BaseAdapter {
                     c.setSubjectCode(subject.getCode());
 
                 SubjectClass sc = (SubjectClass) lv.getItemAtPosition(position);
-
                 if(isChecked){
                     sc.setSelected(true);
                     insertIntoDatabase(sc);
@@ -134,12 +133,11 @@ public class ClassListAdapter extends BaseAdapter {
                 mapSpinner.put(position,parent.getItemAtPosition(pos).toString());
                 System.out.println("Valor da Chave "+position+ " = "+mapSpinner.get(position));
 
-
                 if(sc.isSelected()){
                     sc.setPriority(parent.getItemAtPosition(pos).toString());
+                    classDB.alter(sc);
                     Log.i("SPINNER",sc.getTeacher() + " --- " + sc.getPriority());
                 }
-
             }
 
             @Override
@@ -152,8 +150,12 @@ public class ClassListAdapter extends BaseAdapter {
     private void insertIntoDatabase(SubjectClass sc){
         if (!subjectDB.isSubjectOnDB(subject.getCode())){
             subjectDB.insert(subject);
-            for (SubjectClass c : classes)
+            for (SubjectClass c : classes) {
+                if(c.getPriority() == null)
+                    c.setPriority("0");
+                Log.d("timetable", "PrioridadeAdapter: " + c.getPriority());
                 classDB.insert(c);
+            }
             Log.i("OUTSIDEDB", subject.getCode() + " "+ sc.getTeacher());
         } else {
             classDB.alter(sc);
@@ -186,8 +188,8 @@ public class ClassListAdapter extends BaseAdapter {
         TextView classTeacher;
         TextView classTime;
         TextView classCampus;
+        Spinner classPriority;
         CheckBox checkbox;
-        Spinner spinner;
     }
 
 }

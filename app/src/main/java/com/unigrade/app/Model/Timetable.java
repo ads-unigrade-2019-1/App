@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Timetable implements Serializable {
-    //TODO Pegar da classe Horário
     ArrayList<SubjectClass> timetableClass;
 
     public Timetable(){
@@ -25,11 +24,16 @@ public class Timetable implements Serializable {
     }
 
     public void printTimetable(){
-        //test method
-//        for (int i=0; i<timetableClass.size(); i++){
-//            Log.d("Timetable", timetableClass.get(i).getName());
-//            Log.d("Timetable", timetableClass.get(i).getSubjectCode());
-//        }
+//        test method
+        try {
+            for (int i = 0; i < timetableClass.size(); i++) {
+                Log.d("Timetable", timetableClass.get(i).getName());
+                Log.d("Timetable", timetableClass.get(i).getSubjectCode());
+                Log.d("Timetable", timetableClass.get(i).getPriority());
+            }
+        } catch(RuntimeException e){
+            e.printStackTrace();
+        }
 
     }
 }
