@@ -9,8 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,7 +19,6 @@ import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ClassListAdapter extends BaseAdapter {
 
@@ -29,8 +26,6 @@ public class ClassListAdapter extends BaseAdapter {
     private Context context;
     private Subject subject;
     private ClassesController classesController;
-    private ViewHolder viewHolder = new ViewHolder();
-    private HashMap<Integer,String> mapSpinner = new HashMap<Integer, String>();
 
     public ClassListAdapter(ArrayList<SubjectClass> classes, Context context, Subject subject) {
         this.classes = classes;
@@ -56,43 +51,57 @@ public class ClassListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_class, null);
+        ViewHolder viewHolder;
+
+        if(convertView == null){
+            convertView = LayoutInflater.from(
+                    context).inflate(R.layout.item_class, parent, false
+            );
+
+            viewHolder = new ViewHolder();
+            viewHolder.classCampus = convertView.findViewById(R.id.class_campus);
+            viewHolder.classCode = convertView.findViewById(R.id.class_code);
+            viewHolder.classTeacher = convertView.findViewById(R.id.class_teacher);
+            viewHolder.classTime = convertView.findViewById(R.id.class_time);
+            viewHolder.checkbox = convertView.findViewById(R.id.class_checkbox);
+            viewHolder.classPriority = convertView.findViewById(R.id.class_priority);
+            convertView.setTag(viewHolder);
+
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    context, R.array.classes_array, android.R.layout.simple_spinner_item
+            );
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            viewHolder.classPriority.setAdapter(adapter);
+
+            viewHolder.checkbox.setOnClickListener(checkboxListener());
+            viewHolder.classPriority.setOnItemSelectedListener(spinnerListener());
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
         SubjectClass subjectClass = (SubjectClass)this.getItem(position);
-
-        viewHolder.classCampus = view.findViewById(R.id.class_campus);
-        viewHolder.classCode = view.findViewById(R.id.class_code);
-        viewHolder.classTeacher = view.findViewById(R.id.class_teacher);
-        viewHolder.classTime = view.findViewById(R.id.class_time);
-        viewHolder.checkbox = view.findViewById(R.id.class_checkbox);
-        viewHolder.classPriority = view.findViewById(R.id.class_priority);
 
         viewHolder.classCode.setText(subjectClass.getName());
         viewHolder.classTeacher.setText(subjectClass.getTeacherString('\n'));
         viewHolder.classCampus.setText(subjectClass.getCampus());
         viewHolder.classTime.setText(subjectClass.getSchedulesString());
-        viewHolder.checkbox.setChecked(subjectClass.isSelected());
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                context, R.array.classes_array, android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        viewHolder.classPriority.setAdapter(adapter);
         viewHolder.classPriority.setSelection((Integer.parseInt(subjectClass.getPriority()) - 1));
-        viewHolder.checkbox.setOnCheckedChangeListener(checkboxListener(position));
-        viewHolder.classPriority.setOnItemSelectedListener(spinnerListener(position));
+        viewHolder.classPriority.setTag(position);
+        viewHolder.checkbox.setChecked(subjectClass.isSelected());
+        viewHolder.checkbox.setTag(position);
 
-        return view;
+        return convertView;
     }
 
-    private CompoundButton.OnCheckedChangeListener checkboxListener(final int position){
-        return new CompoundButton.OnCheckedChangeListener() {
+    private View.OnClickListener checkboxListener() {
+        return new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                ListView listView = (ListView) buttonView.getParent().getParent().getParent(); // Isso vai pro ListView
-
-                SubjectClass subjectClass = (SubjectClass) listView.getItemAtPosition(position);
+            public void onClick(View view) {
+                boolean isChecked = ((CheckBox) view).isChecked();
+                int position = (Integer) view.getTag();
+                Log.d("CHECKBOX", String.valueOf(position));
+                SubjectClass subjectClass = (SubjectClass)getItem(position);
                 if(isChecked){
                     classesController.insertIntoDatabase(subjectClass, context, subject, classes);
                     Log.i("ADDED", subjectClass.getTeacherString(';'));
@@ -100,19 +109,20 @@ public class ClassListAdapter extends BaseAdapter {
                     classesController.removeFromDatabase(subjectClass, context, classes);
                     Log.i("REMOVED", subjectClass.getTeacherString(';'));
                 }
+
             }
         };
     }
 
-    private AdapterView.OnItemSelectedListener spinnerListener(final int position){
+    private AdapterView.OnItemSelectedListener spinnerListener(){
 
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                ListView listView = (ListView) view.getParent().getParent().getParent().getParent();
-                SubjectClass subjectClass = (SubjectClass) listView.getItemAtPosition(position);
+                int position = (Integer) parent.getTag();
+                Log.d("SPINNER", String.valueOf(position));
+                SubjectClass subjectClass = (SubjectClass)getItem(position);
 
-                mapSpinner.put(position, parent.getItemAtPosition(pos).toString());
                 subjectClass.setPriority(parent.getItemAtPosition(pos).toString());
 
                 ClassDB classDB = ClassDB.getInstance(context);
