@@ -38,6 +38,10 @@ public class ClassDB {
         Log.d("timetable", "PrioridadeDBInsert: " + subjectClass.getPriority());
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
+            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+            for(ClassMeeting meeting : subjectClass.getSchedules()) {
+                meetingDB.insert(meeting, subjectClass);
+            }
             ContentValues values = getClassAttribute(subjectClass);
             db.insert(table, null, values);
 
@@ -257,11 +261,6 @@ public class ClassDB {
         values.put("subjectCode", subjectClass.getSubjectCode());
         values.put("priority", subjectClass.getPriority());
         values.put("added", String.valueOf(subjectClass.isSelected()));
-
-        MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-        for(ClassMeeting meeting : subjectClass.getSchedules()) {
-            meetingDB.insert(meeting, subjectClass);
-        }
 
         return values;
     }
