@@ -1,8 +1,6 @@
 package com.unigrade.app.View.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +16,10 @@ import android.widget.TextView;
 
 import com.unigrade.app.Controller.ClassesController;
 import com.unigrade.app.DAO.ClassDB;
-import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
-import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -80,14 +77,9 @@ public class ClassListAdapter extends BaseAdapter {
                 context, R.array.classes_array, android.R.layout.simple_spinner_item
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         viewHolder.classPriority.setAdapter(adapter);
-
-        if (mapSpinner.containsKey(position)) {
-            viewHolder.classPriority.setSelection(
-                    Integer.parseInt(mapSpinner.get(position)) -1,false
-            );
-        }
-
+        viewHolder.classPriority.setSelection((Integer.parseInt(subjectClass.getPriority()) - 1));
         viewHolder.checkbox.setOnCheckedChangeListener(checkboxListener(position));
         viewHolder.classPriority.setOnItemSelectedListener(spinnerListener(position));
 
@@ -113,21 +105,18 @@ public class ClassListAdapter extends BaseAdapter {
     }
 
     private AdapterView.OnItemSelectedListener spinnerListener(final int position){
+
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 ListView listView = (ListView) view.getParent().getParent().getParent().getParent();
-
                 SubjectClass subjectClass = (SubjectClass) listView.getItemAtPosition(position);
-                Log.d("Timetable ", "SC NameCode:" + subjectClass.getName() + " " + subjectClass.getSubjectCode());
 
                 mapSpinner.put(position, parent.getItemAtPosition(pos).toString());
-                System.out.println("Valor da Chave "+position+ " = "+mapSpinner.get(position));
-
                 subjectClass.setPriority(parent.getItemAtPosition(pos).toString());
+
                 ClassDB classDB = ClassDB.getInstance(context);
                 classDB.alter(subjectClass);
-                Log.i("SPINNER",subjectClass.getTeacher() + " --- " + subjectClass.getPriority());
             }
 
             @Override
