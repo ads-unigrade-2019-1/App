@@ -183,6 +183,8 @@ public class ClassDB {
                 SubjectClass subjectClass = new SubjectClass();
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
 
                 String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
                 String[] teachersArray = teachersString.split(";");
