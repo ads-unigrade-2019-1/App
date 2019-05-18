@@ -1,6 +1,4 @@
 package com.unigrade.app.View.Fragment;
-
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,21 +9,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
-import androidx.navigation.Navigation;
-
 import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.Adapter.TimetableListAdapter;
 import com.unigrade.app.View.AsyncTask.GetTimetables;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class TimetablesFragment extends Fragment implements TimetableListAdapter.Callback {
+public class TimetablesFragment extends Fragment {
 
     private ArrayList<Timetable> timetables = new ArrayList<>();
     private ProgressBar progressBar;
@@ -87,14 +79,6 @@ public class TimetablesFragment extends Fragment implements TimetableListAdapter
             noInternet.setVisibility(View.VISIBLE);
         }
 
-    }
-
-
-    @Override
-    public void expandTimetable(Timetable timetable){
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("timetable", (Serializable) timetable);
-        Navigation.findNavController(getView()).navigate(R.id.expandedTimetableFragment, bundle);
     }
 
     @Override

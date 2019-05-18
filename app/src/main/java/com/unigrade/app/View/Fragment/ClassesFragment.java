@@ -1,6 +1,4 @@
 package com.unigrade.app.View.Fragment;
-
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -136,11 +134,6 @@ public class ClassesFragment extends Fragment {
         classesList.setAdapter(
                 new ClassListAdapter(classes, getActivity(), subject)
         );
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     @Override

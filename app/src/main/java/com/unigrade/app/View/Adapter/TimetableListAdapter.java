@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import androidx.navigation.Navigation;
+
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
@@ -100,7 +104,11 @@ public class TimetableListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
                 Log.d("VISUALIZAR", String.valueOf(position));
-                fragment.expandTimetable((Timetable) getItem(position));
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("timetable", (Timetable) getItem(position));
+                Navigation.findNavController(fragment.getView())
+                        .navigate(R.id.expandedTimetableFragment, bundle);
+
             }
         };
     }
@@ -116,8 +124,5 @@ public class TimetableListAdapter extends BaseAdapter {
         };
     }
 
-    public interface Callback {
-        void expandTimetable(Timetable timetable);
-    }
 
 }

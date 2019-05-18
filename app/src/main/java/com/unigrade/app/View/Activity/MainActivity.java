@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
+import com.unigrade.app.View.Fragment.ExpandedTimetableFragment;
 import com.unigrade.app.View.Fragment.SubjectsFragment;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
 import com.unigrade.app.View.Fragment.UserSubjectsFragment;
@@ -27,14 +28,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
-        implements SubjectsFragment.OnFragmentInteractionListener,
-                    CourseFragment.OnFragmentInteractionListener,
-                    FlowFragment.OnFragmentInteractionListener,
-        UserSubjectsFragment.OnFragmentInteractionListener,
-                    ClassesFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity {
 
     private ArrayList<Subject> subjectsList;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView = findViewById(R.id.bottom_nav);
 
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
@@ -60,6 +57,8 @@ public class MainActivity extends AppCompatActivity
                     bottomNavigationView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
                 } else if (destination.getId() == R.id.classesFragment) {
+                    bottomNavigationView.setVisibility(View.GONE);
+                } else if (destination.getId() == R.id.expandedTimetableFragment) {
                     bottomNavigationView.setVisibility(View.GONE);
                 } else {
                     bottomNavigationView.setVisibility(View.VISIBLE);
@@ -90,11 +89,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri){
-        //you can leave it empty
     }
 
     public void setSubjectsList(ArrayList<Subject> list){
