@@ -67,7 +67,6 @@ android:layout_gravity="top" >
             android:background="@android:drawable/btn_dropdown"
             android:dropDownWidth="70dp"
             android:spinnerMode="dropdown" />
-
     </LinearLayout>
 
 
@@ -88,6 +87,5 @@ android:layout_gravity="top" >
         android:layout_marginStart="400dp"
         android:layout_marginLeft="400dp"
         android:text=" "/>
-
 
 </LinearLayout>
