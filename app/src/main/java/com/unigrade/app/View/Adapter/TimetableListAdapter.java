@@ -18,11 +18,13 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TimetableListAdapter extends BaseAdapter {
 
@@ -78,16 +80,31 @@ public class TimetableListAdapter extends BaseAdapter {
 
         Timetable timetable = (Timetable) this.getItem(position);
 
-        for (int i=1; i < viewHolder.timetableLayout.getChildCount(); i++){ // iterate times
-            TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
-            for(int j=1; j < tr.getChildCount(); j++){// iterate week days
-                TextView classSchedule = (TextView) tr.getChildAt(j);
-                if(j%2 == 0 || i%2 != 0)
-                    classSchedule.setText("*");
-            }
+        ArrayList<ClassMeeting> timetableMeetings = timetable.getTimetableMeetings();
+        String[] weekDays = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"};
+        String[] initTimes = {"06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"};
 
+        for (int i=1; i <= initTimes.length; i++){
+            TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
+            for (int j=1; j <= weekDays.length; j++){
+                TextView classSchedule = (TextView) tr.getChildAt(j);
+                if(timetable.findMeetingByTimeDay(initTimes[i-1], weekDays[j-1]).getDay() != null){
+                    classSchedule.setText("*");
+                }
+            }
         }
 
+
+
+//        for (int i=1; i < viewHolder.timetableLayout.getChildCount(); i++){ // iterate times
+//            TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
+//            for(int j=1; j < tr.getChildCount(); j++){// iterate week days
+//                TextView classSchedule = (TextView) tr.getChildAt(j);
+//                if(j%2 == 0 || i%2 != 0)
+//                    classSchedule.setText("*");
+//            }
+//
+//        }
         return convertView;
     }
 
