@@ -1,9 +1,17 @@
 package com.unigrade.app.Controller;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TableLayout;
 
 import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.ServerHelper;
@@ -15,7 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -147,6 +158,57 @@ public class TimetablesController extends Controller{
         }
         Log.d("JSONString", subjectsJSON.toString());
         return subjectsJSON;
+    }
+
+    public boolean isDownloadPermitted(Context context){
+        String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        int isPermitted = ContextCompat.checkSelfPermission(context, permission);
+
+        return isPermitted == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public boolean shouldShowExplanation(Activity activity){
+        String permission = Manifest.permission.READ_CONTACTS;
+
+        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+    }
+
+    public void downloadTableLayout(TableLayout tableLayout, Context context){
+
+        tableLayout.setDrawingCacheEnabled(true);
+        Bitmap bitmap = tableLayout.getDrawingCache();
+
+        String root = Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath();
+        File imageFolder = new File( root + File.separator + "unigrade");
+
+        if(!imageFolder.exists())
+            imageFolder.mkdirs();
+
+        String path = imageFolder.getAbsolutePath();
+        String date = Calendar.getInstance().getTime().toString();
+        File file = new File( path + File.separator + "timetable" + date + ".png");
+        Log.d("GRADE", file.getAbsolutePath());
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+
+            Uri contentUri = Uri.fromFile(file);
+
+            mediaScanIntent.setData(contentUri);
+            context.sendBroadcast(mediaScanIntent);
+
+        }
+
+
     }
 
 }

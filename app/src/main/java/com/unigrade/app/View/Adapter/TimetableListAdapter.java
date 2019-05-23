@@ -1,11 +1,12 @@
 package com.unigrade.app.View.Adapter;
 
-import android.animation.Animator;
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.net.Uri;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
@@ -69,7 +71,7 @@ public class TimetableListAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
 
             viewHolder.btnVisualize.setOnClickListener(visualizeListener());
-            viewHolder.btnDownload.setOnClickListener(downloadListener());
+            viewHolder.btnDownload.setOnClickListener(downloadListener(convertView));
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -130,15 +132,63 @@ public class TimetableListAdapter extends BaseAdapter {
         };
     }
 
-    private View.OnClickListener downloadListener(){
+    private View.OnClickListener downloadListener(final View view){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
                 Log.d("DOWNLOAD", String.valueOf(position));
+                TimetablesController timetablesController = TimetablesController.getInstance();
+
+                TableLayout tableLayout = view.findViewById(R.id.timetable_layout);
+
+                if (timetablesController.isDownloadPermitted(fragment.getContext())){
+                    Log.d("PERMISSAO", "Com permissao");
+                    timetablesController.downloadTableLayout(tableLayout, context);
+                } else {
+                    Log.d("PERMISSAO", "Sem permissao");
+                    askForPermission();
+                }
+
 
             }
         };
+    }
+
+    private void askForPermission(){
+        TimetablesController timetablesController = TimetablesController.getInstance();
+
+        if (timetablesController.shouldShowExplanation(fragment.getActivity())) {
+
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+            alertBuilder.setCancelable(true);
+            alertBuilder.setTitle("Permissão necessária");
+            alertBuilder.setMessage("Precisamos da sua permissão para salvar sua grade" +
+                    "em seu dispositivo. Conceder permissão?");
+
+            alertBuilder.setPositiveButton(
+                    android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(
+                            (Activity) context,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            1);
+                }
+            });
+
+            AlertDialog alert = alertBuilder.create();
+            alert.show();
+
+        } else {
+
+            ActivityCompat.requestPermissions(
+                    fragment.getActivity(),
+                    new String[]{Manifest.permission.READ_CONTACTS},
+                    1
+            );
+
+        }
+
     }
 
 
