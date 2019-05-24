@@ -82,7 +82,6 @@ public class TimetableListAdapter extends BaseAdapter {
 
         Timetable timetable = (Timetable) this.getItem(position);
 
-        ArrayList<ClassMeeting> timetableMeetings = timetable.getTimetableMeetings();
         String[] weekDays = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"};
         String[] initTimes = {"06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"};
 
@@ -95,18 +94,6 @@ public class TimetableListAdapter extends BaseAdapter {
                 }
             }
         }
-
-
-
-//        for (int i=1; i < viewHolder.timetableLayout.getChildCount(); i++){ // iterate times
-//            TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
-//            for(int j=1; j < tr.getChildCount(); j++){// iterate week days
-//                TextView classSchedule = (TextView) tr.getChildAt(j);
-//                if(j%2 == 0 || i%2 != 0)
-//                    classSchedule.setText("*");
-//            }
-//
-//        }
         return convertView;
     }
 
@@ -149,8 +136,6 @@ public class TimetableListAdapter extends BaseAdapter {
                     Log.d("PERMISSAO", "Sem permissao");
                     askForPermission();
                 }
-
-
             }
         };
     }
@@ -186,10 +171,6 @@ public class TimetableListAdapter extends BaseAdapter {
                     new String[]{Manifest.permission.READ_CONTACTS},
                     1
             );
-
         }
-
     }
-
-
 }
