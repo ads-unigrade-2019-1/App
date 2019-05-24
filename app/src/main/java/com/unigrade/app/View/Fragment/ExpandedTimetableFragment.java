@@ -17,6 +17,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
@@ -48,9 +49,14 @@ public class ExpandedTimetableFragment extends Fragment {
         ActionBar toolbar = ((MainActivity) getActivity()).getSupportActionBar();
 
         Bundle bundle = getArguments();
+        TimetablesController timetablesController  = TimetablesController.getInstance();
 
-        insertTimetableInView((TableLayout) v.findViewById(R.id.timetable_layout),
-                (Timetable) bundle.getSerializable("timetable"));
+        timetablesController.insertTimetableInView(
+                (TableLayout) v.findViewById(R.id.timetable_layout),
+                (Timetable) bundle.getSerializable("timetable"),
+                getContext(),
+                false
+        );
 
         toolbar.setTitle("");
         toolbar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
@@ -70,24 +76,5 @@ public class ExpandedTimetableFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-    }
-
-    private void insertTimetableInView(TableLayout timetableLayout, Timetable timetable){
-        String[] weekDays = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"};
-        String[] initTimes = {"06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"};
-
-        for (int i=1; i <= initTimes.length; i++){
-            TableRow tr = (TableRow) timetableLayout.getChildAt(i);
-
-            for (int j=1; j <= weekDays.length; j++){
-                TextView classSchedule = (TextView) tr.getChildAt(j);
-                SubjectClass subjectClass = timetable.findClassesByTimeDay(initTimes[i-1], weekDays[j-1]);
-
-                if(subjectClass != null){
-                    Subject subject = (SubjectDB.getInstance(getContext())).getSubject(subjectClass.getSubjectCode());
-                    classSchedule.setText(String.format("%s\nTurma %s\n%s ", subject.getName(), subjectClass.getName(), subjectClass.getTeacherString('\n')));
-                }
-            }
-        }
     }
 }

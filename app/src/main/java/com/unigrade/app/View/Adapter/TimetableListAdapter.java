@@ -82,18 +82,13 @@ public class TimetableListAdapter extends BaseAdapter {
 
         Timetable timetable = (Timetable) this.getItem(position);
 
-        String[] weekDays = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"};
-        String[] initTimes = {"06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"};
-
-        for (int i=1; i <= initTimes.length; i++){
-            TableRow tr = (TableRow) viewHolder.timetableLayout.getChildAt(i);
-            for (int j=1; j <= weekDays.length; j++){
-                TextView classSchedule = (TextView) tr.getChildAt(j);
-                if(timetable.findMeetingByTimeDay(initTimes[i-1], weekDays[j-1]).getDay() != null){
-                    classSchedule.setText("*");
-                }
-            }
-        }
+        TimetablesController timetablesController = TimetablesController.getInstance();
+        timetablesController.insertTimetableInView(
+                viewHolder.timetableLayout,
+                timetable,
+                context,
+                true
+        );
         return convertView;
     }
 
@@ -124,12 +119,20 @@ public class TimetableListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
                 Log.d("DOWNLOAD", String.valueOf(position));
-                TimetablesController timetablesController = TimetablesController.getInstance();
 
+                Timetable timetable = (Timetable) getItem(position);
+
+                TimetablesController timetablesController = TimetablesController.getInstance();
                 TableLayout tableLayout = view.findViewById(R.id.timetable_layout);
 
                 if (timetablesController.isDownloadPermitted(fragment.getContext())){
                     Log.d("PERMISSAO", "Com permissao");
+                    timetablesController.insertTimetableInView(
+                            tableLayout,
+                            timetable,
+                            context,
+                            false
+                    );
                     timetablesController.downloadTableLayout(tableLayout, context);
                 } else {
                     Log.d("PERMISSAO", "Sem permissao");
@@ -144,7 +147,7 @@ public class TimetableListAdapter extends BaseAdapter {
 
         if (timetablesController.shouldShowExplanation(fragment.getActivity())) {
 
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(fragment.getActivity());
             alertBuilder.setCancelable(true);
             alertBuilder.setTitle("Permissão necessária");
             alertBuilder.setMessage("Precisamos da sua permissão para salvar sua grade" +

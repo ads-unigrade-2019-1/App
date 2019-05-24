@@ -8,14 +8,19 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.ClassMeeting;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 
@@ -209,6 +214,47 @@ public class TimetablesController extends Controller{
         }
 
 
+    }
+
+    public void insertTimetableInView(
+            TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
+
+        String[] weekDays = {
+                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"
+        };
+        String[] initTimes = {
+                "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"
+        };
+
+        for (int i=1; i <= initTimes.length; i++){
+            TableRow tr = (TableRow) timetableLayout.getChildAt(i);
+
+            if(!isMinified)
+                tr.setMinimumHeight(90);
+
+            for (int j=1; j <= weekDays.length; j++){
+                TextView classSchedule = (TextView) tr.getChildAt(j);
+
+                SubjectClass subjectClass = timetable.findClassesByTimeDay(
+                        initTimes[i-1],
+                        weekDays[j-1]
+                );
+
+                if(subjectClass != null){
+                    Subject subject = (SubjectDB.getInstance(context)).getSubject(
+                            subjectClass.getSubjectCode()
+                    );
+                    if(isMinified){
+                        classSchedule.setText("*");
+                    } else {
+                        classSchedule.setText(
+                                String.format("%s\nTurma %s", subject.getName(), subjectClass.getName())
+                        );
+                        classSchedule.setTextSize(6);
+                    }
+                }
+            }
+        }
     }
 
 
