@@ -16,15 +16,13 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.unigrade.app.DAO.ClassDB;
+import com.unigrade.app.DAO.SubjectDB;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.Adapter.TimetableListAdapter;
-
 
 public class ExpandedTimetableFragment extends Fragment {
 
@@ -80,11 +78,14 @@ public class ExpandedTimetableFragment extends Fragment {
 
         for (int i=1; i <= initTimes.length; i++){
             TableRow tr = (TableRow) timetableLayout.getChildAt(i);
+
             for (int j=1; j <= weekDays.length; j++){
                 TextView classSchedule = (TextView) tr.getChildAt(j);
                 SubjectClass subjectClass = timetable.findClassesByTimeDay(initTimes[i-1], weekDays[j-1]);
+
                 if(subjectClass != null){
-                    classSchedule.setText(subjectClass.getName());
+                    Subject subject = (SubjectDB.getInstance(getContext())).getSubject(subjectClass.getSubjectCode());
+                    classSchedule.setText(String.format("%s\nTurma %s\n%s ", subject.getName(), subjectClass.getName(), subjectClass.getTeacherString('\n')));
                 }
             }
         }

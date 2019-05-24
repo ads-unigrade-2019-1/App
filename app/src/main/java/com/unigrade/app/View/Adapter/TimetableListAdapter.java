@@ -114,7 +114,6 @@ public class TimetableListAdapter extends BaseAdapter {
                 bundle.putSerializable("timetable", (Timetable) getItem(position));
                 Navigation.findNavController(fragment.getView())
                         .navigate(R.id.expandedTimetableFragment, bundle);
-
             }
         };
     }
