@@ -120,59 +120,26 @@ public class TimetableListAdapter extends BaseAdapter {
                 int position = (Integer) v.getTag();
                 Log.d("DOWNLOAD", String.valueOf(position));
 
-                Timetable timetable = (Timetable) getItem(position);
-
-                TimetablesController timetablesController = TimetablesController.getInstance();
-                TableLayout tableLayout = view.findViewById(R.id.timetable_layout);
-
-                if (timetablesController.isDownloadPermitted(fragment.getContext())){
-                    Log.d("PERMISSAO", "Com permissao");
-                    timetablesController.insertTimetableInView(
-                            tableLayout,
-                            timetable,
-                            context,
-                            false
-                    );
-                    timetablesController.downloadTableLayout(tableLayout, context);
-                } else {
-                    Log.d("PERMISSAO", "Sem permissao");
-                    askForPermission();
-                }
+//                // custom dialog
+//                final Dialog dialog = new Dialog(context);
+//                dialog.setContentView(R.layout.dialog);
+//                dialog.setTitle("Title...");
+//
+//                // set the custom dialog components - text, image and button
+//                TextView text = (TextView) dialog.findViewById(R.id.text);
+//                text.setText("Android custom dialog example!");
+//                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//                image.setImageResource(R.drawable.ic_launcher);
+//
+//                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//                // if button is clicked, close the custom dialog
+//                dialogButton.setOnClickListener(new OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
             }
         };
-    }
-
-    private void askForPermission(){
-        TimetablesController timetablesController = TimetablesController.getInstance();
-
-        if (timetablesController.shouldShowExplanation(fragment.getActivity())) {
-
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(fragment.getActivity());
-            alertBuilder.setCancelable(true);
-            alertBuilder.setTitle("Permissão necessária");
-            alertBuilder.setMessage("Precisamos da sua permissão para salvar sua grade" +
-                    "em seu dispositivo. Conceder permissão?");
-
-            alertBuilder.setPositiveButton(
-                    android.R.string.yes, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    ActivityCompat.requestPermissions(
-                            (Activity) context,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            1);
-                }
-            });
-
-            AlertDialog alert = alertBuilder.create();
-            alert.show();
-
-        } else {
-
-            ActivityCompat.requestPermissions(
-                    fragment.getActivity(),
-                    new String[]{Manifest.permission.READ_CONTACTS},
-                    1
-            );
-        }
     }
 }

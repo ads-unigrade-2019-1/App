@@ -1,16 +1,22 @@
 package com.unigrade.app.View.Fragment;
 
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
@@ -26,6 +32,9 @@ import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 
 public class ExpandedTimetableFragment extends Fragment {
+
+    private Timetable timetable;
+    private TableLayout timetableLayout;
 
     public ExpandedTimetableFragment() {
         // Required empty public constructor
@@ -49,11 +58,14 @@ public class ExpandedTimetableFragment extends Fragment {
         ActionBar toolbar = ((MainActivity) getActivity()).getSupportActionBar();
 
         Bundle bundle = getArguments();
+        timetable = (Timetable) bundle.getSerializable("timetable");
+        timetableLayout = v.findViewById(R.id.timetable_layout);
+
         TimetablesController timetablesController  = TimetablesController.getInstance();
 
         timetablesController.insertTimetableInView(
-                (TableLayout) v.findViewById(R.id.timetable_layout),
-                (Timetable) bundle.getSerializable("timetable"),
+                timetableLayout,
+                timetable,
                 getContext(),
                 false
         );
@@ -74,7 +86,67 @@ public class ExpandedTimetableFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
+        inflater.inflate(R.menu.menu_expanded_fragment, menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.item_download){
+            downloadTimetable();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void downloadTimetable(){
+
+        TimetablesController timetablesController = TimetablesController.getInstance();
+
+        if (timetablesController.isDownloadPermitted(getContext())){
+            Log.d("PERMISSAO", "Com permissao");
+            timetablesController.downloadTableLayout(timetableLayout, getContext());
+        } else {
+            Log.d("PERMISSAO", "Sem permissao");
+            askForPermission();
+        }
+
+    }
+
+    private void askForPermission(){
+        TimetablesController timetablesController = TimetablesController.getInstance();
+
+        if (timetablesController.shouldShowExplanation(getActivity())) {
+
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+            alertBuilder.setCancelable(false);
+            alertBuilder.setTitle("Permissão necessária");
+            alertBuilder.setMessage("Precisamos da sua permissão para salvar sua grade" +
+                    "em seu dispositivo. Conceder permissão?");
+
+            alertBuilder.setPositiveButton(
+                    android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(
+                                    getActivity(),
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    1);
+                        }
+                    });
+
+            AlertDialog alert = alertBuilder.create();
+            alertBuilder.show();
+
+        } else {
+
+            ActivityCompat.requestPermissions(
+                    getActivity(),
+                    new String[]{Manifest.permission.READ_CONTACTS},
+                    1
+            );
+        }
     }
 }
