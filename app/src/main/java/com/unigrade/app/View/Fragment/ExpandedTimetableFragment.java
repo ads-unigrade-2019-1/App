@@ -97,6 +97,9 @@ public class ExpandedTimetableFragment extends Fragment {
         if(id == R.id.item_download){
             downloadTimetable();
             return true;
+        } else if (id == android.R.id.home){
+            getActivity().onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
