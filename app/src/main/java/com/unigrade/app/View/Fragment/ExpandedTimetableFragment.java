@@ -79,8 +79,8 @@ public class ExpandedTimetableFragment extends Fragment {
     }
 
     @Override
-    public void onPause(){
-        super.onPause();
+    public void onDetach(){
+        super.onDetach();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
@@ -120,36 +120,25 @@ public class ExpandedTimetableFragment extends Fragment {
     }
 
     private void askForPermission(){
-        TimetablesController timetablesController = TimetablesController.getInstance();
 
-        if (timetablesController.shouldShowExplanation(getActivity())) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        alertBuilder.setCancelable(false);
+        alertBuilder.setTitle("Permissão necessária");
+        alertBuilder.setMessage("Precisamos da sua permissão para salvar sua grade " +
+                "em seu dispositivo. Conceder permissão?");
 
-            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-            alertBuilder.setCancelable(false);
-            alertBuilder.setTitle("Permissão necessária");
-            alertBuilder.setMessage("Precisamos da sua permissão para salvar sua grade" +
-                    "em seu dispositivo. Conceder permissão?");
+        alertBuilder.setPositiveButton(
+                android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(
+                                getActivity(),
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                2);
+                    }
+                });
 
-            alertBuilder.setPositiveButton(
-                    android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(
-                                    getActivity(),
-                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    1);
-                        }
-                    });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
 
-            AlertDialog alert = alertBuilder.create();
-            alertBuilder.show();
-
-        } else {
-
-            ActivityCompat.requestPermissions(
-                    getActivity(),
-                    new String[]{Manifest.permission.READ_CONTACTS},
-                    1
-            );
-        }
     }
 }
