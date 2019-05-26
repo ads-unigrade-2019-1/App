@@ -166,14 +166,14 @@ public class TimetablesController extends Controller{
     }
 
     public boolean isDownloadPermitted(Context context){
-        String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
         int isPermitted = ContextCompat.checkSelfPermission(context, permission);
 
         return isPermitted == PackageManager.PERMISSION_GRANTED;
     }
 
     public boolean shouldShowExplanation(Activity activity){
-        String permission = Manifest.permission.READ_CONTACTS;
+        String permission = Manifest.permission.WRITE_CONTACTS;
 
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
