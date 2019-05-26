@@ -173,7 +173,7 @@ public class TimetablesController extends Controller{
     }
 
     public boolean shouldShowExplanation(Activity activity){
-        String permission = Manifest.permission.WRITE_CONTACTS;
+        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }

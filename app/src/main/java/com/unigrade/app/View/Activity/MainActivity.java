@@ -1,5 +1,4 @@
 package com.unigrade.app.View.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,14 +11,6 @@ import android.view.MenuItem;
 
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
-import com.unigrade.app.View.Fragment.ExpandedTimetableFragment;
-import com.unigrade.app.View.Fragment.SubjectsFragment;
-import com.unigrade.app.View.Fragment.TimetablesFragment;
-import com.unigrade.app.View.Fragment.UserSubjectsFragment;
-import com.unigrade.app.View.Fragment.ClassesFragment;
-import com.unigrade.app.View.Fragment.CourseFragment;
-import com.unigrade.app.View.Fragment.FlowFragment;
-
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;

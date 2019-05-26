@@ -132,7 +132,7 @@ public class ExpandedTimetableFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         ActivityCompat.requestPermissions(
                                 getActivity(),
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 2);
                     }
                 });

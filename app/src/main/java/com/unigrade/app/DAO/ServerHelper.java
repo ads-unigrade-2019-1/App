@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class ServerHelper {
     public static final String REQUEST_METHOD = "GET";
-    public static final int READ_TIMEOUT = 15000;
-    public static final int CONNECTION_TIMEOUT = 15000;
+    public static final int READ_TIMEOUT = 20000;
+    public static final int CONNECTION_TIMEOUT = 20000;
     private String url;
     private String result;
 
