@@ -3,6 +3,7 @@ package com.unigrade.app.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
@@ -34,8 +35,13 @@ public class ClassDB {
     }
 
     public boolean insert(SubjectClass subjectClass){
+        Log.d("timetable", "PrioridadeDBInsert: " + subjectClass.getPriority());
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
+            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+            for(ClassMeeting meeting : subjectClass.getSchedules()) {
+                meetingDB.insert(meeting, subjectClass);
+            }
             ContentValues values = getClassAttribute(subjectClass);
             db.insert(table, null, values);
 
@@ -62,13 +68,16 @@ public class ClassDB {
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
             try {
+                Log.d("timetable", "PrioridadeDB: " + cursor.getString(cursor.getColumnIndex("priority")));
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
+                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
 
                 String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
                 String[] teachersArray = teachersString.split(";");
-                List<String> teachers = Arrays.asList(teachersArray);
-                subjectClass.setTeacher((ArrayList<String>) teachers);
+                ArrayList<String> teachers = new ArrayList<>(Arrays.asList(teachersArray));
+                subjectClass.setTeacher(teachers);
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectClass.getSubjectCode());
@@ -89,7 +98,7 @@ public class ClassDB {
         try{
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
-                               subjectClass.getSubjectCode()};
+                    subjectClass.getSubjectCode()};
             db.delete(table, "name=? AND subjectCode=?", params);
 
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
@@ -120,7 +129,7 @@ public class ClassDB {
         }
         return true;
     }
-    
+
     public SubjectClass getClass(String name, String subjectCode){
         SQLiteDatabase db;
         try {
@@ -138,12 +147,11 @@ public class ClassDB {
             subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+            subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
 
             String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
             String[] teachersArray = teachersString.split(";");
-            List<String> teachers = Arrays.asList(teachersArray);
-
-            subjectClass.setTeacher((ArrayList<String>) teachers);
+            subjectClass.setTeacher(new ArrayList<>(Arrays.asList(teachersArray)));
 
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
             ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
@@ -153,6 +161,9 @@ public class ClassDB {
         } catch (SQLiteException e){
             e.printStackTrace();
             return null;
+
+        } catch (CursorIndexOutOfBoundsException e){
+            e.printStackTrace();
         }
         cursor.close();
         return subjectClass;
@@ -176,22 +187,24 @@ public class ClassDB {
                 SubjectClass subjectClass = new SubjectClass();
                 subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
+                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
 
                 String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
                 String[] teachersArray = teachersString.split(";");
                 ArrayList<String> teachers = new ArrayList<>();
                 teachers.addAll(Arrays.asList(teachersArray));
-
                 subjectClass.setTeacher(teachers);
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
-
                 subjectClass.setSchedules(schedules);
 
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
+                subjectClass.setSubjectCode(subjectCode);
 
                 subjectsClass.add(subjectClass);
+
             }
         } catch (SQLiteException e){
             e.printStackTrace();
@@ -243,20 +256,11 @@ public class ClassDB {
         ContentValues values = new ContentValues();
 
         values.put("name", subjectClass.getName());
-
         values.put("teacher", subjectClass.getTeacherString(';'));
-
         values.put("campus", subjectClass.getCampus());
-
         values.put("subjectCode", subjectClass.getSubjectCode());
-        MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-        for(ClassMeeting meeting : subjectClass.getSchedules()) {
-            meetingDB.insert(meeting, subjectClass);
-        }
-
+        values.put("priority", subjectClass.getPriority());
         values.put("added", String.valueOf(subjectClass.isSelected()));
-
-        Log.d("ClassDB ", "get(): " + values.toString());
 
         return values;
     }

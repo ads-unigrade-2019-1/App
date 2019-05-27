@@ -2,32 +2,67 @@ package com.unigrade.app.Model;
 
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Timetable {
-    //TODO Pegar da classe Horário
-    ArrayList<SubjectClass> timetableClass;
+public class Timetable implements Serializable {
+    private ArrayList<SubjectClass> timetableClasses;
 
     public Timetable(){
     }
 
     public Timetable(ArrayList<SubjectClass> timetableClass){
-        this.timetableClass = timetableClass;
+        this.timetableClasses = timetableClass;
     }
 
     public ArrayList<SubjectClass> getTimetableClass() {
-        return timetableClass;
+        return timetableClasses;
+    }
+
+    public ArrayList<ClassMeeting> getTimetableMeetings(){
+        ArrayList<ClassMeeting> classMeetings = new ArrayList<>();
+
+        for (SubjectClass timetableClass : timetableClasses) {
+            classMeetings.addAll(timetableClass.getSchedules());
+        }
+
+        return classMeetings;
+    }
+
+    public ClassMeeting findMeetingByTimeDay(final String initHour, String day){
+        ClassMeeting findedClassMeeting = new ClassMeeting();
+
+        for(ClassMeeting classMeeting : this.getTimetableMeetings()){
+            if(classMeeting.getInit_hour().equals(initHour) && classMeeting.getDay().equals(day)){
+                findedClassMeeting = classMeeting;
+                break;
+            }
+        };
+
+        return findedClassMeeting;
+    }
+
+    public SubjectClass findClassesByTimeDay(final String initHour, String day){
+        for(SubjectClass subjectClass : this.getTimetableClass()){
+            for(ClassMeeting classMeeting : subjectClass.getSchedules()){
+                if(classMeeting.getInit_hour().equals(initHour) && classMeeting.getDay().equals(day)){
+                    return subjectClass;
+                }
+            };
+        };
+        return null;
     }
 
     public void printTimetable(){
-        //test method
-        for (int i=0; i<timetableClass.size(); i++){
-            Log.d("Timetable", timetableClass.get(i).getName());
-            Log.d("Timetable", timetableClass.get(i).getSubjectCode());
+//        test method
+        try {
+            for (int i = 0; i < timetableClasses.size(); i++) {
+                Log.d("Timetable", timetableClasses.get(i).getName());
+                Log.d("Timetable", timetableClasses.get(i).getSubjectCode());
+                Log.d("Timetable", timetableClasses.get(i).getPriority());
+            }
+        } catch(RuntimeException e){
+            e.printStackTrace();
         }
 
     }

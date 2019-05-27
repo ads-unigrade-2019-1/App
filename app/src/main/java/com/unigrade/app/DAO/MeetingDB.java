@@ -113,7 +113,7 @@ public class MeetingDB {
 
             String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
 
-            db.update(table, values, "name = ? AND subjectCode = ?", params);
+            db.update(table, values, "className = ? AND subjectCode = ?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;

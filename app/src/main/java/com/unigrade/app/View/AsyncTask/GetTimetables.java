@@ -28,7 +28,6 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
 
     @Override
     protected ArrayList<Timetable> doInBackground(String... params) {
-        SystemClock.sleep(2000);
         return timetablesController.getTimetablesList(timetablesFragment.getContext());
     }
 
@@ -37,7 +36,7 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
         timetablesFragment.setSubjects(timetables);
         timetablesFragment.getSubjectList()
                 .setAdapter(
-                        new TimetableListAdapter(timetables, timetablesFragment.getActivity())
+                        new TimetableListAdapter(timetables, timetablesFragment)
                 );
         timetablesFragment.getProgressBar().setVisibility(View.GONE);
     }

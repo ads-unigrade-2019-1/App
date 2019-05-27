@@ -1,13 +1,26 @@
 package com.unigrade.app.Controller;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.ClassMeeting;
+import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 
@@ -15,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -37,7 +53,7 @@ public class TimetablesController extends Controller{
         // Returns the list of all subjects from the API
         ClassDB classDB = ClassDB.getInstance(context);
 
-//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.all()).toString());
+//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.allSelecteds()).toString());
 //        TODO
 //         excluir essa chamada de função
 //         descomentar o post
@@ -46,42 +62,42 @@ public class TimetablesController extends Controller{
 
         String result = "" +
                 "[" +
-                    "[" +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                            "\"name\":\"L\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                            "\"name\":\"B\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"113040\"," +
-                            "\"name\":\"C\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"208213\"," +
-                            "\"name\":\"L\"" +
-                        "}" +
-                    "]," +
-                    "[" +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                                "\"name\":\"L\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"120642\"," +
-                            "\"name\":\"B\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"113040\"," +
-                            "\"name\":\"C\"" +
-                        "}," +
-                        "{" +
-                            "\"discipline\":\"208213\"," +
-                            "\"name\":\"L\"" +
-                        "}" +
-                    "]" +
+                "[" +
+                "{" +
+                "\"discipline\":\"128121\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"B\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"129852\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"A\"" +
+                "}" +
+                "]," +
+                "[" +
+                "{" +
+                "\"discipline\":\"128121\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"B\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"129852\"," +
+                "\"name\":\"A\"" +
+                "}," +
+                "{" +
+                "\"discipline\":\"103691\"," +
+                "\"name\":\"A\"" +
+                "}" +
+                "]" +
                 "]";
 
         ArrayList<Timetable> timetables = new ArrayList<>();
@@ -98,7 +114,7 @@ public class TimetablesController extends Controller{
 
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
-
+                    Log.d("timetable", "Prioridade: " + classDB.getClass(name, discipline).getPriority());
                     timetableClass.add(classDB.getClass(name, discipline));
                 }
                 Timetable timetable = new Timetable(timetableClass);
@@ -117,29 +133,28 @@ public class TimetablesController extends Controller{
         for(SubjectClass subjectClass : subjectClasses){
             JSONObject subjectJSON = new JSONObject();
             try {
+                JSONArray teachersJSON = new JSONArray();
+                for(String teacher : subjectClass.getTeacher()){
+                    teachersJSON.put(teacher);
+                }
 
-//              TODO criar JSONArray para os professores
-//              JSONArray teachersJSON = new JSONArray()
-//              for(String teacher : subjectClass.getTeachers())
-//                teachersJSON.put(teacher);
-//              timetableJSON.put("teachers", teachersJSON);
-                subjectJSON.put("teachers", subjectClass.getTeacher());
-
-//             TODO criar JSONArray para os horários a partir do obj schedule
                 JSONArray meetingsJSON = new JSONArray();
                 for(ClassMeeting schedule : subjectClass.getSchedules()) {
-//                   JSONObject scheduleJSON = new JSONObject()
-//
-//                   scheduleJSON.put("room", schedule.getRoom());
-//                   scheduleJSON.put("day", schedule.getDay());
-//                   scheduleJSON.put("init_hour", schedule.getInitHour());
-//                   scheduleJSON.put("final_hour", schedule.getFinalHour());
-                    meetingsJSON.put(schedule);
+                    JSONObject scheduleJSON = new JSONObject();
+
+                    scheduleJSON.put("room", schedule.getRoom());
+                    scheduleJSON.put("day", schedule.getDay());
+                    scheduleJSON.put("init_hour", schedule.getInit_hour());
+                    scheduleJSON.put("final_hour", schedule.getFinal_hour());
+                    meetingsJSON.put(scheduleJSON);
                 }
+
+                subjectJSON.put("teachers", teachersJSON);
                 subjectJSON.put("meetings", meetingsJSON);
                 subjectJSON.put("name", subjectClass.getName());
                 subjectJSON.put("discipline", subjectClass.getSubjectCode());
                 subjectJSON.put("campus", subjectClass.getCampus());
+                subjectJSON.put("priority", subjectClass.getPriority());
 
                 subjectsJSON.put(subjectJSON);
             } catch (JSONException e) {
@@ -149,5 +164,99 @@ public class TimetablesController extends Controller{
         Log.d("JSONString", subjectsJSON.toString());
         return subjectsJSON;
     }
+
+    public boolean isDownloadPermitted(Context context){
+        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int isPermitted = ContextCompat.checkSelfPermission(context, permission);
+
+        return isPermitted == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public boolean shouldShowExplanation(Activity activity){
+        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+    }
+
+    public void downloadTableLayout(TableLayout tableLayout, Context context){
+
+        tableLayout.setDrawingCacheEnabled(true);
+        Bitmap bitmap = tableLayout.getDrawingCache();
+
+        String root = Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                .getAbsolutePath();
+        File imageFolder = new File( root + File.separator + "unigrade");
+
+        if(!imageFolder.exists())
+            imageFolder.mkdirs();
+
+        String path = imageFolder.getAbsolutePath();
+        String date = Calendar.getInstance().getTime().toString();
+        File file = new File( path + File.separator + "timetable" + date + ".png");
+        Log.d("GRADE", file.getAbsolutePath());
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+
+            Uri contentUri = Uri.fromFile(file);
+
+            mediaScanIntent.setData(contentUri);
+            context.sendBroadcast(mediaScanIntent);
+
+        }
+
+
+    }
+
+    public void insertTimetableInView(
+            TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
+
+        String[] weekDays = {
+                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"
+        };
+        String[] initTimes = {
+                "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"
+        };
+
+        for (int i=1; i <= initTimes.length; i++){
+            TableRow tr = (TableRow) timetableLayout.getChildAt(i);
+
+            if(!isMinified)
+                tr.setMinimumHeight(90);
+
+            for (int j=1; j <= weekDays.length; j++){
+                TextView classSchedule = (TextView) tr.getChildAt(j);
+
+                SubjectClass subjectClass = timetable.findClassesByTimeDay(
+                        initTimes[i-1],
+                        weekDays[j-1]
+                );
+
+                if(subjectClass != null){
+                    Subject subject = (SubjectDB.getInstance(context)).getSubject(
+                            subjectClass.getSubjectCode()
+                    );
+                    if(isMinified){
+                        classSchedule.setText("*");
+                    } else {
+                        classSchedule.setText(
+                                String.format("%s\nTurma %s", subject.getName(), subjectClass.getName())
+                        );
+                        classSchedule.setTextSize(6);
+                    }
+                }
+            }
+        }
+    }
+
+
 
 }

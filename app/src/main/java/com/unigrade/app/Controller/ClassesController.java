@@ -1,6 +1,11 @@
 package com.unigrade.app.Controller;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
@@ -29,9 +34,7 @@ public class ClassesController extends Controller {
     }
 
     private String getClassURL(Subject subject) {
-        String classURL = URL_SUBJECT_CLASSES + subject.getCode();
-
-        return classURL;
+        return URL_SUBJECT_CLASSES + subject.getCode();
     }
 
     public ArrayList<SubjectClass> getClassesList(Subject subject) {
@@ -96,6 +99,59 @@ public class ClassesController extends Controller {
         }
 
         return classes;
+    }
+
+    public void insertIntoDatabase(
+            SubjectClass subjectClass, Context context,
+                Subject subject, ArrayList<SubjectClass> classes){
+
+        ClassDB classDB = ClassDB.getInstance(context);
+        SubjectDB subjectDB = SubjectDB.getInstance(context);
+        String subjectCode = subjectClass.getSubjectCode();
+
+        subjectClass.setSelected(true);
+
+        if (!subjectDB.isSubjectOnDB(subjectCode)){
+            subjectDB.insert(subject);
+            for (SubjectClass c : classes) {
+                if(c.getPriority() == null)
+                    c.setPriority("1");
+                Log.d("timetable", "PrioridadeAdapter: " + c.getPriority());
+                classDB.insert(c);
+            }
+            Log.i("OUTSIDEDB", subjectCode + " "+ subjectClass.getTeacher());
+        } else {
+            classDB.alter(subjectClass);
+            Log.i("ONDB", subjectCode + " "+ subjectClass.getTeacher());
+        }
+    }
+
+    public void removeFromDatabase(
+            SubjectClass subjectClass, Context context, ArrayList<SubjectClass> classes){
+
+        ClassDB classDB = ClassDB.getInstance(context);
+        SubjectDB subjectDB = SubjectDB.getInstance(context);
+        String subjectCode = subjectClass.getSubjectCode();
+
+        subjectClass.setSelected(false);
+
+        if (isLonelyAdded(subjectClass, classes)){
+            for (SubjectClass c : classes)
+                classDB.delete(c);
+            subjectDB.delete(subjectCode);
+            Log.i("LONELY", subjectCode + " "+ subjectClass.getTeacher());
+        } else {
+            classDB.alter(subjectClass);
+            Log.i("NOTLONELY", subjectCode + " "+ subjectClass.getTeacher());
+        }
+    }
+
+    private boolean isLonelyAdded(SubjectClass subjectClass, ArrayList<SubjectClass> classes){
+        for (SubjectClass sc : classes)
+            if (sc.isSelected() && sc != subjectClass)
+                return false;
+
+        return true;
     }
 
 }

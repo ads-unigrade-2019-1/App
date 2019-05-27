@@ -1,6 +1,4 @@
 package com.unigrade.app.View.Fragment;
-
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,13 +9,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
 import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.AsyncTask.GetTimetables;
-
 import java.util.ArrayList;
 
 
@@ -29,7 +25,6 @@ public class TimetablesFragment extends Fragment {
     private Button btnReload;
     private AsyncTask getTimetablesTask;
     private ListView timetablesList;
-    private OnFragmentInteractionListener mListener;
 
     public ProgressBar getProgressBar() {
         return progressBar;
@@ -84,12 +79,6 @@ public class TimetablesFragment extends Fragment {
             noInternet.setVisibility(View.VISIBLE);
         }
 
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     @Override

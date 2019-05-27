@@ -42,6 +42,7 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
             for (SubjectClass sc: classes) {
                 if(classDB.isClassOnDB(sc)) {
                     sc.setSelected(true);
+                    sc.setPriority(classDB.getClass(sc.getName(), sc.getSubjectCode()).getPriority());
                 }
             }
         }

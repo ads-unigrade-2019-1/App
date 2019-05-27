@@ -36,6 +36,7 @@ public class DBHelper extends SQLiteOpenHelper{
                     "campus VARCHAR(255) NOT NULL, " +
                     "subjectCode VARCHAR(255) NOT NULL, " +
                     "added BOOLEAN NOT NULL DEFAULT 0, " +
+                    "priority VARCHAR(5) DEFAULT '1', " +
                     "CONSTRAINT classes_pk PRIMARY KEY (name, subjectCode), " +
                     "CONSTRAINT classes_subject_FK FOREIGN KEY (subjectCode) " +
                     "REFERENCES subject(code))";
