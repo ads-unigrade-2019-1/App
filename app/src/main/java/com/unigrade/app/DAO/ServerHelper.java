@@ -67,6 +67,8 @@ public class ServerHelper {
             connection.setRequestMethod("POST");
             connection.setReadTimeout(READ_TIMEOUT);
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-type", "application/json");
             connection.setDoOutput(true);
             connection.connect();
 
