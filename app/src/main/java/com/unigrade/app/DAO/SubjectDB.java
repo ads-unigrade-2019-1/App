@@ -128,7 +128,8 @@ public class SubjectDB {
             return null;
         }
 
-        Cursor cursor = db.query(table, null, "code=?", new String[]{code}, null, null, null);
+        Cursor cursor = db.query(table, null, "code=?",
+                new String[]{code}, null, null, null);
         cursor.moveToFirst();
 
         Subject subject = new Subject();

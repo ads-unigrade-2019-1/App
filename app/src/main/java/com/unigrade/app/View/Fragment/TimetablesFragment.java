@@ -85,7 +85,7 @@ public class TimetablesFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        if(getTimetablesTask != null && getTimetablesTask .getStatus() != AsyncTask.Status.FINISHED) {
+        if(getTimetablesTask != null && getTimetablesTask.getStatus() != AsyncTask.Status.FINISHED){
             getTimetablesTask.cancel(true);
         }
     }

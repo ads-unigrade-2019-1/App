@@ -21,7 +21,8 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
     private SubjectDB subjectDB;
     private Subject subject;
 
-    public GetClasses(ClassesFragment classesFragment, ClassDB classDB, SubjectDB subjectDB, Subject subject){
+    public GetClasses(ClassesFragment classesFragment, ClassDB classDB,
+                      SubjectDB subjectDB, Subject subject){
         this.classesFragment = classesFragment;
         this.classDB = classDB;
         this.subject = subject;
@@ -41,8 +42,10 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
         if(subjectDB.isSubjectOnDB(subject.getCode())) {
             for (SubjectClass sc: classes) {
                 if(classDB.isClassOnDB(sc)) {
-                    sc.setSelected(classDB.getClass(sc.getName(), sc.getSubjectCode()).isSelected());
-                    sc.setPriority(classDB.getClass(sc.getName(), sc.getSubjectCode()).getPriority());
+                    sc.setSelected(classDB.getClass(sc.getName(),
+                            sc.getSubjectCode()).isSelected());
+                    sc.setPriority(classDB.getClass(sc.getName(),
+                            sc.getSubjectCode()).getPriority());
                 }
             }
         }
@@ -56,7 +59,8 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
         classesFragment.setClasses(classes);
         classesFragment.getClassesList()
                 .setAdapter(
-                        new ClassListAdapter(classesFragment.getClasses(), classesFragment.getActivity(), classesFragment.getSubject())
+                        new ClassListAdapter(classesFragment.getClasses(),
+                                classesFragment.getActivity(), classesFragment.getSubject())
                 );
         classesFragment.getProgressBar().setVisibility(View.GONE);
     }

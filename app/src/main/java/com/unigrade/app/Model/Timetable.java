@@ -45,7 +45,8 @@ public class Timetable implements Serializable {
     public SubjectClass findClassesByTimeDay(final String initHour, String day){
         for(SubjectClass subjectClass : this.getTimetableClass()){
             for(ClassMeeting classMeeting : subjectClass.getSchedules()){
-                if(classMeeting.getInit_hour().equals(initHour) && classMeeting.getDay().equals(day)){
+                if(classMeeting.getInit_hour().equals(
+                        initHour) && classMeeting.getDay().equals(day)){
                     return subjectClass;
                 }
             };

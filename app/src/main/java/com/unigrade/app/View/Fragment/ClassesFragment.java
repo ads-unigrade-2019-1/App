@@ -118,7 +118,8 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(this, classDB, subjectDB, subject).execute();
+            getClassesTask = new GetClasses(
+                    this, classDB, subjectDB, subject).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);

@@ -62,28 +62,34 @@ public class ClassDB {
         }
 
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
-        cursor = db.query(table, null, "added=?", new String[]{"true"}, null, null, null);
+        cursor = db.query(table, null, "added=?", new String[]{"true"},
+                null, null, null);
 
         while (cursor.moveToNext()){
             SubjectClass subjectClass = new SubjectClass();
             try {
-                Log.d("timetable", "PrioridadeDB: " + cursor.getString(cursor.getColumnIndex("priority")));
-                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
-                subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
-                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
-                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
-                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
+                Log.d("timetable", "PrioridadeDB: " + cursor.getString(
+                        cursor.getColumnIndex("priority")));
+                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex(
+                        "campus")));
+                subjectClass.setName(cursor.getString(cursor.getColumnIndex(
+                        "name")));
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex(
+                        "subjectCode")));
+                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex(
+                        "priority")));
+                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(
+                        cursor.getColumnIndex("added"))));
 
-                String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+                String teachersString = cursor.getString(cursor.getColumnIndex(
+                        "teacher"));
                 String[] teachersArray = teachersString.split(";");
                 ArrayList<String> teachers = new ArrayList<>(Arrays.asList(teachersArray));
                 subjectClass.setTeacher(teachers);
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectClass.getSubjectCode());
-                for(ClassMeeting m : schedules) {
-                    Log.d("DEBUGANDO1 ", "get(): " + m.getDay());
-                }
+                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(
+                        subjectClass.getName(), subjectClass.getSubjectCode());
                 subjectClass.setSchedules(schedules);
 
             } catch (SQLiteException e){
@@ -144,16 +150,21 @@ public class ClassDB {
             return null;
         }
 
-        Cursor cursor = db.query(table, null, "subjectCode=? AND name=?", new String[]{subjectCode, name}, null, null, null);
+        Cursor cursor = db.query(table, null,
+                "subjectCode=? AND name=?", new String[]{subjectCode, name},
+                null, null, null);
         cursor.moveToFirst();
 
         SubjectClass subjectClass = new SubjectClass();
         try {
-            subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
+            subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex(
+                    "subjectCode")));
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
-            subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
-            subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
+            subjectClass.setPriority(cursor.getString(cursor.getColumnIndex(
+                    "priority")));
+            subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(
+                    cursor.getColumnIndex("added"))));
 
             String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
             String[] teachersArray = teachersString.split(";");
@@ -161,9 +172,6 @@ public class ClassDB {
 
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
             ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
-            for(ClassMeeting m : schedules) {
-                Log.d("DEBUGANDO2 ", "get(): " + m.getDay());
-            }
             subjectClass.setSchedules(schedules);
 
         } catch (SQLiteException e){
@@ -190,28 +198,32 @@ public class ClassDB {
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
 
         try{
-            cursor = db.query(table, null, "subjectCode=?", new String[]{subjectCode}, null, null, null);
+            cursor = db.query(table, null, "subjectCode=?",
+                    new String[]{subjectCode}, null, null, null);
             while (cursor.moveToNext()){
                 SubjectClass subjectClass = new SubjectClass();
-                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
+                subjectClass.setCampus(cursor.getString(cursor.getColumnIndex(
+                        "campus")));
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
-                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
-                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
+                subjectClass.setPriority(cursor.getString(cursor.getColumnIndex(
+                        "priority")));
+                subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex(
+                        "subjectCode")));
 
-                String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
+                String teachersString = cursor.getString(cursor.getColumnIndex(
+                        "teacher"));
                 String[] teachersArray = teachersString.split(";");
                 ArrayList<String> teachers = new ArrayList<>();
                 teachers.addAll(Arrays.asList(teachersArray));
                 subjectClass.setTeacher(teachers);
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
-                for(ClassMeeting m : schedules) {
-                    Log.d("DEBUGANDO3 ", "get(): " + m.getDay());
-                }
+                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(
+                        subjectClass.getName(), subjectCode);
                 subjectClass.setSchedules(schedules);
 
-                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
+                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(
+                        cursor.getColumnIndex("added"))));
                 subjectClass.setSubjectCode(subjectCode);
 
                 subjectsClass.add(subjectClass);
@@ -228,7 +240,7 @@ public class ClassDB {
     public boolean isClassOnDB(SubjectClass sc) {
 
         String sql = String.format(
-                "SELECT * FROM %s WHERE subjectCode=%s and name='%s'",
+                "SELECT * FROM %s WHERE subjectCode='%s' and name='%s'",
                 table, sc.getSubjectCode(), sc.getName()
         );
         SQLiteDatabase db;

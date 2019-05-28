@@ -113,7 +113,8 @@ public class TimetablesController extends Controller{
 
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
-                    Log.d("timetable", "Prioridade: " + classDB.getClass(name, discipline).getPriority());
+                    Log.d("timetable", "Prioridade: " + classDB.getClass(
+                            name, discipline).getPriority());
                     timetableClass.add(classDB.getClass(name, discipline));
                 }
                 Timetable timetable = new Timetable(timetableClass);
@@ -247,7 +248,8 @@ public class TimetablesController extends Controller{
                         classSchedule.setText("*");
                     } else {
                         classSchedule.setText(
-                                String.format("%s\nTurma %s", subject.getName(), subjectClass.getName())
+                                String.format(
+                                        "%s\nTurma %s", subject.getName(), subjectClass.getName())
                         );
                         classSchedule.setTextSize(6);
                     }
