@@ -102,8 +102,8 @@ public class ClassesController extends Controller {
     }
 
     public void insertIntoDatabase(
-            SubjectClass subjectClass, Context context,
-                Subject subject, ArrayList<SubjectClass> classes){
+        SubjectClass subjectClass, Context context,
+            Subject subject, ArrayList<SubjectClass> classes){
 
         ClassDB classDB = ClassDB.getInstance(context);
         SubjectDB subjectDB = SubjectDB.getInstance(context);

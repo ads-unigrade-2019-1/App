@@ -72,6 +72,7 @@ public class ClassDB {
                 subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
                 subjectClass.setSubjectCode(cursor.getString(cursor.getColumnIndex("subjectCode")));
                 subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
+                subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
                 String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
                 String[] teachersArray = teachersString.split(";");
@@ -147,6 +148,7 @@ public class ClassDB {
             subjectClass.setCampus(cursor.getString(cursor.getColumnIndex("campus")));
             subjectClass.setName(cursor.getString(cursor.getColumnIndex("name")));
             subjectClass.setPriority(cursor.getString(cursor.getColumnIndex("priority")));
+            subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));
 
             String teachersString = cursor.getString(cursor.getColumnIndex("teacher"));
             String[] teachersArray = teachersString.split(";");

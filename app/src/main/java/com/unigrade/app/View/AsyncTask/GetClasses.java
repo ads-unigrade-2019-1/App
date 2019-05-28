@@ -1,6 +1,7 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.unigrade.app.Controller.ClassesController;
@@ -41,7 +42,10 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
         if(subjectDB.isSubjectOnDB(subject.getCode())) {
             for (SubjectClass sc: classes) {
                 if(classDB.isClassOnDB(sc)) {
-                    sc.setSelected(true);
+                    boolean a = classDB.getClass(sc.getName(), sc.getSubjectCode()).isSelected();
+                    String b = Boolean.toString(a);
+                    Log.i("DEBUG MASTER ", b);
+                    sc.setSelected(classDB.getClass(sc.getName(), sc.getSubjectCode()).isSelected());
                     sc.setPriority(classDB.getClass(sc.getName(), sc.getSubjectCode()).getPriority());
                 }
             }
