@@ -68,14 +68,25 @@ public class MeetingDB {
 
         ArrayList<ClassMeeting> classMeetings = new ArrayList<>();
 
+        String select = String.format("SELECT * FROM %s", table);
+        String where = String.format(
+                "WHERE subjectCode='%s' AND className='%s'", subjectCode, className);
+        String case1 = "WHEN 'Domingo' THEN 1 WHEN 'Segunda' THEN 2 WHEN 'Terça' THEN 3";
+        String case2 = "WHEN 'Quarta' THEN 4 WHEN 'Quinta' THEN 5 WHEN 'Sexta' THEN 6";
+        String case3 = "WHEN 'Sábado' THEN 7 ELSE 100 END";
+        String cases = case1 + " " + case2 + " " + case3;
+        String orderBy = "ORDER BY (CASE day" + " "+ cases + ") ASC, initHour ASC";
+        String selectQuery = select + " " + where + " " + orderBy;
+
         try{
-            String[] params = {className, subjectCode};
-            cursor = db.query(table, null, "className=? AND subjectCode=?", params, null, null, null);
+            cursor = db.rawQuery(selectQuery, null);
             while (cursor.moveToNext()){
                 ClassMeeting classMeeting = new ClassMeeting();
                 classMeeting.setDay(cursor.getString(cursor.getColumnIndex("day")));
-                classMeeting.setInit_hour(cursor.getString(cursor.getColumnIndex("initHour")));
-                classMeeting.setFinal_hour(cursor.getString(cursor.getColumnIndex("finalHour")));
+                classMeeting.setInit_hour(cursor.getString(cursor.getColumnIndex(
+                        "initHour")));
+                classMeeting.setFinal_hour(cursor.getString(cursor.getColumnIndex(
+                        "finalHour")));
                 classMeeting.setRoom(cursor.getString(cursor.getColumnIndex("room")));
 
                 classMeetings.add(classMeeting);
@@ -106,9 +117,10 @@ public class MeetingDB {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
 
-            String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
-
-            db.update(table, values, "className=? AND subjectCode=?", params);
+            String[] params = {subjectClass.getSubjectCode(), subjectClass.getName(), classMeeting.getDay(), classMeeting.getInit_hour()};
+            Log.i("DIA MEETINGDB ALTER ", classMeeting.getDay());
+            Log.i("INIT MEETINGDB ALTER", classMeeting.getInit_hour());
+            db.update(table, values, "subjectCode=? AND className=? AND day=? AND initHour=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;

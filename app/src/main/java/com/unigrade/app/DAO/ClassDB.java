@@ -81,7 +81,9 @@ public class ClassDB {
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectClass.getSubjectCode());
-
+                for(ClassMeeting m : schedules) {
+                    Log.d("DEBUGANDO1 ", "get(): " + m.getDay());
+                }
                 subjectClass.setSchedules(schedules);
 
             } catch (SQLiteException e){
@@ -113,7 +115,10 @@ public class ClassDB {
     public boolean alter(SubjectClass subjectClass) {
         try{
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+
             for(ClassMeeting schedule : subjectClass.getSchedules()) {
+                Log.i("DIA CLASSDB ALTER", schedule.getDay());
+                Log.i("INITHOUR CLASSDB ALTER", schedule.getInit_hour());
                 meetingDB.alter(subjectClass, schedule);
             }
 
@@ -156,6 +161,9 @@ public class ClassDB {
 
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
             ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
+            for(ClassMeeting m : schedules) {
+                Log.d("DEBUGANDO2 ", "get(): " + m.getDay());
+            }
             subjectClass.setSchedules(schedules);
 
         } catch (SQLiteException e){
@@ -198,6 +206,9 @@ public class ClassDB {
 
                 MeetingDB meetingDB = MeetingDB.getInstance(this.context);
                 ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(subjectClass.getName(), subjectCode);
+                for(ClassMeeting m : schedules) {
+                    Log.d("DEBUGANDO3 ", "get(): " + m.getDay());
+                }
                 subjectClass.setSchedules(schedules);
 
                 subjectClass.setSelected(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("added"))));

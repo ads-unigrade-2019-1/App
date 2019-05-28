@@ -48,6 +48,7 @@ public class DBHelper extends SQLiteOpenHelper{
                     "room VARCHAR(255) NOT NULL, " +
                     "className VARCHAR(255) NOT NULL, " +
                     "subjectCode VARCHAR(255) NOT NULL, " +
+                    "CONSTRAINT meetings_pk PRIMARY KEY (className, subjectCode, day, initHour), " +
                     "CONSTRAINT meeting_class_FK FOREIGN KEY (className, subjectCode) " +
                     "REFERENCES classes(name, subjectCode))";
             db.execSQL(createMeetingTableSql);
