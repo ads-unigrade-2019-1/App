@@ -29,27 +29,33 @@
                 <TextView
                     android:text="S"
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:text="T"
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:text="Q"
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:text="Q"
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:text="S"
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:text="S"
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -61,25 +67,32 @@
                 <TextView
                     android:text="6h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -90,25 +103,32 @@
                 <TextView
                     android:text="8h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -119,25 +139,32 @@
                 <TextView
                     android:text="10h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -148,25 +175,32 @@
                 <TextView
                     android:text="12h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -177,25 +211,32 @@
                 <TextView
                     android:text="14h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -206,25 +247,32 @@
                 <TextView
                     android:text="16h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -235,25 +283,32 @@
                 <TextView
                     android:text="18h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -264,25 +319,32 @@
                 <TextView
                     android:text="20h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
             <TableRow
@@ -293,25 +355,32 @@
                 <TextView
                     android:text="22h"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    android:textAlignment="center"/>
             </TableRow>
 
         </TableLayout>
