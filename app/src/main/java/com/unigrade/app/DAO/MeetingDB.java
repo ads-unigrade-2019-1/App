@@ -45,15 +45,10 @@ public class MeetingDB {
         ContentValues values = new ContentValues();
 
         values.put("day", classMeeting.getDay());
-
         values.put("initHour", classMeeting.getInit_hour());
-
         values.put("finalHour", classMeeting.getFinal_hour());
-
         values.put("room", classMeeting.getRoom());
-
         values.put("className", subjectClass.getName());
-
         values.put("subjectCode", subjectClass.getSubjectCode());
 
         Log.d("MeetingDB ", "get(): " + values.toString());
@@ -98,7 +93,7 @@ public class MeetingDB {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
                     subjectClass.getSubjectCode()};
-            db.delete(table, "className = ? AND subjectCode = ?", params);
+            db.delete(table, "className=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -113,7 +108,7 @@ public class MeetingDB {
 
             String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
 
-            db.update(table, values, "className = ? AND subjectCode = ?", params);
+            db.update(table, values, "className=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;

@@ -73,7 +73,7 @@ public class SubjectDB {
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectCode};
-            db.delete(table, "code = ?", params);
+            db.delete(table, "code=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;
@@ -88,7 +88,7 @@ public class SubjectDB {
 
             String[] params = {subject.getCode()};
 
-            db.update(table, values, "code = ?", params);
+            db.update(table, values, "code=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
             return false;

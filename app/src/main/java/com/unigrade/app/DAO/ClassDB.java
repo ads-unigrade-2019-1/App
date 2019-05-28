@@ -156,7 +156,6 @@ public class ClassDB {
 
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
             ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
-
             subjectClass.setSchedules(schedules);
 
         } catch (SQLiteException e){
