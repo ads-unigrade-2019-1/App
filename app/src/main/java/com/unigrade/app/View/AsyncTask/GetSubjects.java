@@ -1,10 +1,7 @@
 package com.unigrade.app.View.AsyncTask;
 
-import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;

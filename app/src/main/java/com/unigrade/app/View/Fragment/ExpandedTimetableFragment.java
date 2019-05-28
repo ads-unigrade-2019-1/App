@@ -2,7 +2,6 @@ package com.unigrade.app.View.Fragment;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -20,13 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.unigrade.app.Controller.TimetablesController;
-import com.unigrade.app.DAO.SubjectDB;
-import com.unigrade.app.Model.Subject;
-import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;

@@ -1,12 +1,7 @@
 package com.unigrade.app.View.Adapter;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +9,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
 import com.unigrade.app.Controller.TimetablesController;
-import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TimetableListAdapter extends BaseAdapter {
 

@@ -13,7 +13,6 @@ import com.unigrade.app.Model.SubjectClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class ClassDB {
     private String table = "classes";

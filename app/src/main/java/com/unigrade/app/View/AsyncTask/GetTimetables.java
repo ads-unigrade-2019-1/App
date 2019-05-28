@@ -1,7 +1,6 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.view.View;
 
 import com.unigrade.app.Controller.TimetablesController;
