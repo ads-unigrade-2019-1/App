@@ -98,7 +98,7 @@ public class SubjectDB {
 
     public boolean isSubjectOnDB(String code) {
 
-        String sql = String.format("SELECT * FROM %s WHERE code=%s", table, code);
+        String sql = String.format("SELECT * FROM %s WHERE code='%s'", table, code);
         SQLiteDatabase db;
 
         try{

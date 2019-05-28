@@ -119,8 +119,6 @@ public class MeetingDB {
 
             String[] params = {subjectClass.getSubjectCode(), subjectClass.getName(),
                     classMeeting.getDay(), classMeeting.getInit_hour()};
-            Log.i("DIA MEETINGDB ALTER ", classMeeting.getDay());
-            Log.i("INIT MEETINGDB ALTER", classMeeting.getInit_hour());
             db.update(table, values,
                     "subjectCode=? AND className=? AND day=? AND initHour=?", params);
         } catch (SQLiteException e){

@@ -123,8 +123,6 @@ public class ClassDB {
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
 
             for(ClassMeeting schedule : subjectClass.getSchedules()) {
-                Log.i("DIA CLASSDB ALTER", schedule.getDay());
-                Log.i("INITHOUR CLASSDB ALTER", schedule.getInit_hour());
                 meetingDB.alter(subjectClass, schedule);
             }
 
