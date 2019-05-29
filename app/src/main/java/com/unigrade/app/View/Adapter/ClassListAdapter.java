@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.unigrade.app.Controller.ClassesController;
 import com.unigrade.app.DAO.ClassDB;
@@ -104,9 +105,15 @@ public class ClassListAdapter extends BaseAdapter {
                 SubjectClass subjectClass = (SubjectClass)getItem(position);
                 if(isChecked){
                     classesController.insertIntoDatabase(subjectClass, context, subject, classes);
+                    String message = "Turma " + subjectClass.getName() + " adicionada";
+                    Toast.makeText(context.getApplicationContext(), message,
+                            Toast.LENGTH_SHORT).show();
                     Log.i("ADDED", subjectClass.getTeacherString(';'));
                 }else {
                     classesController.removeFromDatabase(subjectClass, context, classes);
+                    String message = "Turma " + subjectClass.getName() + " removida";
+                    Toast.makeText(context.getApplicationContext(), message,
+                            Toast.LENGTH_SHORT).show();
                     Log.i("REMOVED", subjectClass.getTeacherString(';'));
                 }
 
