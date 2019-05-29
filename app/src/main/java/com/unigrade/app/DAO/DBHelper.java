@@ -53,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper{
                     "REFERENCES classes(name, subjectCode))";
             db.execSQL(createMeetingTableSql);
 
-        }catch(SQLiteException e){
+        } catch(SQLiteException e){
             e.printStackTrace();
         }
     }
@@ -71,7 +71,7 @@ public class DBHelper extends SQLiteOpenHelper{
             db.execSQL(sqlDropMeetingTable);
 
             onCreate(db);
-        }catch(SQLiteException e){
+        } catch(SQLiteException e){
             e.printStackTrace();
         }
     }

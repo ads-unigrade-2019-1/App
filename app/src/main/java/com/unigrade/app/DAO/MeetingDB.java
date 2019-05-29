@@ -29,16 +29,14 @@ public class MeetingDB {
         dbHelper = DBHelper.getInstance(context);
     }
 
-    public boolean insert(ClassMeeting classMeeting, SubjectClass subjectClass){
+    public void insert(ClassMeeting classMeeting, SubjectClass subjectClass){
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
             db.insert(table, null, values);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     private ContentValues getMeetingAttribute(ClassMeeting classMeeting, SubjectClass subjectClass){
@@ -57,13 +55,12 @@ public class MeetingDB {
     }
 
     public ArrayList<ClassMeeting> getClassMeetings(String className, String subjectCode){
-        SQLiteDatabase db;
-        Cursor cursor;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         ArrayList<ClassMeeting> classMeetings = new ArrayList<>();
@@ -93,13 +90,12 @@ public class MeetingDB {
             }
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
         cursor.close();
         return classMeetings;
     }
 
-    public boolean delete(SubjectClass subjectClass){
+    public void delete(SubjectClass subjectClass){
         try{
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
@@ -107,12 +103,10 @@ public class MeetingDB {
             db.delete(table, "className=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
-    public boolean alter(SubjectClass subjectClass, ClassMeeting classMeeting) {
+    public void alter(SubjectClass subjectClass, ClassMeeting classMeeting) {
         try{
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
@@ -123,8 +117,6 @@ public class MeetingDB {
                     "subjectCode=? AND className=? AND day=? AND initHour=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 }

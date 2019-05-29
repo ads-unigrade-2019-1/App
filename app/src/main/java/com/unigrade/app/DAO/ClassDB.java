@@ -33,7 +33,7 @@ public class ClassDB {
         dbHelper = DBHelper.getInstance(this.context);
     }
 
-    public boolean insert(SubjectClass subjectClass){
+    public void insert(SubjectClass subjectClass){
         Log.d("timetable", "PrioridadeDBInsert: " + subjectClass.getPriority());
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -46,19 +46,16 @@ public class ClassDB {
 
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public ArrayList<SubjectClass> allSelecteds(){
-        SQLiteDatabase db;
+        SQLiteDatabase db = null;
         Cursor cursor;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
@@ -94,7 +91,6 @@ public class ClassDB {
 
             } catch (SQLiteException e){
                 e.printStackTrace();
-                return null;
             }
             subjectsClass.add(subjectClass);
         }
@@ -102,7 +98,7 @@ public class ClassDB {
         return subjectsClass;
     }
 
-    public boolean delete(SubjectClass subjectClass){
+    public void delete(SubjectClass subjectClass){
         try{
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectClass.getName(),
@@ -113,12 +109,10 @@ public class ClassDB {
             meetingDB.delete(subjectClass);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
-    public boolean alter(SubjectClass subjectClass) {
+    public void alter(SubjectClass subjectClass) {
         try{
             MeetingDB meetingDB = MeetingDB.getInstance(this.context);
 
@@ -134,18 +128,15 @@ public class ClassDB {
             db.update(table, values, "name=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public SubjectClass getClass(String name, String subjectCode){
-        SQLiteDatabase db;
+        SQLiteDatabase db = null;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         Cursor cursor = db.query(table, null,
@@ -174,7 +165,6 @@ public class ClassDB {
 
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
 
         } catch (CursorIndexOutOfBoundsException e){
             e.printStackTrace();
@@ -184,13 +174,12 @@ public class ClassDB {
     }
 
     public ArrayList<SubjectClass> getSubjectClasses(String subjectCode){
-        SQLiteDatabase db;
-        Cursor cursor;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         ArrayList<SubjectClass> subjectsClass = new ArrayList<>();
@@ -229,7 +218,6 @@ public class ClassDB {
             }
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
         cursor.close();
         return subjectsClass;
@@ -241,13 +229,12 @@ public class ClassDB {
                 "SELECT * FROM %s WHERE subjectCode='%s' and name='%s'",
                 table, sc.getSubjectCode(), sc.getName()
         );
-        SQLiteDatabase db;
+        SQLiteDatabase db = null;
 
         try{
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
 
         Cursor cursor = db.rawQuery(sql, null);
@@ -261,16 +248,14 @@ public class ClassDB {
 
     }
 
-    public boolean insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
+    public void insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
         for(SubjectClass subjectClass : subjectClassesList){
             try {
                 insert(subjectClass);
             } catch (SQLiteException e){
                 e.printStackTrace();
-                return false;
             }
         }
-        return true;
     }
 
     private ContentValues getClassAttribute(SubjectClass subjectClass){

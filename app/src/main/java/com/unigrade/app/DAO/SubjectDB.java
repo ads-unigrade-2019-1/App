@@ -27,27 +27,24 @@ public class SubjectDB {
         dbHelper = DBHelper.getInstance(context);
     }
 
-    public boolean insert(Subject subject){
+    public void insert(Subject subject){
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getSubjectAttributes(subject);
             db.insert(table, null, values);
         } catch(SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public ArrayList<Subject> all(){
         String sql = String.format("SELECT * FROM %s", table);
-        SQLiteDatabase db;
+        SQLiteDatabase db = null;
 
         try{
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         Cursor cursor = db.rawQuery(sql, null);
@@ -60,7 +57,6 @@ public class SubjectDB {
                 subject.setCredits(cursor.getString(cursor.getColumnIndex("credits")));
             } catch (SQLiteException e){
                 e.printStackTrace();
-                return null;
             }
             subjects.add(subject);
         }
@@ -69,19 +65,17 @@ public class SubjectDB {
         return subjects;
     }
 
-    public boolean delete(String subjectCode){
+    public void delete(String subjectCode){
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String[] params = {subjectCode};
             db.delete(table, "code=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
-    public boolean alter(Subject subject) {
+    public void alter(Subject subject) {
         try {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = getSubjectAttributes(subject);
@@ -91,21 +85,18 @@ public class SubjectDB {
             db.update(table, values, "code=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     public boolean isSubjectOnDB(String code) {
 
         String sql = String.format("SELECT * FROM %s WHERE code='%s'", table, code);
-        SQLiteDatabase db;
+        SQLiteDatabase db = null;
 
         try{
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
 
         Cursor cursor = db.rawQuery(sql, null);
@@ -120,12 +111,11 @@ public class SubjectDB {
     }
 
     public Subject getSubject(String code){
-        SQLiteDatabase db;
+        SQLiteDatabase db = null;
         try {
             db = dbHelper.getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         Cursor cursor = db.query(table, null, "code=?",
@@ -139,7 +129,6 @@ public class SubjectDB {
             subject.setName(cursor.getString(cursor.getColumnIndex("name")));
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         cursor.close();
