@@ -16,7 +16,7 @@ public class SubjectDB {
 
     private static SubjectDB instance;
 
-    public static SubjectDB getInstance(Context context) {
+    synchronized public static SubjectDB getInstance(Context context) {
         if(instance == null){
             instance = new SubjectDB(context);
         }

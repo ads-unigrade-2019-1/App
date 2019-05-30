@@ -41,7 +41,7 @@ public class TimetablesController extends Controller{
         //Empty constructor
     }
 
-    public static TimetablesController getInstance() {
+    synchronized public static TimetablesController getInstance() {
         if(instance == null){
             instance = new TimetablesController();
         }

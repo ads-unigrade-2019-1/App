@@ -21,7 +21,7 @@ public class ClassDB {
 
     private static ClassDB instance;
 
-    public static ClassDB getInstance(Context context) {
+    synchronized public static ClassDB getInstance(Context context) {
         if(instance == null){
             instance = new ClassDB(context.getApplicationContext());
         }

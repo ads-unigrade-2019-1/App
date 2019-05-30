@@ -26,7 +26,7 @@ public class ClassesController extends Controller {
         //Empty constructor
     }
 
-    public static ClassesController getInstance() {
+    synchronized public static ClassesController getInstance() {
         if(instance == null){
             instance = new ClassesController();
         }

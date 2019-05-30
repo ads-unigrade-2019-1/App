@@ -18,7 +18,7 @@ public class MeetingDB {
 
     private static MeetingDB instance;
 
-    public static MeetingDB getInstance(Context context) {
+    synchronized public static MeetingDB getInstance(Context context) {
         if(instance == null){
             instance = new MeetingDB(context);
         }
