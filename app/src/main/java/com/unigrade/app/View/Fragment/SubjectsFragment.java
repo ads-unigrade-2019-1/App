@@ -2,6 +2,7 @@ package com.unigrade.app.View.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
@@ -33,6 +35,8 @@ public class SubjectsFragment extends Fragment {
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
     private SubjectListAdapter adapter;
+    private SearchView searchBar;
+    private int inputNumber = 0;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -71,9 +75,10 @@ public class SubjectsFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
+        searchBar = v.findViewById(R.id.search_bar);
+
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 
-        callServer();
 
         subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,6 +94,25 @@ public class SubjectsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 callServer();
+            }
+        });
+
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                callServer();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                inputNumber += 1;
+                if(inputNumber >= 3){
+                    callServer();
+                    inputNumber = 0;
+                }
+
+                return false;
             }
         });
 
