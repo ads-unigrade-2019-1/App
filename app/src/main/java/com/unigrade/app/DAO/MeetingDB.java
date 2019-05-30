@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class MeetingDB {
     private String table = "meetings";
-    private DBHelper dbHelper;
 
     private static MeetingDB instance;
+    private Context context;
 
     synchronized public static MeetingDB getInstance(Context context) {
         if(instance == null){
@@ -26,12 +26,12 @@ public class MeetingDB {
     }
 
     public MeetingDB(Context context) {
-        dbHelper = DBHelper.getInstance(context);
+        this.context = context;
     }
 
     public void insert(ClassMeeting classMeeting, SubjectClass subjectClass){
         try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
             db.insert(table, null, values);
         } catch (SQLiteException e){
@@ -58,7 +58,7 @@ public class MeetingDB {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         try {
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class MeetingDB {
 
     public void delete(SubjectClass subjectClass){
         try{
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             String[] params = {subjectClass.getName(),
                     subjectClass.getSubjectCode()};
             db.delete(table, "className=? AND subjectCode=?", params);
@@ -108,7 +108,7 @@ public class MeetingDB {
 
     public void alter(SubjectClass subjectClass, ClassMeeting classMeeting) {
         try{
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
 
             String[] params = {subjectClass.getSubjectCode(), subjectClass.getName(),

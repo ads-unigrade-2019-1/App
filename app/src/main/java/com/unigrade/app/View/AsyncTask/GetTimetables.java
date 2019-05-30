@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, ArrayList<Timetable> > {
 
-    private TimetablesController timetablesController;
     private TimetablesFragment timetablesFragment;
 
     public GetTimetables(TimetablesFragment timetablesFragment){
@@ -21,13 +20,13 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
 
     @Override
     protected void onPreExecute() {
-        timetablesController =  TimetablesController.getInstance();
         timetablesFragment.getProgressBar().setVisibility(View.VISIBLE);
     }
 
     @Override
     protected ArrayList<Timetable> doInBackground(String... params) {
-        return timetablesController.getTimetablesList(timetablesFragment.getContext());
+        return TimetablesController.getInstance().getTimetablesList(
+                timetablesFragment.getContext());
     }
 
     @Override

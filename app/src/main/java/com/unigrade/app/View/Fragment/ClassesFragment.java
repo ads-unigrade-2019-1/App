@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.unigrade.app.Controller.ClassesController;
 import com.unigrade.app.DAO.ClassDB;
-import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.View.Activity.MainActivity;
@@ -37,8 +36,6 @@ public class ClassesFragment extends Fragment {
     private TextView tvClassTitle;
     private String caller;
     private Subject subject;
-    private ClassDB classDB;
-    private SubjectDB subjectDB;
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -88,9 +85,6 @@ public class ClassesFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
 
-        subjectDB = SubjectDB.getInstance(getActivity());
-        classDB = ClassDB.getInstance(getActivity());
-
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 
         if(caller.equals("subjects")){
@@ -118,8 +112,7 @@ public class ClassesFragment extends Fragment {
         if(classesController.isConnectedToNetwork(getActivity())){
             classesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getClassesTask = new GetClasses(
-                    this, classDB, subjectDB, subject).execute();
+            getClassesTask = new GetClasses(this, subject).execute();
         } else {
             classesList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
@@ -129,7 +122,7 @@ public class ClassesFragment extends Fragment {
 
     private void callDatabase(){
         Log.i("CALLDATABASE", "New adapter added");
-        classes = classDB.getSubjectClasses(subject.getCode());
+        classes = ClassDB.getInstance(getActivity()).getSubjectClasses(subject.getCode());
         for (SubjectClass sc: classes)
             Log.i("ISSELECTED", String.valueOf(sc.isSelected()));
         classesList.setAdapter(

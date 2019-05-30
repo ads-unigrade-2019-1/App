@@ -68,9 +68,8 @@ public class TimetablesFragment extends Fragment {
     }
 
     private void callServer(){
-        TimetablesController subjectsController = TimetablesController.getInstance();
 
-        if(subjectsController.isConnectedToNetwork(getActivity())){
+        if(TimetablesController.getInstance().isConnectedToNetwork(getActivity())){
             timetablesList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
             getTimetablesTask = new GetTimetables(this).execute();

@@ -21,12 +21,10 @@ import androidx.navigation.Navigation;
 
 
 public class UserSubjectsFragment extends Fragment {
-    private SubjectDB subjectDB;
 
     public UserSubjectsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -36,8 +34,7 @@ public class UserSubjectsFragment extends Fragment {
 
         boolean removeSubject;
 
-        subjectDB = SubjectDB.getInstance(getActivity());
-        ArrayList<Subject> subjectsList = subjectDB.all();
+        ArrayList<Subject> subjectsList = SubjectDB.getInstance(getActivity()).all();
 
         try{
             ArrayList<Subject> verifyList = ((MainActivity) getActivity()).getSubjectsList();
@@ -46,18 +43,18 @@ public class UserSubjectsFragment extends Fragment {
                 removeSubject = true;
                 for (int j = 0; j < verifyList.size(); j++) {
                     if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
-                        subjectDB.alter(verifyList.get(j));
+                        SubjectDB.getInstance(getActivity()).alter(verifyList.get(j));
                         subjectsList.set(i, verifyList.get(j));
                         removeSubject = false;
                         break;
                     }
                 }
                 if (removeSubject) {
-                    subjectDB.delete(subjectsList.get(i).getCode());
+                    SubjectDB.getInstance(getActivity()).delete(subjectsList.get(i).getCode());
                     subjectsList.remove(i);
                 }
             }
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
 

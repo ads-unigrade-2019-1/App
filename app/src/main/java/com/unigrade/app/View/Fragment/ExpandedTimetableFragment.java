@@ -102,16 +102,14 @@ public class ExpandedTimetableFragment extends Fragment {
 
     private void downloadTimetable(){
 
-        TimetablesController timetablesController = TimetablesController.getInstance();
-
-        if (timetablesController.isDownloadPermitted(getContext())){
+        if (TimetablesController.getInstance().isDownloadPermitted(getContext())){
             String downloadingMessage = "Realizando download da grade..";
             Toast.makeText(getContext().getApplicationContext(), downloadingMessage,
                     Toast.LENGTH_SHORT).show();
 
             Log.d("PERMISSAO", "Com permissao");
 
-            String message = timetablesController.downloadTableLayout(
+            String message = TimetablesController.getInstance().downloadTableLayout(
                     timetableLayout, getContext());
             Toast.makeText(getContext().getApplicationContext(), message,
                     Toast.LENGTH_SHORT).show();

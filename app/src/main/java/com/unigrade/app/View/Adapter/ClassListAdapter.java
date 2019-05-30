@@ -26,13 +26,11 @@ public class ClassListAdapter extends BaseAdapter {
     private ArrayList<SubjectClass> classes;
     private Context context;
     private Subject subject;
-    private ClassesController classesController;
 
     public ClassListAdapter(ArrayList<SubjectClass> classes, Context context, Subject subject) {
         this.classes = classes;
         this.context = context;
         this.subject = subject;
-        this.classesController = ClassesController.getInstance();
     }
 
     @Override
@@ -104,13 +102,15 @@ public class ClassListAdapter extends BaseAdapter {
                 Log.d("CHECKBOX", String.valueOf(position));
                 SubjectClass subjectClass = (SubjectClass)getItem(position);
                 if(isChecked){
-                    classesController.insertIntoDatabase(subjectClass, context, subject, classes);
+                    ClassesController.getInstance().insertIntoDatabase(
+                            subjectClass, context, subject, classes);
                     String message = "Turma " + subjectClass.getName() + " adicionada";
                     Toast.makeText(context.getApplicationContext(), message,
                             Toast.LENGTH_SHORT).show();
                     Log.i("ADDED", subjectClass.getTeacherString(';'));
                 }else {
-                    classesController.removeFromDatabase(subjectClass, context, classes);
+                    ClassesController.getInstance().removeFromDatabase(
+                            subjectClass, context, classes);
                     String message = "Turma " + subjectClass.getName() + " removida";
                     Toast.makeText(context.getApplicationContext(), message,
                             Toast.LENGTH_SHORT).show();
@@ -132,8 +132,7 @@ public class ClassListAdapter extends BaseAdapter {
 
                 subjectClass.setPriority(parent.getItemAtPosition(pos).toString());
 
-                ClassDB classDB = ClassDB.getInstance(context);
-                classDB.alter(subjectClass);
+                ClassDB.getInstance(context).alter(subjectClass);
             }
 
             @Override

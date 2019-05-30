@@ -76,8 +76,7 @@ public class TimetableListAdapter extends BaseAdapter {
         Timetable timetable = (Timetable) this.getItem(position);
         Log.d("VISUALIZAR", "pequena " + String.valueOf(position));
 
-        TimetablesController timetablesController = TimetablesController.getInstance();
-        timetablesController.insertTimetableInView(
+        TimetablesController.getInstance().insertTimetableInView(
                 viewHolder.timetableLayout,
                 timetable,
                 context,

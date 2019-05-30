@@ -16,7 +16,6 @@ import java.util.Arrays;
 
 public class ClassDB {
     private String table = "classes";
-    private DBHelper dbHelper;
     private Context context;
 
     private static ClassDB instance;
@@ -30,16 +29,14 @@ public class ClassDB {
 
     public ClassDB(Context context) {
         this.context = context;
-        dbHelper = DBHelper.getInstance(this.context);
     }
 
     public void insert(SubjectClass subjectClass){
         Log.d("timetable", "PrioridadeDBInsert: " + subjectClass.getPriority());
         try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             for(ClassMeeting meeting : subjectClass.getSchedules()) {
-                meetingDB.insert(meeting, subjectClass);
+                MeetingDB.getInstance(context).insert(meeting, subjectClass);
             }
             ContentValues values = getClassAttribute(subjectClass);
             db.insert(table, null, values);
@@ -49,11 +46,11 @@ public class ClassDB {
         }
     }
 
-    public ArrayList<SubjectClass> allSelecteds(){
+    public ArrayList<SubjectClass> allSelected(){
         SQLiteDatabase db = null;
         Cursor cursor;
         try {
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -84,8 +81,7 @@ public class ClassDB {
                 ArrayList<String> teachers = new ArrayList<>(Arrays.asList(teachersArray));
                 subjectClass.setTeacher(teachers);
 
-                MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(
+                ArrayList<ClassMeeting> schedules = MeetingDB.getInstance(context).getClassMeetings(
                         subjectClass.getName(), subjectClass.getSubjectCode());
                 subjectClass.setSchedules(schedules);
 
@@ -100,13 +96,12 @@ public class ClassDB {
 
     public void delete(SubjectClass subjectClass){
         try{
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             String[] params = {subjectClass.getName(),
                     subjectClass.getSubjectCode()};
             db.delete(table, "name=? AND subjectCode=?", params);
 
-            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-            meetingDB.delete(subjectClass);
+            MeetingDB.getInstance(context).delete(subjectClass);
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -114,13 +109,12 @@ public class ClassDB {
 
     public void alter(SubjectClass subjectClass) {
         try{
-            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
 
             for(ClassMeeting schedule : subjectClass.getSchedules()) {
-                meetingDB.alter(subjectClass, schedule);
+                MeetingDB.getInstance(context).alter(subjectClass, schedule);
             }
 
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getClassAttribute(subjectClass);
 
             String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
@@ -134,7 +128,7 @@ public class ClassDB {
     public SubjectClass getClass(String name, String subjectCode){
         SQLiteDatabase db = null;
         try {
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -159,8 +153,8 @@ public class ClassDB {
             String[] teachersArray = teachersString.split(";");
             subjectClass.setTeacher(new ArrayList<>(Arrays.asList(teachersArray)));
 
-            MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-            ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(name, subjectCode);
+            ArrayList<ClassMeeting> schedules = MeetingDB.getInstance(
+                    context).getClassMeetings(name, subjectCode);
             subjectClass.setSchedules(schedules);
 
         } catch (SQLiteException e){
@@ -177,7 +171,7 @@ public class ClassDB {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         try {
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -204,8 +198,7 @@ public class ClassDB {
                 teachers.addAll(Arrays.asList(teachersArray));
                 subjectClass.setTeacher(teachers);
 
-                MeetingDB meetingDB = MeetingDB.getInstance(this.context);
-                ArrayList<ClassMeeting> schedules = meetingDB.getClassMeetings(
+                ArrayList<ClassMeeting> schedules = MeetingDB.getInstance(context).getClassMeetings(
                         subjectClass.getName(), subjectCode);
                 subjectClass.setSchedules(schedules);
 
@@ -232,7 +225,7 @@ public class ClassDB {
         SQLiteDatabase db = null;
 
         try{
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }

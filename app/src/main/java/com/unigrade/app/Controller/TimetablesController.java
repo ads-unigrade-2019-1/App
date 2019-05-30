@@ -52,7 +52,7 @@ public class TimetablesController extends Controller{
         // Returns the list of all subjects from the API
         ClassDB classDB = ClassDB.getInstance(context);
 
-        String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(classDB.allSelecteds()).toString());
+        String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(classDB.allSelected()).toString());
         Log.d("Timetable", "Resultado: " + result);
         ArrayList<Timetable> timetables = new ArrayList<>();
 

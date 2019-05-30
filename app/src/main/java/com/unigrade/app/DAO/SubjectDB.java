@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class SubjectDB {
     private String table = "subjects";
-    private DBHelper dbHelper;
+    private Context context;
 
     private static SubjectDB instance;
 
@@ -24,12 +24,12 @@ public class SubjectDB {
     }
 
     public SubjectDB(Context context){
-        dbHelper = DBHelper.getInstance(context);
+        this.context = context;
     }
 
     public void insert(Subject subject){
         try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getSubjectAttributes(subject);
             db.insert(table, null, values);
         } catch(SQLiteException e){
@@ -42,7 +42,7 @@ public class SubjectDB {
         SQLiteDatabase db = null;
 
         try{
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class SubjectDB {
 
     public void delete(String subjectCode){
         try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             String[] params = {subjectCode};
             db.delete(table, "code=?", params);
         } catch (SQLiteException e){
@@ -77,7 +77,7 @@ public class SubjectDB {
 
     public void alter(Subject subject) {
         try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getSubjectAttributes(subject);
 
             String[] params = {subject.getCode()};
@@ -94,7 +94,7 @@ public class SubjectDB {
         SQLiteDatabase db = null;
 
         try{
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }
@@ -113,7 +113,7 @@ public class SubjectDB {
     public Subject getSubject(String code){
         SQLiteDatabase db = null;
         try {
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
         }

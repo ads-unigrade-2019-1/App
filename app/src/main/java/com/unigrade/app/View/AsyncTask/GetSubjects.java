@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> > {
 
-    private SubjectsController subjectsController;
     private SubjectsFragment subjectsFragment;
 
     public GetSubjects(SubjectsFragment subjectsFragment){
@@ -22,13 +21,12 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
 
     @Override
     protected void onPreExecute() {
-        subjectsController =  SubjectsController.getInstance();
         subjectsFragment.getProgressBar().setVisibility(View.VISIBLE);
     }
 
     @Override
     protected ArrayList<Subject> doInBackground(String... params) {
-        return subjectsController.getSubjectsList();
+        return SubjectsController.getInstance().getSubjectsList();
     }
 
     @Override
