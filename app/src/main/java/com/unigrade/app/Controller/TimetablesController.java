@@ -53,6 +53,7 @@ public class TimetablesController extends Controller{
         ClassDB classDB = ClassDB.getInstance(context);
 
         String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(classDB.allSelected()).toString());
+        Log.d("JSONString", arrayToJSON(classDB.allSelected()).toString());
         Log.d("Timetable", "Resultado: " + result);
         ArrayList<Timetable> timetables = new ArrayList<>();
 
@@ -116,7 +117,7 @@ public class TimetablesController extends Controller{
                 e.printStackTrace();
             }
         }
-        Log.d("JSONString", subjectsJSON.toString());
+
         return subjectsJSON;
     }
 
@@ -178,25 +179,35 @@ public class TimetablesController extends Controller{
     public void insertTimetableInView(
             TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
 
+        timetable.printTimetable();
+
         String[] weekDays = {
                 "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
         };
         String[] initTimes = {
-                "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"
+                "06:00", "06:30", "07:00", "07:30",
+                "08:00", "08:30", "09:00", "09:30",
+                "10:00", "10:30", "11:00", "11:30",
+                "12:00", "12:30", "13:00", "13:30",
+                "14:00", "14:30", "15:00", "15:30",
+                "16:00", "16:30", "17:00", "17:30",
+                "18:00", "18:30", "19:00", "19:30",
+                "20:00", "20:30", "21:00", "21:30",
+                "22:00", "22:30", "23:00", "23:30"
         };
 
-        for (int i=1; i <= initTimes.length; i++) {
-            TableRow tr = (TableRow) timetableLayout.getChildAt(i);
-
+        for (int i=0; i < initTimes.length/4; i++) {
+            TableRow tr = (TableRow) timetableLayout.getChildAt(i+1);
             if (!isMinified){
                 tr.setMinimumHeight(90);
             }
-            for (int j=1; j <= weekDays.length; j++){
-                TextView classSchedule = (TextView) tr.getChildAt(j);
+            for (int j=0; j < weekDays.length; j++){
+                TextView classSchedule = (TextView) tr.getChildAt(j+1);
 
                 SubjectClass subjectClass = timetable.findClassesByTimeDay(
-                        initTimes[i-1],
-                        weekDays[j-1]
+                        initTimes,
+                        i,
+                        weekDays[j]
                 );
 
                 if(subjectClass != null){
