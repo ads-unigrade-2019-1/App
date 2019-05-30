@@ -50,9 +50,9 @@ public class TimetablesController extends Controller{
 
     public ArrayList<Timetable> getTimetablesList(Context context){
         // Returns the list of all subjects from the API
-        ClassDB classDB = ClassDB.getInstance(context);
 
-        String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(classDB.allSelected()).toString());
+        String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(
+                ClassDB.getInstance(context).allSelected()).toString());
         Log.d("Timetable", "Resultado: " + result);
         ArrayList<Timetable> timetables = new ArrayList<>();
 
@@ -68,9 +68,9 @@ public class TimetablesController extends Controller{
 
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
-                    Log.d("timetable", "Prioridade: " + classDB.getClass(
-                            name, discipline).getPriority());
-                    timetableClass.add(classDB.getClass(name, discipline));
+                    Log.d("timetable", "Prioridade: " + ClassDB.getInstance(
+                            context).getClass(name, discipline).getPriority());
+                    timetableClass.add(ClassDB.getInstance(context).getClass(name, discipline));
                 }
                 Timetable timetable = new Timetable(timetableClass);
                 timetables.add(timetable);

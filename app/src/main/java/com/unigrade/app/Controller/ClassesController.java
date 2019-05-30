@@ -105,23 +105,21 @@ public class ClassesController extends Controller {
         SubjectClass subjectClass, Context context,
             Subject subject, ArrayList<SubjectClass> classes){
 
-        ClassDB classDB = ClassDB.getInstance(context);
-        SubjectDB subjectDB = SubjectDB.getInstance(context);
         String subjectCode = subjectClass.getSubjectCode();
 
         subjectClass.setSelected(true);
 
-        if (!subjectDB.isSubjectOnDB(subjectCode)){
-            subjectDB.insert(subject);
+        if (!SubjectDB.getInstance(context).isSubjectOnDB(subjectCode)){
+            SubjectDB.getInstance(context).insert(subject);
             for (SubjectClass c : classes) {
                 if(c.getPriority() == null)
                     c.setPriority("1");
                 Log.d("timetable", "PrioridadeAdapter: " + c.getPriority());
-                classDB.insert(c);
+                ClassDB.getInstance(context).insert(c);
             }
             Log.i("OUTSIDEDB", subjectCode + " "+ subjectClass.getTeacher());
         } else {
-            classDB.alter(subjectClass);
+            ClassDB.getInstance(context).alter(subjectClass);
             Log.i("ONDB", subjectCode + " "+ subjectClass.getTeacher());
         }
     }
@@ -129,19 +127,17 @@ public class ClassesController extends Controller {
     public void removeFromDatabase(
             SubjectClass subjectClass, Context context, ArrayList<SubjectClass> classes){
 
-        ClassDB classDB = ClassDB.getInstance(context);
-        SubjectDB subjectDB = SubjectDB.getInstance(context);
         String subjectCode = subjectClass.getSubjectCode();
 
         subjectClass.setSelected(false);
 
         if (isLonelyAdded(subjectClass, classes)){
             for (SubjectClass c : classes)
-                classDB.delete(c);
-            subjectDB.delete(subjectCode);
+                ClassDB.getInstance(context).delete(c);
+            SubjectDB.getInstance(context).delete(subjectCode);
             Log.i("LONELY", subjectCode + " "+ subjectClass.getTeacher());
         } else {
-            classDB.alter(subjectClass);
+            ClassDB.getInstance(context).alter(subjectClass);
             Log.i("NOTLONELY", subjectCode + " "+ subjectClass.getTeacher());
         }
     }
