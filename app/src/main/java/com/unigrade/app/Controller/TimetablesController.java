@@ -133,7 +133,7 @@ public class TimetablesController extends Controller{
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 
-    public void downloadTableLayout(TableLayout tableLayout, Context context){
+    public String downloadTableLayout(TableLayout tableLayout, Context context){
 
         tableLayout.setDrawingCacheEnabled(true);
         Bitmap bitmap = tableLayout.getDrawingCache();
@@ -156,8 +156,12 @@ public class TimetablesController extends Controller{
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
+
+            return "Download realizado em " + file.toString();
         } catch (Exception e) {
             e.printStackTrace();
+
+            return e.toString();
         } finally {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 

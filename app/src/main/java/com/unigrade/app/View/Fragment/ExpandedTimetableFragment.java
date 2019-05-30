@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.Timetable;
@@ -104,8 +105,16 @@ public class ExpandedTimetableFragment extends Fragment {
         TimetablesController timetablesController = TimetablesController.getInstance();
 
         if (timetablesController.isDownloadPermitted(getContext())){
+            String downloadingMessage = "Realizando download da grade..";
+            Toast.makeText(getContext().getApplicationContext(), downloadingMessage,
+                    Toast.LENGTH_SHORT).show();
+
             Log.d("PERMISSAO", "Com permissao");
-            timetablesController.downloadTableLayout(timetableLayout, getContext());
+
+            String message = timetablesController.downloadTableLayout(
+                    timetableLayout, getContext());
+            Toast.makeText(getContext().getApplicationContext(), message,
+                    Toast.LENGTH_SHORT).show();
         } else {
             Log.d("PERMISSAO", "Sem permissao");
             askForPermission();
