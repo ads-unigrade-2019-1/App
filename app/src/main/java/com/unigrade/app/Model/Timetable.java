@@ -42,11 +42,24 @@ public class Timetable implements Serializable {
         return findedClassMeeting;
     }
 
-    public SubjectClass findClassesByTimeDay(final String initHour, String day){
+    public SubjectClass findClassesByTimeDay(final String[] initHour, Integer timeIndex,  String day){
+        //Log.d("Horários", "ENTROU: " + timeIndex);
+        int i=0;
         for(SubjectClass subjectClass : this.getTimetableClass()){
             for(ClassMeeting classMeeting : subjectClass.getSchedules()){
-                if(classMeeting.getInit_hour().equals(
-                        initHour) && classMeeting.getDay().equals(day)){
+//                Log.d("Horários", "Compare: " +
+//                        initHour[(timeIndex*4 + 3)] + "," +
+//                        initHour[(timeIndex*4 + 2)] + "," +
+//                        initHour[(timeIndex*4 + 1)] + "," +
+//                        initHour[(timeIndex*4)] + "," +
+//                        day);
+//                Log.d("Horários", "BD: " + classMeeting.getInit_hour() + "," + classMeeting.getDay());
+                if((classMeeting.getInit_hour().equals(initHour[(timeIndex*4 + 3)])
+                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4 + 2])
+                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4 + 1])
+                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4]))
+                    && classMeeting.getDay().equals(day)){
+//                    Log.d("Horários", "IGUAL");
                     return subjectClass;
                 }
             };
@@ -57,10 +70,10 @@ public class Timetable implements Serializable {
     public void printTimetable(){
 //        test method
         try {
+            Log.d("TimetablePrint", "-----------------------------------------------");
             for (int i = 0; i < timetableClasses.size(); i++) {
-                Log.d("Timetable", timetableClasses.get(i).getName());
-                Log.d("Timetable", timetableClasses.get(i).getSubjectCode());
-                Log.d("Timetable", timetableClasses.get(i).getPriority());
+                Log.d("TimetablePrint", "Nome: " +  timetableClasses.get(i).getName());
+                Log.d("TimetablePrint", "Horário: " + timetableClasses.get(i).getSchedulesString());
             }
         } catch(RuntimeException e){
             e.printStackTrace();
