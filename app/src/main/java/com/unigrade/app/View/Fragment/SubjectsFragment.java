@@ -119,7 +119,7 @@ public class SubjectsFragment extends Fragment {
          SubjectsController subjectsController = SubjectsController.getInstance();
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
-            subjectList.setVisibility(View.VISIBLE);
+            subjectList.setVisibility(View.GONE);
             noInternet.setVisibility(View.GONE);
             getSubjectsTask = new GetSubjects(this,text).execute();
         } else {

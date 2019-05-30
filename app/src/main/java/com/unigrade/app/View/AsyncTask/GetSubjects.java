@@ -45,6 +45,7 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
                 .setAdapter(
                         new SubjectListAdapter(subjectsFragment.getSubjects(), subjectsFragment.getActivity())
         );
+        subjectsFragment.getSubjectList().setVisibility(View.VISIBLE);
         subjectsFragment.getProgressBar().setVisibility(View.GONE);
     }
 }
