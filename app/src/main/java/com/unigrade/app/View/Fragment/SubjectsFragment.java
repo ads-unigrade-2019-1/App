@@ -36,7 +36,6 @@ public class SubjectsFragment extends Fragment {
     private AsyncTask getSubjectsTask;
     private SubjectListAdapter adapter;
     private SearchView searchBar;
-    private int inputNumber = 0;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -93,24 +92,21 @@ public class SubjectsFragment extends Fragment {
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callServer();
+                callServer("");
             }
         });
 
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                callServer();
+                callServer(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                inputNumber += 1;
-                if(inputNumber >= 3){
-                    callServer();
-                    inputNumber = 0;
-                }
+                if(newText.length() >= 3)
+                    callServer(newText);
 
                 return false;
             }
@@ -119,13 +115,13 @@ public class SubjectsFragment extends Fragment {
         return v;
     }
 
-    private void callServer(){
+    private void callServer(String text){
          SubjectsController subjectsController = SubjectsController.getInstance();
 
         if(subjectsController.isConnectedToNetwork(getActivity())){
             subjectList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
-            getSubjectsTask = new GetSubjects(this).execute();
+            getSubjectsTask = new GetSubjects(this,text).execute();
         } else {
             subjectList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
