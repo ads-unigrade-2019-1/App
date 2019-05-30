@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 
 import com.unigrade.app.Controller.TimetablesController;
+import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
@@ -73,6 +74,7 @@ public class TimetableListAdapter extends BaseAdapter {
         viewHolder.btnDownload.setTag(position);
 
         Timetable timetable = (Timetable) this.getItem(position);
+        Log.d("VISUALIZAR", "pequena " + String.valueOf(position));
 
         TimetablesController timetablesController = TimetablesController.getInstance();
         timetablesController.insertTimetableInView(
@@ -92,13 +94,18 @@ public class TimetableListAdapter extends BaseAdapter {
     }
 
     private View.OnClickListener visualizeListener(){
+
+    int i = 0;
+
+
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
-                Log.d("VISUALIZAR", String.valueOf(position));
+                Log.d("VISUALIZAR", "grande" + String.valueOf(position));
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("timetable", (Timetable) getItem(position));
+
                 Navigation.findNavController(fragment.getView())
                         .navigate(R.id.expandedTimetableFragment, bundle);
             }

@@ -52,53 +52,8 @@ public class TimetablesController extends Controller{
         // Returns the list of all subjects from the API
         ClassDB classDB = ClassDB.getInstance(context);
 
-//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.allSelecteds()).toString());
-//        TODO
-//         excluir essa chamada de função
-//         descomentar o post
-//         excluir string result feita à mão
-        arrayToJSON(classDB.allSelecteds());
-
-        String result = "" +
-                "[" +
-                "[" +
-                "{" +
-                "\"discipline\":\"128121\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"B\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"129852\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"A\"" +
-                "}" +
-                "]," +
-                "[" +
-                "{" +
-                "\"discipline\":\"128121\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"B\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"129852\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"A\"" +
-                "}" +
-                "]" +
-                "]";
-
+        String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(classDB.allSelecteds()).toString());
+        Log.d("Timetable", "Resultado: " + result);
         ArrayList<Timetable> timetables = new ArrayList<>();
 
         try {
@@ -220,18 +175,18 @@ public class TimetablesController extends Controller{
             TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
 
         String[] weekDays = {
-                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"
+                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
         };
         String[] initTimes = {
                 "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"
         };
 
-        for (int i=1; i <= initTimes.length; i++){
+        for (int i=1; i <= initTimes.length; i++) {
             TableRow tr = (TableRow) timetableLayout.getChildAt(i);
 
-            if(!isMinified)
+            if (!isMinified){
                 tr.setMinimumHeight(90);
-
+            }
             for (int j=1; j <= weekDays.length; j++){
                 TextView classSchedule = (TextView) tr.getChildAt(j);
 
@@ -253,6 +208,9 @@ public class TimetablesController extends Controller{
                         );
                         classSchedule.setTextSize(6);
                     }
+                }
+                else {
+                    classSchedule.setText("");
                 }
             }
         }
