@@ -78,7 +78,8 @@ public class ServerHelper {
 
             int number = connection.getResponseCode();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
             StringBuilder stringBuilder = new StringBuilder();
 
             String inputLine;

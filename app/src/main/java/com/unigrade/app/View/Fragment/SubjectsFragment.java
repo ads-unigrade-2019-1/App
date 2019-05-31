@@ -80,7 +80,8 @@ public class SubjectsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("caller", "subjects");
-                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(
+                        position));
                 Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
             }
         });
@@ -96,9 +97,8 @@ public class SubjectsFragment extends Fragment {
     }
 
     private void callServer(){
-         SubjectsController subjectsController = SubjectsController.getInstance();
 
-        if(subjectsController.isConnectedToNetwork(getActivity())){
+        if(SubjectsController.getInstance().isConnectedToNetwork(getActivity())){
             subjectList.setVisibility(View.VISIBLE);
             noInternet.setVisibility(View.GONE);
             getSubjectsTask = new GetSubjects(this).execute();
