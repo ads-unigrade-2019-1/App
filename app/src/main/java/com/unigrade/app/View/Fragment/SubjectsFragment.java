@@ -34,7 +34,6 @@ public class SubjectsFragment extends Fragment {
     private Button btnReload;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
-    private SubjectListAdapter adapter;
     private SearchView searchBar;
 
     public SubjectsFragment() {
@@ -73,44 +72,18 @@ public class SubjectsFragment extends Fragment {
         subjectList = v.findViewById(R.id.subjects_list);
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
-
         searchBar = v.findViewById(R.id.search_bar);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 
-
-        subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("caller", "subjects");
-                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
-                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
-            }
-        });
-
+        subjectList.setOnItemClickListener(itemListener());
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 callServer("");
             }
         });
-
-        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                callServer(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText.length() >= 3)
-                    callServer(newText);
-
-                return false;
-            }
-        });
+        searchBar.setOnQueryTextListener(searchListener());
 
         return v;
     }
@@ -127,6 +100,36 @@ public class SubjectsFragment extends Fragment {
             noInternet.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private AdapterView.OnItemClickListener itemListener(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("caller", "subjects");
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
+            }
+        };
+    }
+
+    private SearchView.OnQueryTextListener searchListener(){
+        return new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                callServer(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.length() >= 3)
+                    callServer(newText);
+
+                return false;
+            }
+        };
     }
 
     @Override
