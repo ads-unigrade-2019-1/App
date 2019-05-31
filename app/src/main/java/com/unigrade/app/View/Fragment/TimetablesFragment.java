@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import com.unigrade.app.Controller.TimetablesController;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
@@ -88,4 +90,5 @@ public class TimetablesFragment extends Fragment {
             getTimetablesTask.cancel(true);
         }
     }
+
 }
