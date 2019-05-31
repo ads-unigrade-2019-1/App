@@ -33,7 +33,7 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
 
     @Override
     protected ArrayList<Subject> doInBackground(String... params) {
-        return subjectsController.getSubjectsList();
+        return subjectsController.getSubjectsList(searchInput);
     }
 
     @Override
