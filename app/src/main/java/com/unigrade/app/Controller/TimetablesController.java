@@ -243,6 +243,15 @@ public class TimetablesController extends Controller{
         }
     }
 
+    public boolean haveSubjects(Context context) {
+        ArrayList<SubjectClass> subjects = ClassDB.getInstance(context).allSelected();
+        if (subjects.size() == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 
 }
