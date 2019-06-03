@@ -22,7 +22,7 @@ public class SubjectsController extends Controller {
         //Empty constructor
     }
 
-    public static SubjectsController getInstance() {
+    synchronized public static SubjectsController getInstance() {
         if(instance == null){
             instance = new SubjectsController();
         }

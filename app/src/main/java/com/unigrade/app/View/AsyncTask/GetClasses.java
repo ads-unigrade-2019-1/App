@@ -1,5 +1,6 @@
 package com.unigrade.app.View.AsyncTask;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
@@ -15,34 +16,32 @@ import java.util.ArrayList;
 
 public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClass> > {
 
-    private ClassesController classesController;
     private ClassesFragment classesFragment;
-    private ClassDB classDB;
-    private SubjectDB subjectDB;
     private Subject subject;
 
-    public GetClasses(ClassesFragment classesFragment, ClassDB classDB, SubjectDB subjectDB, Subject subject){
+    public GetClasses(ClassesFragment classesFragment, Subject subject){
         this.classesFragment = classesFragment;
-        this.classDB = classDB;
         this.subject = subject;
-        this.subjectDB = subjectDB;
     }
 
     @Override
     protected void onPreExecute() {
-        classesController =  ClassesController.getInstance();
         classesFragment.getProgressBar().setVisibility(View.VISIBLE);
     }
 
     @Override
     protected ArrayList<SubjectClass> doInBackground(String... params) {
-        ArrayList<SubjectClass> classes = classesController.getClassesList(subject);
+        ArrayList<SubjectClass> classes = ClassesController.getInstance().getClassesList(subject);
 
-        if(subjectDB.isSubjectOnDB(subject.getCode())) {
+        if(SubjectDB.getInstance(classesFragment.getContext()).isSubjectOnDB(subject.getCode())) {
             for (SubjectClass sc: classes) {
-                if(classDB.isClassOnDB(sc)) {
-                    sc.setSelected(true);
-                    sc.setPriority(classDB.getClass(sc.getName(), sc.getSubjectCode()).getPriority());
+                if(ClassDB.getInstance(classesFragment.getContext()).isClassOnDB(sc)) {
+                    sc.setSelected(ClassDB.getInstance(
+                            classesFragment.getContext()).getClass(sc.getName(),
+                            sc.getSubjectCode()).isSelected());
+                    sc.setPriority(ClassDB.getInstance(
+                            classesFragment.getContext()).getClass(sc.getName(),
+                            sc.getSubjectCode()).getPriority());
                 }
             }
         }
@@ -56,7 +55,8 @@ public class GetClasses extends AsyncTask<String, Integer, ArrayList<SubjectClas
         classesFragment.setClasses(classes);
         classesFragment.getClassesList()
                 .setAdapter(
-                        new ClassListAdapter(classesFragment.getClasses(), classesFragment.getActivity(), classesFragment.getSubject())
+                        new ClassListAdapter(classesFragment.getClasses(),
+                                classesFragment.getActivity(), classesFragment.getSubject())
                 );
         classesFragment.getProgressBar().setVisibility(View.GONE);
     }

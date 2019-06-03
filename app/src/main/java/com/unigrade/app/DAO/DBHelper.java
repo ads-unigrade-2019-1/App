@@ -1,7 +1,6 @@
 package com.unigrade.app.DAO;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,7 +9,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     private static DBHelper instance;
 
-    public static DBHelper getInstance(Context context) {
+    synchronized public static DBHelper getInstance(Context context) {
         if(instance == null){
             instance = new DBHelper(context);
         }
@@ -49,11 +48,12 @@ public class DBHelper extends SQLiteOpenHelper{
                     "room VARCHAR(255) NOT NULL, " +
                     "className VARCHAR(255) NOT NULL, " +
                     "subjectCode VARCHAR(255) NOT NULL, " +
+                    "CONSTRAINT meetings_pk PRIMARY KEY (className, subjectCode, day, initHour), " +
                     "CONSTRAINT meeting_class_FK FOREIGN KEY (className, subjectCode) " +
                     "REFERENCES classes(name, subjectCode))";
             db.execSQL(createMeetingTableSql);
 
-        }catch(SQLiteException e){
+        } catch(SQLiteException e){
             e.printStackTrace();
         }
     }
@@ -71,7 +71,7 @@ public class DBHelper extends SQLiteOpenHelper{
             db.execSQL(sqlDropMeetingTable);
 
             onCreate(db);
-        }catch(SQLiteException e){
+        } catch(SQLiteException e){
             e.printStackTrace();
         }
     }

@@ -28,4 +28,6 @@
 
     <include layout="@layout/content_no_internet"/>
 
+    <include layout="@layout/content_empty_timetable"/>
+
 </FrameLayout>

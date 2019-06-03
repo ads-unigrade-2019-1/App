@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 public class MeetingDB {
     private String table = "meetings";
-    private DBHelper dbHelper;
 
     private static MeetingDB instance;
+    private Context context;
 
-    public static MeetingDB getInstance(Context context) {
+    synchronized public static MeetingDB getInstance(Context context) {
         if(instance == null){
             instance = new MeetingDB(context);
         }
@@ -26,34 +26,27 @@ public class MeetingDB {
     }
 
     public MeetingDB(Context context) {
-        dbHelper = DBHelper.getInstance(context);
+        this.context = context;
     }
 
-    public boolean insert(ClassMeeting classMeeting, SubjectClass subjectClass){
+    public void insert(ClassMeeting classMeeting, SubjectClass subjectClass){
         try {
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
             db.insert(table, null, values);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     private ContentValues getMeetingAttribute(ClassMeeting classMeeting, SubjectClass subjectClass){
         ContentValues values = new ContentValues();
 
         values.put("day", classMeeting.getDay());
-
         values.put("initHour", classMeeting.getInit_hour());
-
         values.put("finalHour", classMeeting.getFinal_hour());
-
         values.put("room", classMeeting.getRoom());
-
         values.put("className", subjectClass.getName());
-
         values.put("subjectCode", subjectClass.getSubjectCode());
 
         Log.d("MeetingDB ", "get(): " + values.toString());
@@ -62,62 +55,68 @@ public class MeetingDB {
     }
 
     public ArrayList<ClassMeeting> getClassMeetings(String className, String subjectCode){
-        SQLiteDatabase db;
-        Cursor cursor;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
         try {
-            db = dbHelper.getReadableDatabase();
+            db = DBHelper.getInstance(context).getReadableDatabase();
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
 
         ArrayList<ClassMeeting> classMeetings = new ArrayList<>();
 
+        String select = String.format("SELECT * FROM %s", table);
+        String where = String.format(
+                "WHERE subjectCode='%s' AND className='%s'", subjectCode, className);
+        String case1 = "WHEN 'Domingo' THEN 1 WHEN 'Segunda' THEN 2 WHEN 'Terça' THEN 3";
+        String case2 = "WHEN 'Quarta' THEN 4 WHEN 'Quinta' THEN 5 WHEN 'Sexta' THEN 6";
+        String case3 = "WHEN 'Sábado' THEN 7 ELSE 100 END";
+        String cases = case1 + " " + case2 + " " + case3;
+        String orderBy = "ORDER BY (CASE day" + " "+ cases + ") ASC, initHour ASC";
+        String selectQuery = select + " " + where + " " + orderBy;
+
         try{
-            String[] params = {className, subjectCode};
-            cursor = db.query(table, null, "className=? AND subjectCode=?", params, null, null, null);
+            cursor = db.rawQuery(selectQuery, null);
             while (cursor.moveToNext()){
                 ClassMeeting classMeeting = new ClassMeeting();
                 classMeeting.setDay(cursor.getString(cursor.getColumnIndex("day")));
-                classMeeting.setInit_hour(cursor.getString(cursor.getColumnIndex("initHour")));
-                classMeeting.setFinal_hour(cursor.getString(cursor.getColumnIndex("finalHour")));
+                classMeeting.setInit_hour(cursor.getString(cursor.getColumnIndex(
+                        "initHour")));
+                classMeeting.setFinal_hour(cursor.getString(cursor.getColumnIndex(
+                        "finalHour")));
                 classMeeting.setRoom(cursor.getString(cursor.getColumnIndex("room")));
 
                 classMeetings.add(classMeeting);
             }
         } catch (SQLiteException e){
             e.printStackTrace();
-            return null;
         }
         cursor.close();
         return classMeetings;
     }
 
-    public boolean delete(SubjectClass subjectClass){
+    public void delete(SubjectClass subjectClass){
         try{
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             String[] params = {subjectClass.getName(),
                     subjectClass.getSubjectCode()};
-            db.delete(table, "className = ? AND subjectCode = ?", params);
+            db.delete(table, "className=? AND subjectCode=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
-    public boolean alter(SubjectClass subjectClass, ClassMeeting classMeeting) {
+    public void alter(SubjectClass subjectClass, ClassMeeting classMeeting) {
         try{
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
             ContentValues values = getMeetingAttribute(classMeeting, subjectClass);
 
-            String[] params = {subjectClass.getName(), subjectClass.getSubjectCode()};
-
-            db.update(table, values, "className = ? AND subjectCode = ?", params);
+            String[] params = {subjectClass.getSubjectCode(), subjectClass.getName(),
+                    classMeeting.getDay(), classMeeting.getInit_hour()};
+            db.update(table, values,
+                    "subjectCode=? AND className=? AND day=? AND initHour=?", params);
         } catch (SQLiteException e){
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 }

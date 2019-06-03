@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -23,6 +22,7 @@ import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
+import com.unigrade.app.View.Fragment.TimetablesFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +42,7 @@ public class TimetablesController extends Controller{
         //Empty constructor
     }
 
-    public static TimetablesController getInstance() {
+    synchronized public static TimetablesController getInstance() {
         if(instance == null){
             instance = new TimetablesController();
         }
@@ -51,55 +51,11 @@ public class TimetablesController extends Controller{
 
     public ArrayList<Timetable> getTimetablesList(Context context){
         // Returns the list of all subjects from the API
-        ClassDB classDB = ClassDB.getInstance(context);
 
-//        String result = new GetDAO(URL_ALL_TIMETABLES).post(ArrayToJSON(classDAO.allSelecteds()).toString());
-//        TODO
-//         excluir essa chamada de função
-//         descomentar o post
-//         excluir string result feita à mão
-        arrayToJSON(classDB.allSelecteds());
-
-        String result = "" +
-                "[" +
-                "[" +
-                "{" +
-                "\"discipline\":\"128121\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"B\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"129852\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"A\"" +
-                "}" +
-                "]," +
-                "[" +
-                "{" +
-                "\"discipline\":\"128121\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"B\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"129852\"," +
-                "\"name\":\"A\"" +
-                "}," +
-                "{" +
-                "\"discipline\":\"103691\"," +
-                "\"name\":\"A\"" +
-                "}" +
-                "]" +
-                "]";
-
+        String result = (new ServerHelper(URL_ALL_TIMETABLES)).post(arrayToJSON(ClassDB.getInstance(
+                context).allSelected()).toString());
+        Log.d("JSONString", arrayToJSON(ClassDB.getInstance(context).allSelected()).toString());
+        Log.d("Timetable", "Resultado: " + result);
         ArrayList<Timetable> timetables = new ArrayList<>();
 
         try {
@@ -114,17 +70,31 @@ public class TimetablesController extends Controller{
 
                     String name = classJSON.getString("name");
                     String discipline = classJSON.getString("discipline");
-                    Log.d("timetable", "Prioridade: " + classDB.getClass(name, discipline).getPriority());
-                    timetableClass.add(classDB.getClass(name, discipline));
+                    Log.d("timetable", "Prioridade: " + ClassDB.getInstance(
+                            context).getClass(name, discipline).getPriority());
+                    timetableClass.add(ClassDB.getInstance(context).getClass(name, discipline));
                 }
                 Timetable timetable = new Timetable(timetableClass);
                 timetables.add(timetable);
                 timetable.printTimetable();
             }
 
-        } catch (JSONException e) {
+        } catch (NullPointerException e){
+            //TODO Adicionar mensagem - Sem turmas adicionadas
+        } catch (Exception e) {
             e.printStackTrace();
+
         }
+        for(int i =0; i<timetables.size(); i++){
+            Timetable timetable = timetables.get(i);
+            Log.d("ShowTimetable", "TIMETABLE " + i);
+            for (SubjectClass subjectClass : timetable.getTimetableClass()){
+                Log.d("ShowTimetable", "---------------------");
+                Log.d("ShowTimetable", "Nome: " + subjectClass.getName());
+                Log.d("ShowTimetable", "Horário: " + subjectClass.getSchedulesString());
+            }
+        }
+
         return timetables;
     }
 
@@ -161,7 +131,7 @@ public class TimetablesController extends Controller{
                 e.printStackTrace();
             }
         }
-        Log.d("JSONString", subjectsJSON.toString());
+
         return subjectsJSON;
     }
 
@@ -178,7 +148,7 @@ public class TimetablesController extends Controller{
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 
-    public void downloadTableLayout(TableLayout tableLayout, Context context){
+    public String downloadTableLayout(TableLayout tableLayout, Context context){
 
         tableLayout.setDrawingCacheEnabled(true);
         Bitmap bitmap = tableLayout.getDrawingCache();
@@ -201,8 +171,12 @@ public class TimetablesController extends Controller{
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
+
+            return "Download realizado em " + file.toString();
         } catch (Exception e) {
             e.printStackTrace();
+
+            return e.toString();
         } finally {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
@@ -212,32 +186,40 @@ public class TimetablesController extends Controller{
             context.sendBroadcast(mediaScanIntent);
 
         }
-
-
     }
 
     public void insertTimetableInView(
             TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
 
+        timetable.printTimetable();
+
         String[] weekDays = {
-                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"
+                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
         };
         String[] initTimes = {
-                "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"
+                "06:00", "06:30", "07:00", "07:30",
+                "08:00", "08:30", "09:00", "09:30",
+                "10:00", "10:30", "11:00", "11:30",
+                "12:00", "12:30", "13:00", "13:30",
+                "14:00", "14:30", "15:00", "15:30",
+                "16:00", "16:30", "17:00", "17:30",
+                "18:00", "18:30", "19:00", "19:30",
+                "20:00", "20:30", "21:00", "21:30",
+                "22:00", "22:30", "23:00", "23:30"
         };
 
-        for (int i=1; i <= initTimes.length; i++){
-            TableRow tr = (TableRow) timetableLayout.getChildAt(i);
-
-            if(!isMinified)
+        for (int i=0; i < initTimes.length/4; i++) {
+            TableRow tr = (TableRow) timetableLayout.getChildAt(i+1);
+            if (!isMinified){
                 tr.setMinimumHeight(90);
-
-            for (int j=1; j <= weekDays.length; j++){
-                TextView classSchedule = (TextView) tr.getChildAt(j);
+            }
+            for (int j=0; j < weekDays.length; j++){
+                TextView classSchedule = (TextView) tr.getChildAt(j+1);
 
                 SubjectClass subjectClass = timetable.findClassesByTimeDay(
-                        initTimes[i-1],
-                        weekDays[j-1]
+                        initTimes,
+                        i,
+                        weekDays[j]
                 );
 
                 if(subjectClass != null){
@@ -248,12 +230,25 @@ public class TimetablesController extends Controller{
                         classSchedule.setText("*");
                     } else {
                         classSchedule.setText(
-                                String.format("%s\nTurma %s", subject.getName(), subjectClass.getName())
+                                String.format(
+                                        "%s\nTurma %s", subject.getName(), subjectClass.getName())
                         );
                         classSchedule.setTextSize(6);
                     }
                 }
+                else {
+                    classSchedule.setText("");
+                }
             }
+        }
+    }
+
+    public boolean haveSubjects(Context context) {
+        ArrayList<SubjectClass> subjects = ClassDB.getInstance(context).allSelected();
+        if (subjects.size() == 0) {
+            return false;
+        } else {
+            return true;
         }
     }
 

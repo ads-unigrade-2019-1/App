@@ -1,12 +1,7 @@
 package com.unigrade.app.View.Adapter;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +9,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
 import com.unigrade.app.Controller.TimetablesController;
-import com.unigrade.app.Model.ClassMeeting;
+import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TimetableListAdapter extends BaseAdapter {
 
@@ -81,9 +74,9 @@ public class TimetableListAdapter extends BaseAdapter {
         viewHolder.btnDownload.setTag(position);
 
         Timetable timetable = (Timetable) this.getItem(position);
+        Log.d("VISUALIZAR", "pequena " + String.valueOf(position));
 
-        TimetablesController timetablesController = TimetablesController.getInstance();
-        timetablesController.insertTimetableInView(
+        TimetablesController.getInstance().insertTimetableInView(
                 viewHolder.timetableLayout,
                 timetable,
                 context,
@@ -100,13 +93,18 @@ public class TimetableListAdapter extends BaseAdapter {
     }
 
     private View.OnClickListener visualizeListener(){
+
+    int i = 0;
+
+
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
-                Log.d("VISUALIZAR", String.valueOf(position));
+                Log.d("VISUALIZAR", "grande" + String.valueOf(position));
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("timetable", (Timetable) getItem(position));
+
                 Navigation.findNavController(fragment.getView())
                         .navigate(R.id.expandedTimetableFragment, bundle);
             }

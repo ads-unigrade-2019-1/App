@@ -15,11 +15,12 @@ import java.util.ArrayList;
 public class SubjectListAdapter extends BaseAdapter {
     private ArrayList<Subject> subjects;
     private static LayoutInflater inflater = null;
-    private ViewHolder viewHolder = new ViewHolder();
+    private Context context;
 
     public SubjectListAdapter(ArrayList<Subject> subjects, Context context){
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.subjects = subjects;
+        this.context = context;
     }
     @Override
     public int getCount() {
@@ -38,15 +39,27 @@ public class SubjectListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.item_subject, null);
+        ViewHolder viewHolder;
 
-        viewHolder.subjectCode = view.findViewById(R.id.subject_code);
-        viewHolder.subjectName = view.findViewById(R.id.subject_name);
+        if(convertView == null){
+            convertView = LayoutInflater.from(
+                    context).inflate(R.layout.item_subject, parent, false
+            );
+            viewHolder = new ViewHolder();
+            viewHolder.subjectCode = convertView.findViewById(R.id.subject_code);
+            viewHolder.subjectName = convertView.findViewById(R.id.subject_name);
 
-        viewHolder.subjectCode.setText(((Subject)this.getItem(position)).getCode());
-        viewHolder.subjectName.setText(((Subject)this.getItem(position)).getName());
+            convertView.setTag(viewHolder);
 
-        return view;
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        Subject subject = (Subject) this.getItem(position);
+
+        viewHolder.subjectCode.setText(subject.getCode());
+        viewHolder.subjectName.setText(subject.getName());
+        return convertView;
     }
 
     private class ViewHolder{

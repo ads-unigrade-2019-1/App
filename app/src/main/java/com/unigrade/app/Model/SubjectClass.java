@@ -21,7 +21,8 @@ public class SubjectClass {
         this.isSelected = selected;
     }
 
-    public SubjectClass(String name, ArrayList<String> teacher, String campus, ArrayList<ClassMeeting> schedules, String subjectCode){
+    public SubjectClass(String name, ArrayList<String> teacher,
+                        String campus, ArrayList<ClassMeeting> schedules, String subjectCode){
         int campi = Integer.parseInt(campus);
         if (campi == 1) campus = "Darcy Ribeiro";
         else if (campi == 2) {

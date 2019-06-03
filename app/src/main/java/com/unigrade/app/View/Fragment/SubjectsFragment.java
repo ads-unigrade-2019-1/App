@@ -2,7 +2,6 @@ package com.unigrade.app.View.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
 
 import java.io.Serializable;
@@ -89,9 +87,8 @@ public class SubjectsFragment extends Fragment {
     }
 
     private void callServer(String text){
-         SubjectsController subjectsController = SubjectsController.getInstance();
 
-        if(subjectsController.isConnectedToNetwork(getActivity())){
+        if(SubjectsController.getInstance().isConnectedToNetwork(getActivity())){
             subjectList.setVisibility(View.GONE);
             noInternet.setVisibility(View.GONE);
             getSubjectsTask = new GetSubjects(this,text).execute();
