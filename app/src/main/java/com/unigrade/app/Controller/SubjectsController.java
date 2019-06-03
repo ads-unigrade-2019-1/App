@@ -1,5 +1,8 @@
 package com.unigrade.app.Controller;
 
+import android.util.Log;
+
+import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.Subject;
 
@@ -9,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.unigrade.app.DAO.URLs.URL_ALL_SUBJECTS;
+import static com.unigrade.app.DAO.URLs.URL_SEARCH_SUBJECTS;
 
 public class SubjectsController extends Controller {
 
@@ -26,10 +29,13 @@ public class SubjectsController extends Controller {
         return instance;
     }
 
-    public ArrayList<Subject> getSubjectsList(){
+    public ArrayList<Subject> getSubjectsList(String searchInput){
         // Returns the list of all subjects from the API
 
-        String result = new ServerHelper (URL_ALL_SUBJECTS).get();
+        String stringJson = textToJSON(searchInput);
+
+        String result = (new ServerHelper(URL_SEARCH_SUBJECTS)).post(stringJson);
+
         ArrayList<Subject> subjects = new ArrayList<>();
 
         try {
@@ -55,6 +61,12 @@ public class SubjectsController extends Controller {
         }
            
         return subjects;
+    }
+
+    public String textToJSON(String text) {
+        String jsonString = "{\"search\":\"" + text + "\"}";
+
+        return jsonString;
     }
 
 }

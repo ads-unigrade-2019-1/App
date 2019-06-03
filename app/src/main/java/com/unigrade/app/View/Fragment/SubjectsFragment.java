@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.unigrade.app.Controller.SubjectsController;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
-import com.unigrade.app.View.Adapter.SubjectListAdapter;
 import com.unigrade.app.View.AsyncTask.GetSubjects;
 
 import java.io.Serializable;
@@ -32,7 +32,7 @@ public class SubjectsFragment extends Fragment {
     private Button btnReload;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
-    private SubjectListAdapter adapter;
+    private SearchView searchBar;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -70,43 +70,63 @@ public class SubjectsFragment extends Fragment {
         subjectList = v.findViewById(R.id.subjects_list);
         noInternet = v.findViewById(R.id.no_internet);
         btnReload = v.findViewById(R.id.reload);
+        searchBar = v.findViewById(R.id.search_bar);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 
-        callServer();
-
-        subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("caller", "subjects");
-                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(
-                        position));
-                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
-            }
-        });
-
+        subjectList.setOnItemClickListener(itemListener());
         btnReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callServer();
+                callServer("");
             }
         });
+        searchBar.setOnQueryTextListener(searchListener());
 
         return v;
     }
 
-    private void callServer(){
+    private void callServer(String text){
 
         if(SubjectsController.getInstance().isConnectedToNetwork(getActivity())){
-            subjectList.setVisibility(View.VISIBLE);
+            subjectList.setVisibility(View.GONE);
             noInternet.setVisibility(View.GONE);
-            getSubjectsTask = new GetSubjects(this).execute();
+            getSubjectsTask = new GetSubjects(this,text).execute();
         } else {
             subjectList.setVisibility(View.GONE);
             noInternet.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private AdapterView.OnItemClickListener itemListener(){
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("caller", "subjects");
+                bundle.putSerializable("subject", (Serializable) parent.getAdapter().getItem(position));
+                Navigation.findNavController(view).navigate(R.id.classesFragment, bundle);
+            }
+        };
+    }
+
+    private SearchView.OnQueryTextListener searchListener(){
+        return new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                callServer(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.length() >= 3)
+                    callServer(newText);
+
+                return false;
+            }
+        };
     }
 
     @Override

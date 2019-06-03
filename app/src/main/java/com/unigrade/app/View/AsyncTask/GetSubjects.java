@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> > {
 
     private SubjectsFragment subjectsFragment;
+    private String searchInput;
 
-    public GetSubjects(SubjectsFragment subjectsFragment){
+    public GetSubjects(SubjectsFragment subjectsFragment, String searchInput){
         this.subjectsFragment = subjectsFragment;
+        this.searchInput = searchInput;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
 
     @Override
     protected ArrayList<Subject> doInBackground(String... params) {
-        return SubjectsController.getInstance().getSubjectsList();
+        return SubjectsController.getInstance().getSubjectsList(searchInput);
     }
 
     @Override
@@ -39,6 +41,7 @@ public class GetSubjects extends AsyncTask<String, Integer, ArrayList<Subject> >
                         new SubjectListAdapter(subjectsFragment.getSubjects(),
                                 subjectsFragment.getActivity())
         );
+        subjectsFragment.getSubjectList().setVisibility(View.VISIBLE);
         subjectsFragment.getProgressBar().setVisibility(View.GONE);
     }
 }
