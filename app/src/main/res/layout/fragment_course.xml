@@ -34,7 +34,7 @@
         android:textSize="20sp"/>
 
     <Spinner
-        android:id="@+id/campusSpinner"
+        android:id="@+id/campus_spinner"
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:layout_marginRight="30sp"
@@ -52,7 +52,7 @@
         android:textSize="20sp"/>
 
     <Spinner
-        android:id="@+id/courseSpinner"
+        android:id="@+id/course_spinner"
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:layout_marginRight="30sp"

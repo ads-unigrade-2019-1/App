@@ -85,15 +85,15 @@ public class TimetablesController extends Controller{
             e.printStackTrace();
 
         }
-        for(int i =0; i<timetables.size(); i++){
-            Timetable timetable = timetables.get(i);
-            Log.d("ShowTimetable", "TIMETABLE " + i);
-            for (SubjectClass subjectClass : timetable.getTimetableClass()){
-                Log.d("ShowTimetable", "---------------------");
-                Log.d("ShowTimetable", "Nome: " + subjectClass.getName());
-                Log.d("ShowTimetable", "Horário: " + subjectClass.getSchedulesString());
-            }
-        }
+//        for(int i =0; i<timetables.size(); i++){
+//            Timetable timetable = timetables.get(i);
+//            Log.d("ShowTimetable", "TIMETABLE " + i);
+//            for (SubjectClass subjectClass : timetable.getTimetableClass()){
+//                Log.d("ShowTimetable", "---------------------");
+//                Log.d("ShowTimetable", "Nome: " + subjectClass.getName());
+//                Log.d("ShowTimetable", "Horário: " + subjectClass.getSchedulesString());
+//            }
+//        }
 
         return timetables;
     }
