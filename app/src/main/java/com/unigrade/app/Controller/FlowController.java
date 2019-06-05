@@ -1,12 +1,18 @@
 package com.unigrade.app.Controller;
+import android.util.Log;
+
 import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.Course;
+import com.unigrade.app.Model.Period;
+import com.unigrade.app.Model.Subject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.unigrade.app.DAO.URLs.URL_CAMPUS_COURSES;
+import static com.unigrade.app.DAO.URLs.URL_COURSE_FLOW;
 
 public class FlowController extends Controller {
     private static FlowController instance;
@@ -63,6 +69,45 @@ public class FlowController extends Controller {
             return 1;
         else
             return 3;
+    }
+
+    private ArrayList<Period> getFlow(String courseCode){
+
+        String result = (new ServerHelper(courseFlowURL(courseCode))).get();
+        ArrayList<Period> flow = new ArrayList<>();
+
+        try {
+            JSONArray flowJSON = new JSONArray(result);
+
+            for(int i = 0; i < flowJSON.length(); i++){
+                JSONArray periodJSON = flowJSON.getJSONArray(i);
+                ArrayList<Subject> subjects = new ArrayList<>();
+
+                for(int j = 0; j < periodJSON.length(); j++){
+                    JSONArray subjectJSON = periodJSON.getJSONArray(j);
+
+                    String name = subjectJSON.getJSONObject(1).toString();
+                    String code = subjectJSON.getJSONObject(0).toString();
+
+                    Log.d("PERÍODO -> MATÉRIA", (i + 1) + " -> " + name);
+
+                    subjects.add(new Subject(code, name));
+
+                }
+                Period period = new Period(i + 1, subjects);
+                flow.add(period);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return flow;
+    }
+
+    private String courseFlowURL(String code){
+        return URL_CAMPUS_COURSES + code;
     }
 
 }

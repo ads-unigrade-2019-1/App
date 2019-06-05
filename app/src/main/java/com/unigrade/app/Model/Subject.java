@@ -7,7 +7,9 @@ public class Subject implements Serializable {
     private String name;
     private String credits;
 
-    public Subject(){
+    public Subject(String code, String name){
+        this.code = code;
+        this.name = name;
     }
 
     public Subject(String code, String name, String credits) {
