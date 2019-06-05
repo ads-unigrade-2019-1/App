@@ -1,215 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".View.Fragment.FlowFragment">
+    android:layout_height="match_parent">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp">
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:visibility="gone" />
 
-            <TextView
-                android:text="PERÍODO 1  "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+    <!-- INSERIR FLUXO AQUI-->
 
-            <TextView
-                android:text="       CRÉDITOS 24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+    <include layout="@layout/content_no_internet"/>
 
+</FrameLayout>
 
+    <!--<TableLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20sp">-->
+        <!--<TableRow-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent">-->
 
-        </TableRow>
+            <!--<TextView-->
+                <!--android:text="PERÍODO 1  "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
 
-        <TableRow>
-
-            <TextView
-                android:text="Código"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="Nome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
-
-            <TextView
-                android:text="DOENÇAS PARAS ANIMAIS DOMÉSTIC "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
-
-            <TextView
-                android:text="ALGORITMOS PROGR COMPUTADORES "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
-
-            <TextView
-                android:text="ALGORITMOS PROGR COMPUTADORES "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
-
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
-
-            <TextView
-                android:text="ALGORITMOS PROGR COMPUTADORES "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
-
-        </TableRow>
-
-    </TableLayout>
-
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp">
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <TextView
-                android:text="PERÍODO 1  "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:text="       CRÉDITOS 24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <!--<TextView-->
+                <!--android:text="       CRÉDITOS 24"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
 
 
 
-        </TableRow>
+        <!--</TableRow>-->
 
-        <TableRow>
+        <!--<TableRow>-->
 
-            <TextView
-                android:text="Código"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <!--<TextView-->
+                <!--android:text="Código"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
 
-            <TextView
-                android:text="Nome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
+            <!--<TextView-->
+                <!--android:text="Nome"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
 
-        </TableRow>
+        <!--</TableRow>-->
 
-        <TableRow>
+        <!--<TableRow>-->
 
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
 
-            <TextView
-                android:text="DOENÇAS PARAS ANIMAIS DOMÉSTIC "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
+            <!--<TextView-->
+                <!--android:text="DOENÇAS PARAS ANIMAIS DOMÉSTIC "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
 
-        </TableRow>
+        <!--</TableRow>-->
 
-        <TableRow>
+        <!--<TableRow>-->
 
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
 
-            <TextView
-                android:text="ALGORITMOS PROGR COMPUTADORES "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
+            <!--<TextView-->
+                <!--android:text="ALGORITMOS PROGR COMPUTADORES "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
 
-        </TableRow>
+        <!--</TableRow>-->
 
-        <TableRow>
+        <!--<TableRow>-->
 
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
 
-            <TextView
-                android:text="ALGORITMOS PROGR COMPUTADORES "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
+            <!--<TextView-->
+                <!--android:text="ALGORITMOS PROGR COMPUTADORES "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
 
-        </TableRow>
+        <!--</TableRow>-->
 
-        <TableRow>
+        <!--<TableRow>-->
 
-            <TextView
-                android:text="113476"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"/>
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
 
-            <TextView
-                android:text="ALGORITMOS PROGR COMPUTADORES "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="80sp"/>
+            <!--<TextView-->
+                <!--android:text="ALGORITMOS PROGR COMPUTADORES "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
 
-        </TableRow>
+        <!--</TableRow>-->
 
-    </TableLayout>
+    <!--</TableLayout>-->
 
-</LinearLayout>
+    <!--<TableLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="20sp">-->
+        <!--<TableRow-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent">-->
+
+            <!--<TextView-->
+                <!--android:text="PERÍODO 1  "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <!--<TextView-->
+                <!--android:text="       CRÉDITOS 24"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+
+
+        <!--</TableRow>-->
+
+        <!--<TableRow>-->
+
+            <!--<TextView-->
+                <!--android:text="Código"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
+            <!--<TextView-->
+                <!--android:text="Nome"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow>-->
+
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
+
+            <!--<TextView-->
+                <!--android:text="DOENÇAS PARAS ANIMAIS DOMÉSTIC "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow>-->
+
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
+
+            <!--<TextView-->
+                <!--android:text="ALGORITMOS PROGR COMPUTADORES "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow>-->
+
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
+
+            <!--<TextView-->
+                <!--android:text="ALGORITMOS PROGR COMPUTADORES "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow>-->
+
+            <!--<TextView-->
+                <!--android:text="113476"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="10sp"/>-->
+
+            <!--<TextView-->
+                <!--android:text="ALGORITMOS PROGR COMPUTADORES "-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginRight="80sp"/>-->
+
+        <!--</TableRow>-->
+
+    <!--</TableLayout>-->

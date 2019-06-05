@@ -71,13 +71,16 @@ public class FlowController extends Controller {
             return 3;
     }
 
-    private ArrayList<Period> getFlow(String courseCode){
+    public ArrayList<Period> getFlow(String courseCode){
 
         String result = (new ServerHelper(courseFlowURL(courseCode))).get();
         ArrayList<Period> flow = new ArrayList<>();
 
         try {
-            JSONArray flowJSON = new JSONArray(result);
+            JSONArray resultJSON = new JSONArray(result);
+            JSONObject disciplines = resultJSON.getJSONObject(0);
+            JSONArray flowJSON = disciplines.getJSONArray("disciplines");
+            Log.d("FLOWJSON", flowJSON.toString());
 
             for(int i = 0; i < flowJSON.length(); i++){
                 JSONArray periodJSON = flowJSON.getJSONArray(i);
@@ -86,10 +89,10 @@ public class FlowController extends Controller {
                 for(int j = 0; j < periodJSON.length(); j++){
                     JSONArray subjectJSON = periodJSON.getJSONArray(j);
 
-                    String name = subjectJSON.getJSONObject(1).toString();
-                    String code = subjectJSON.getJSONObject(0).toString();
+                    String name = subjectJSON.getString(1);
+                    String code = subjectJSON.getString(0);
 
-                    Log.d("PERÍODO -> MATÉRIA", (i + 1) + " -> " + name);
+                    //Log.d("PERÍODO -> MATÉRIA", (i + 1) + " -> " + name);
 
                     subjects.add(new Subject(code, name));
 
@@ -107,7 +110,7 @@ public class FlowController extends Controller {
     }
 
     private String courseFlowURL(String code){
-        return URL_CAMPUS_COURSES + code;
+        return URL_COURSE_FLOW + code;
     }
 
 }

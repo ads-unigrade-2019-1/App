@@ -31,13 +31,5 @@ public class GetCourses extends AsyncTask<String, Integer, ArrayList<Course> > {
     protected void onPostExecute(ArrayList<Course> courses) {
         courseFragment.setCourses(courses);
         courseFragment.getSpnCourse().setEnabled(true);
-        //subjectsFragment.setSubjects(subjects);
-        //subjectsFragment.getSubjectList()
-                //.setAdapter(
-                //        new SubjectListAdapter(subjectsFragment.getSubjects(),
-                //                subjectsFragment.getActivity())
-                //);
-        //subjectsFragment.getSubjectList().setVisibility(View.VISIBLE);
-        //subjectsFragment.getProgressBar().setVisibility(View.GONE);
     }
 }
