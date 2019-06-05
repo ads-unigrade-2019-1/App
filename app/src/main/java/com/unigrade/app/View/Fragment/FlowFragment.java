@@ -1,5 +1,6 @@
 package com.unigrade.app.View.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,7 +56,10 @@ public class FlowFragment extends Fragment {
 
         if(FlowController.getInstance().isConnectedToNetwork(getActivity())){
             noInternet.setVisibility(View.GONE);
-            getFlow = new GetFlow(this,"6360").execute();
+            SharedPreferences pref = getActivity().getApplicationContext()
+                    .getSharedPreferences("MyPref", 0);
+            getFlow = new GetFlow(this,
+                    pref.getString("courseCode", null)).execute();
         } else {
             noInternet.setVisibility(View.VISIBLE);
         }

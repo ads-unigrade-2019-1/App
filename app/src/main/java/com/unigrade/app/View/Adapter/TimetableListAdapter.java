@@ -94,9 +94,6 @@ public class TimetableListAdapter extends BaseAdapter {
 
     private View.OnClickListener visualizeListener(){
 
-    int i = 0;
-
-
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {

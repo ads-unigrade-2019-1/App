@@ -1,4 +1,5 @@
 package com.unigrade.app.View.Fragment;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,8 @@ public class CourseFragment extends Fragment {
     private Spinner spnCampus;
     private Spinner spnCourse;
     private AsyncTask getCourses;
+    private int position;
+    private ArrayList<Course> courses;
     private ArrayAdapter<String> spinnerAdapter;
 
     public CourseFragment() {
@@ -54,17 +57,28 @@ public class CourseFragment extends Fragment {
         callServer();
 
         final Button button = view.findViewById(R.id.btn_continue);
-        button.setOnClickListener(
-                Navigation.createNavigateOnClickListener(R.id.timetablesFragment, null)
-        );
+        button.setOnClickListener(continueListener(view));
 
         spnCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 String item = parent.getItemAtPosition(pos).toString();
                 Log.d("CAMPUS", item);
+
                 callServer();
             }
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        spnCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                position = pos;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -87,12 +101,36 @@ public class CourseFragment extends Fragment {
     }
 
     public void setCourses(ArrayList<Course> courses){
+        this.courses = courses;
+
         spinnerAdapter.clear();
 
         for(Course course: courses)
             spinnerAdapter.add(course.getName());
 
         spinnerAdapter.notifyDataSetChanged();
+    }
+
+    private View.OnClickListener continueListener(final View view){
+
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences pref = getActivity().getApplicationContext()
+                        .getSharedPreferences("MyPref", 0);
+                SharedPreferences.Editor editor = pref.edit();
+
+                String courseCode = courses.get(position).getCode();
+
+                editor.putBoolean("isCourseSelected", true);
+                editor.putString("courseCode", courseCode);
+
+                Log.d("CODIGOCURSO", courseCode);
+                editor.apply();
+
+                Navigation.findNavController(view).navigate(R.id.timetablesFragment);
+            }
+        };
     }
 
     @Override

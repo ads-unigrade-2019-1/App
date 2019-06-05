@@ -1,4 +1,5 @@
 package com.unigrade.app.View.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -38,6 +41,20 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView,
                 navController);
+
+        NavInflater navInflater = navController.getNavInflater();
+        NavGraph graph = navInflater.inflate(R.navigation.nav_graph);
+
+        SharedPreferences pref = getApplicationContext()
+                .getSharedPreferences("MyPref", 0);
+
+        if (pref.getBoolean("isCourseSelected", false)) {
+            graph.setStartDestination(R.id.timetablesFragment);
+        } else {
+            graph.setStartDestination(R.id.courseFragment);
+        }
+
+        navController.setGraph(graph);
 
         navController.addOnDestinationChangedListener(
                 new NavController.OnDestinationChangedListener() {
