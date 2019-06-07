@@ -1,7 +1,8 @@
 package com.unigrade.app.Model;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SubjectClass {
+public class SubjectClass implements Serializable {
     private String name;
     private ArrayList<String> teacher = new ArrayList<>();
     private String campus;
