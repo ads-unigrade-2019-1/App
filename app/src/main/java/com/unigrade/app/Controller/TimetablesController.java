@@ -235,8 +235,7 @@ public class TimetablesController extends Controller{
                         );
                         classSchedule.setTextSize(6);
                     }
-                }
-                else {
+                } else {
                     classSchedule.setText("");
                 }
             }

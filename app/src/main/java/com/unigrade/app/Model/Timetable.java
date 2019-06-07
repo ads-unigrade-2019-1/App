@@ -54,10 +54,16 @@ public class Timetable implements Serializable {
 //                        initHour[(timeIndex*4)] + "," +
 //                        day);
 //                Log.d("Horários", "BD: " + classMeeting.getInit_hour() + "," + classMeeting.getDay());
+
+                String regex = ":([0-9]?[0-9])";
+                int inHour = Integer.parseInt(initHour[timeIndex*4].replaceAll(regex,""));
+                int finHour = Integer.parseInt(classMeeting.getFinal_hour().replaceAll(regex,""));
+
                 if((classMeeting.getInit_hour().equals(initHour[(timeIndex*4 + 3)])
                     || classMeeting.getInit_hour().equals(initHour[timeIndex*4 + 2])
                     || classMeeting.getInit_hour().equals(initHour[timeIndex*4 + 1])
-                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4]))
+                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4])
+                    || finHour == inHour || finHour == inHour + 1)
                     && classMeeting.getDay().equals(day)){
 //                    Log.d("Horários", "IGUAL");
                     return subjectClass;
