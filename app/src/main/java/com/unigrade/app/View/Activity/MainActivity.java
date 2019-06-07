@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 
+import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.DAO.URLs;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import androidx.navigation.NavController;
@@ -60,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // Call to awake api server
+        Thread t = new Thread(MainActivity.awakeServer);
+        t.start();
     }
 
     @Override
@@ -91,5 +95,13 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Subject> getSubjectsList(){
         return this.subjectsList;
     }
+
+    private static  Runnable awakeServer = new Runnable() {
+        @Override
+        public void run() {
+            ServerHelper serverHelper = new ServerHelper(URLs.AWAKE_CALL);
+            serverHelper.get();
+        }
+    };
 
 }

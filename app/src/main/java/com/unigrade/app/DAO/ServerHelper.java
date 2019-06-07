@@ -19,40 +19,41 @@ public class ServerHelper {
         this.url = url;
     }
 
-    public String get(){
+    public String get() {
         result = null;
-        try {
-            URL myUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+        while (result == null) {
+            try {
+                URL myUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
 
-            //Set configuration to connection
-            connection.setRequestMethod("GET");
-            connection.setReadTimeout(READ_TIMEOUT);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.connect();
+                //Set configuration to connection
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+                connection.connect();
 
-            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
 
-            BufferedReader reader = new BufferedReader(streamReader);
-            StringBuilder stringBuilder = new StringBuilder();
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
 
-            String inputLine;
-            //Check if it's reading a null lline
-            while((inputLine = reader.readLine()) != null) {
-                stringBuilder.append(inputLine);
+                String inputLine;
+                //Check if it's reading a null lline
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
 
+                }
+
+                reader.close();
+                streamReader.close();
+
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            reader.close();
-            streamReader.close();
-
-            //Set our result equal to our stringBuilder
-            result = stringBuilder.toString();
-            
-        } catch(IOException e){
-            e.printStackTrace();
         }
-
         return result;
 
     }
