@@ -190,7 +190,8 @@ public class TimetablesController extends Controller{
 
     public void insertTimetableInView(
             TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
-
+        // processar
+        // escrever
         timetable.printTimetable();
 
         String[] weekDays = {
