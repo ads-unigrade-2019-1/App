@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Vector;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -190,49 +191,52 @@ public class TimetablesController extends Controller{
 
     public void insertTimetableInView(
             TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
-        // processar
-        // escrever
+
         timetable.printTimetable();
 
-        String[] weekDays = {
-                "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"
-        };
-        String[] initTimes = {
-                "06:00", "06:30", "07:00", "07:30",
-                "08:00", "08:30", "09:00", "09:30",
-                "10:00", "10:30", "11:00", "11:30",
-                "12:00", "12:30", "13:00", "13:30",
-                "14:00", "14:30", "15:00", "15:30",
-                "16:00", "16:30", "17:00", "17:30",
-                "18:00", "18:30", "19:00", "19:30",
-                "20:00", "20:30", "21:00", "21:30",
-                "22:00", "22:30", "23:00", "23:30"
-        };
+        int[] initTimes = {6, 8, 10, 12, 14, 16, 18, 20, 22};
+        String[] weekDays = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
 
-        for (int i=0; i < initTimes.length/4; i++) {
+        // times to lines and week to columns
+        SubjectClass matrix[][] = new SubjectClass[9][6];
+        // fill matrix
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 6; j++) {
+                for(SubjectClass subjectClass : timetable.getTimetableClass()) {
+                    for (ClassMeeting classMeeting : subjectClass.getSchedules()) {
+                        String regex = ":([0-9]?[0-9])";
+                        int initHour = Integer.parseInt(classMeeting.getInit_hour().replaceAll(regex,""));
+                        int finalHour = Integer.parseInt(classMeeting.getFinal_hour().replaceAll(regex,""));
+
+                        if ((initHour == initTimes[i] || initHour == initTimes[i] + 1
+                        || finalHour == initTimes[i] || finalHour == initTimes[i] + 1
+                        || (initTimes[i] >= initHour && initTimes[i] <= finalHour)
+                        ) && classMeeting.getDay().equals(weekDays[j])) {
+                            matrix[i][j] = subjectClass;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i=0; i < 9; i++) {
             TableRow tr = (TableRow) timetableLayout.getChildAt(i+1);
             if (!isMinified){
                 tr.setMinimumHeight(90);
             }
-            for (int j=0; j < weekDays.length; j++){
+            for (int j=0; j < 6; j++){
                 TextView classSchedule = (TextView) tr.getChildAt(j+1);
 
-                SubjectClass subjectClass = timetable.findClassesByTimeDay(
-                        initTimes,
-                        i,
-                        weekDays[j]
-                );
-
-                if(subjectClass != null){
+                if(matrix[i][j] != null){
                     Subject subject = (SubjectDB.getInstance(context)).getSubject(
-                            subjectClass.getSubjectCode()
+                            matrix[i][j].getSubjectCode()
                     );
                     if(isMinified){
                         classSchedule.setText("*");
                     } else {
                         classSchedule.setText(
                                 String.format(
-                                        "%s\nTurma %s", subject.getName(), subjectClass.getName())
+                                        "%s\nTurma %s", subject.getName(), matrix[i][j].getName())
                         );
                         classSchedule.setTextSize(6);
                     }
