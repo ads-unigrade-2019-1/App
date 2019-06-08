@@ -16,7 +16,7 @@ public class DBHelper extends SQLiteOpenHelper{
         return instance;
     }
 
-    DBHelper(Context context) {
+    private DBHelper(Context context) {
         super(context, "Unigrade", null, 1);
     }
 

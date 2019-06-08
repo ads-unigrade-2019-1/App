@@ -23,7 +23,7 @@ public class SubjectDB {
         return instance;
     }
 
-    public SubjectDB(Context context){
+    private SubjectDB(Context context){
         this.context = context;
     }
 

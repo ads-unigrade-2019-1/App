@@ -1,8 +1,4 @@
 package com.unigrade.app.Controller;
-
-import android.util.Log;
-
-import com.unigrade.app.DAO.ClassDB;
 import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.Subject;
 
@@ -63,10 +59,8 @@ public class SubjectsController extends Controller {
         return subjects;
     }
 
-    public String textToJSON(String text) {
-        String jsonString = "{\"search\":\"" + text + "\"}";
-
-        return jsonString;
+    private String textToJSON(String text) {
+        return "{\"search\":\"" + text + "\"}";
     }
 
 }

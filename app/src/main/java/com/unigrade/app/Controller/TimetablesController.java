@@ -1,14 +1,12 @@
 package com.unigrade.app.Controller;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.TableLayout;
@@ -141,12 +139,6 @@ public class TimetablesController extends Controller{
         return isPermitted == PackageManager.PERMISSION_GRANTED;
     }
 
-    public boolean shouldShowExplanation(Activity activity){
-        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
-    }
-
     public String downloadTableLayout(TableLayout tableLayout, Context context){
 
         tableLayout.setDrawingCacheEnabled(true);
@@ -244,11 +236,7 @@ public class TimetablesController extends Controller{
 
     public boolean haveSubjects(Context context) {
         ArrayList<SubjectClass> subjects = ClassDB.getInstance(context).allSelected();
-        if (subjects.size() == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return !subjects.isEmpty();
     }
 
     public String getTimetableClasses(Timetable timetable){
@@ -256,12 +244,10 @@ public class TimetablesController extends Controller{
         ArrayList<SubjectClass> classes = timetable.getTimetableClasses();
 
         for(SubjectClass subjectClass : classes) {
-            classesString.append(
-                    subjectClass.getName() +
-                    " - " +
-                    subjectClass.getTeacherString(' ') +
-                    "\n"
-            );
+            classesString.append(subjectClass.getName());
+            classesString.append(" - ");
+            classesString.append(subjectClass.getTeacherString(' '));
+            classesString.append("\n");
         }
 
         return classesString.toString();

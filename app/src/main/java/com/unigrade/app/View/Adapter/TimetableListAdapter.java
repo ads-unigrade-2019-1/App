@@ -1,9 +1,6 @@
 package com.unigrade.app.View.Adapter;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,14 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableLayout;
-import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
 import com.unigrade.app.Controller.TimetablesController;
-import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Fragment.TimetablesFragment;
@@ -67,7 +61,7 @@ public class TimetableListAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
 
             viewHolder.btnVisualize.setOnClickListener(visualizeListener());
-            viewHolder.btnDownload.setOnClickListener(detailsListener(convertView));
+            viewHolder.btnDownload.setOnClickListener(detailsListener());
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -75,7 +69,6 @@ public class TimetableListAdapter extends BaseAdapter {
 
         viewHolder.btnVisualize.setTag(position);
         viewHolder.btnDownload.setTag(position);
-        String timetableType = "Grade " + (position + 1);
 
         Timetable timetable = (Timetable) this.getItem(position);
         Log.d("VISUALIZAR", "pequena " + position);
@@ -111,7 +104,7 @@ public class TimetableListAdapter extends BaseAdapter {
         };
     }
 
-    private View.OnClickListener detailsListener(final View view){
+    private View.OnClickListener detailsListener(){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {

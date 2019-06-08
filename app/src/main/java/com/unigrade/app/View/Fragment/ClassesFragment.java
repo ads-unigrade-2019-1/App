@@ -1,6 +1,7 @@
 package com.unigrade.app.View.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +32,6 @@ public class ClassesFragment extends Fragment {
     private LinearLayout noInternet;
     private AsyncTask getClassesTask;
     private ListView classesList;
-    private Button btnReload;
-    private TextView tvClassCredits;
-    private TextView tvClassTitle;
-    private String caller;
     private Subject subject;
 
     public ClassesFragment() {
@@ -68,22 +65,23 @@ public class ClassesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_classes, container, false);
         Bundle bundle = getArguments();
         subject = (Subject) bundle.getSerializable("subject");
-        caller = (String) bundle.getSerializable("caller");
+        String caller = (String) bundle.getSerializable("caller");
 
-        tvClassTitle = v.findViewById(R.id.class_title);
-        tvClassCredits = v.findViewById(R.id.class_credits);
+        TextView tvClassTitle = v.findViewById(R.id.class_title);
+        TextView tvClassCredits = v.findViewById(R.id.class_credits);
+
         tvClassTitle.setText(subject.getName());
         tvClassCredits.setText(subject.getCredits());
 
         progressBar = v.findViewById(R.id.progress_bar);
         classesList = v.findViewById(R.id.class_list);
         noInternet = v.findViewById(R.id.no_internet);
-        btnReload = v.findViewById(R.id.reload);
+        Button btnReload = v.findViewById(R.id.reload);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a turma");
 

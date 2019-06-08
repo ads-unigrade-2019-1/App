@@ -12,6 +12,7 @@
         android:layout_height="100sp"
         android:src="@drawable/hat2"
         android:layout_gravity="center"
+        android:contentDescription="Icon"
         android:layout_marginTop="60sp"/>
 
     <TextView
@@ -63,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Continuar"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:layout_marginRight="30sp"
         android:layout_marginEnd="30sp"
         android:textColor="@color/colorLight"

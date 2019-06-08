@@ -48,7 +48,8 @@ public class SubjectClass {
     public String getSchedulesString(){
         StringBuilder schedulesString = new StringBuilder();
         for(ClassMeeting schedule : this.schedules) {
-            schedulesString.append(schedule.formattedClassMeeting() + "\n");
+            schedulesString.append(schedule.formattedClassMeeting());
+            schedulesString.append("\n");
         }
         return schedulesString.toString();
     }
@@ -72,7 +73,8 @@ public class SubjectClass {
     public String getTeacherString(char c) {
         StringBuilder teacherString = new StringBuilder();
         for(String teacher : this.teacher) {
-            teacherString.append(teacher + c);
+            teacherString.append(teacher);
+            teacherString.append(c);
         }
         return teacherString.toString();
     }

@@ -1,6 +1,7 @@
 package com.unigrade.app.View.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,8 @@ public class SubjectsFragment extends Fragment {
     private ArrayList<Subject> subjects = new ArrayList<>();
     private ProgressBar progressBar;
     private LinearLayout noInternet;
-    private Button btnReload;
     private ListView subjectList;
     private AsyncTask getSubjectsTask;
-    private SearchView searchBar;
 
     public SubjectsFragment() {
         // Required empty public constructor
@@ -60,7 +59,7 @@ public class SubjectsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
@@ -69,8 +68,8 @@ public class SubjectsFragment extends Fragment {
         progressBar = v.findViewById(R.id.progress_bar);
         subjectList = v.findViewById(R.id.subjects_list);
         noInternet = v.findViewById(R.id.no_internet);
-        btnReload = v.findViewById(R.id.reload);
-        searchBar = v.findViewById(R.id.search_bar);
+        Button btnReload = v.findViewById(R.id.reload);
+        SearchView searchBar = v.findViewById(R.id.search_bar);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Escolha a matéria");
 

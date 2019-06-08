@@ -14,11 +14,9 @@ import java.util.ArrayList;
 
 public class SubjectListAdapter extends BaseAdapter {
     private ArrayList<Subject> subjects;
-    private static LayoutInflater inflater = null;
     private Context context;
 
     public SubjectListAdapter(ArrayList<Subject> subjects, Context context){
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.subjects = subjects;
         this.context = context;
     }

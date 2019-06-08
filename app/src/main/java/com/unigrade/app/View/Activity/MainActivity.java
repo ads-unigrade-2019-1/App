@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.change_course) {
             Navigation.findNavController(findViewById(R.id.nav_host_fragment))
                     .navigate(R.id.courseFragment);
@@ -99,14 +98,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void setSubjectsList(ArrayList<Subject> list){
-        this.subjectsList = list;
-    }
-
-    public ArrayList<Subject> getSubjectsList(){
-        return this.subjectsList;
     }
 
 }

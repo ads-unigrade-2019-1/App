@@ -61,14 +61,19 @@ public class FlowController extends Controller {
     }
 
     private int campusToInt(String campus){
-        if(campus.equals("Gama"))
-            return 4;
-        else if(campus.equals("Planaltina"))
-            return 2;
-        else if(campus.equals("Darcy Ribeiro"))
-            return 1;
-        else
-            return 3;
+        switch (campus) {
+            case "Gama":
+                return 4;
+            case "Planaltina":
+                return 2;
+            case "Darcy Ribeiro":
+                return 1;
+            case "Ceilândia":
+                return 3;
+            default:
+                return 0;
+        }
+
     }
 
     public ArrayList<Period> getFlow(String courseCode){
