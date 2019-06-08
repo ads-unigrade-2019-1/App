@@ -32,7 +32,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.unigrade.app.DAO.URLs.URL_ALL_TIMETABLES;
 
@@ -194,28 +195,55 @@ public class TimetablesController extends Controller{
 
         timetable.printTimetable();
 
-        int[] initTimes = {6, 8, 10, 12, 14, 16, 18, 20, 22};
-        String[] weekDays = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
+        Map<Integer, Integer> times = new HashMap<>();
+        times.put(6, 0);
+        times.put(8, 1);
+        times.put(10, 2);
+        times.put(12, 3);
+        times.put(14, 4);
+        times.put(16, 5);
+        times.put(18, 6);
+        times.put(20, 7);
+        times.put(22, 8);
+
+        Map<String, Integer> days = new HashMap<>();
+        days.put("Segunda", 0);
+        days.put("Terça", 1);
+        days.put("Quarta", 2);
+        days.put("Quinta", 3);
+        days.put("Sexta", 4);
+        days.put("Sábado", 5);
 
         // times to lines and week to columns
         SubjectClass matrix[][] = new SubjectClass[9][6];
-        // fill matrix
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 6; j++) {
-                for(SubjectClass subjectClass : timetable.getTimetableClass()) {
-                    for (ClassMeeting classMeeting : subjectClass.getSchedules()) {
-                        String regex = ":([0-9]?[0-9])";
-                        int initHour = Integer.parseInt(classMeeting.getInit_hour().replaceAll(regex,""));
-                        int finalHour = Integer.parseInt(classMeeting.getFinal_hour().replaceAll(regex,""));
 
-                        if ((initHour == initTimes[i] || initHour == initTimes[i] + 1
-                        || finalHour == initTimes[i] || finalHour == initTimes[i] + 1
-                        || (initTimes[i] >= initHour && initTimes[i] <= finalHour)
-                        ) && classMeeting.getDay().equals(weekDays[j])) {
-                            matrix[i][j] = subjectClass;
-                        }
-                    }
+        // fill matrix
+        for(SubjectClass subjectClass : timetable.getTimetableClass()) {
+            for (ClassMeeting classMeeting : subjectClass.getSchedules()) {
+                int j = days.get(classMeeting.getDay());
+
+                String regex = ":([0-9]?[0-9])";
+                int initHour = Integer.parseInt(
+                        classMeeting.getInit_hour().replaceAll(regex,""));
+                int finalHour = Integer.parseInt(
+                        classMeeting.getFinal_hour().replaceAll(regex,""));
+
+                int a, b;
+                if (initHour % 2 == 0) {
+                    a = initHour;
+                } else {
+                    a = initHour - 1;
                 }
+                if (finalHour % 2 == 0) {
+                    b = finalHour;
+                } else {
+                    b = finalHour - 1;
+                }
+
+                for (int i = a; i <= b; i += 2) {
+                    matrix[times.get(i)][j] = subjectClass;
+                }
+
             }
         }
 
