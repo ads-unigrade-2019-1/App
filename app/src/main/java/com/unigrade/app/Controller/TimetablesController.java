@@ -215,11 +215,12 @@ public class TimetablesController extends Controller{
         days.put("Sábado", 5);
 
         // times to lines and week to columns
-        SubjectClass matrix[][] = new SubjectClass[9][6];
+        SubjectClass[][] matrix = new SubjectClass[9][6];
 
         // fill matrix
         for(SubjectClass subjectClass : timetable.getTimetableClass()) {
             for (ClassMeeting classMeeting : subjectClass.getSchedules()) {
+
                 int j = days.get(classMeeting.getDay());
 
                 String regex = ":([0-9]?[0-9])";
@@ -248,26 +249,35 @@ public class TimetablesController extends Controller{
         }
 
         for (int i=0; i < 9; i++) {
+
             TableRow tr = (TableRow) timetableLayout.getChildAt(i+1);
+
             if (!isMinified){
                 tr.setMinimumHeight(90);
             }
+
             for (int j=0; j < 6; j++){
                 TextView classSchedule = (TextView) tr.getChildAt(j+1);
 
                 if(matrix[i][j] != null){
-                    Subject subject = (SubjectDB.getInstance(context)).getSubject(
-                            matrix[i][j].getSubjectCode()
-                    );
+
                     if(isMinified){
+
                         classSchedule.setText("*");
                     } else {
+
+                        Subject subject = (SubjectDB.getInstance(context)).getSubject(
+                                matrix[i][j].getSubjectCode()
+                        );
+
                         classSchedule.setText(
                                 String.format(
                                         "%s\nTurma %s", subject.getName(), matrix[i][j].getName())
                         );
+
                         classSchedule.setTextSize(6);
                     }
+
                 } else {
                     classSchedule.setText("");
                 }
