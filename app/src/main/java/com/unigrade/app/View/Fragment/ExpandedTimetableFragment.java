@@ -30,6 +30,7 @@ import com.unigrade.app.View.Activity.MainActivity;
 public class ExpandedTimetableFragment extends Fragment {
 
     private TableLayout timetableLayout;
+    private ActionBar toolbar;
 
     public ExpandedTimetableFragment() {
         // Required empty public constructor
@@ -50,7 +51,7 @@ public class ExpandedTimetableFragment extends Fragment {
                 R.layout.fragment_expanded_timetable, container, false
         );
 
-        ActionBar toolbar = ((MainActivity) getActivity()).getSupportActionBar();
+        toolbar = ((MainActivity) getActivity()).getSupportActionBar();
 
         Bundle bundle = getArguments();
         Timetable timetable = (Timetable) bundle.getSerializable("timetable");
@@ -66,7 +67,6 @@ public class ExpandedTimetableFragment extends Fragment {
         );
 
         toolbar.setTitle("");
-        toolbar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         toolbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setDisplayShowHomeEnabled(true);
 
@@ -77,6 +77,8 @@ public class ExpandedTimetableFragment extends Fragment {
     public void onDetach(){
         super.onDetach();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        toolbar.setDisplayHomeAsUpEnabled(false);
+        toolbar.setDisplayShowHomeEnabled(false);
     }
 
     @Override

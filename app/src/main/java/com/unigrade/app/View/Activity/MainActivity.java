@@ -1,5 +1,6 @@
 package com.unigrade.app.View.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Subject> subjectsList;
     private BottomNavigationView bottomNavigationView;
 
     @Override
