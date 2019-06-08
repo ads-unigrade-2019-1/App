@@ -11,7 +11,12 @@
         android:layout_gravity="center_horizontal|center_vertical"
         android:visibility="gone" />
 
-    <!-- INSERIR FLUXO AQUI-->
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/period_list">
+
+    </ListView>
 
     <include layout="@layout/content_no_internet"/>
 
