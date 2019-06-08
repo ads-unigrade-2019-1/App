@@ -1,6 +1,8 @@
 package com.unigrade.app.Model;
 
-public class ClassMeeting {
+import java.io.Serializable;
+
+public class ClassMeeting implements Serializable {
     private String day;
     private String init_hour;
     private String final_hour;
