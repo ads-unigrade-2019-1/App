@@ -22,7 +22,6 @@ import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
-import com.unigrade.app.View.Fragment.TimetablesFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +87,7 @@ public class TimetablesController extends Controller{
 //        for(int i =0; i<timetables.size(); i++){
 //            Timetable timetable = timetables.get(i);
 //            Log.d("ShowTimetable", "TIMETABLE " + i);
-//            for (SubjectClass subjectClass : timetable.getTimetableClass()){
+//            for (SubjectClass subjectClass : timetable.getTimetableClasses()){
 //                Log.d("ShowTimetable", "---------------------");
 //                Log.d("ShowTimetable", "Nome: " + subjectClass.getName());
 //                Log.d("ShowTimetable", "Horário: " + subjectClass.getSchedulesString());
@@ -250,6 +249,22 @@ public class TimetablesController extends Controller{
         } else {
             return true;
         }
+    }
+
+    public String getTimetableClasses(Timetable timetable){
+        StringBuilder classesString = new StringBuilder();
+        ArrayList<SubjectClass> classes = timetable.getTimetableClasses();
+
+        for(SubjectClass subjectClass : classes) {
+            classesString.append(
+                    subjectClass.getName() +
+                    " - " +
+                    subjectClass.getTeacherString(' ') +
+                    "\n"
+            );
+        }
+
+        return classesString.toString();
     }
 
 

@@ -1,6 +1,9 @@
 package com.unigrade.app.View.Adapter;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -58,13 +62,12 @@ public class TimetableListAdapter extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.timetableLayout = convertView.findViewById(R.id.timetable_layout);
-            viewHolder.timetableType = convertView.findViewById(R.id.timetable_type);
             viewHolder.btnVisualize = convertView.findViewById(R.id.btn_visualize);
             viewHolder.btnDownload = convertView.findViewById(R.id.btn_download);
             convertView.setTag(viewHolder);
 
             viewHolder.btnVisualize.setOnClickListener(visualizeListener());
-            viewHolder.btnDownload.setOnClickListener(downloadListener(convertView));
+            viewHolder.btnDownload.setOnClickListener(detailsListener(convertView));
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -72,9 +75,10 @@ public class TimetableListAdapter extends BaseAdapter {
 
         viewHolder.btnVisualize.setTag(position);
         viewHolder.btnDownload.setTag(position);
+        String timetableType = "Grade " + (position + 1);
 
         Timetable timetable = (Timetable) this.getItem(position);
-        Log.d("VISUALIZAR", "pequena " + String.valueOf(position));
+        Log.d("VISUALIZAR", "pequena " + position);
 
         TimetablesController.getInstance().insertTimetableInView(
                 viewHolder.timetableLayout,
@@ -87,7 +91,6 @@ public class TimetableListAdapter extends BaseAdapter {
 
     static class ViewHolder{
         TableLayout timetableLayout;
-        TextView timetableType;
         Button btnVisualize;
         Button btnDownload;
     }
@@ -98,7 +101,7 @@ public class TimetableListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
-                Log.d("VISUALIZAR", "grande" + String.valueOf(position));
+                Log.d("VISUALIZAR", "grande" + position);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("timetable", (Timetable) getItem(position));
 
@@ -108,32 +111,22 @@ public class TimetableListAdapter extends BaseAdapter {
         };
     }
 
-    private View.OnClickListener downloadListener(final View view){
+    private View.OnClickListener detailsListener(final View view){
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (Integer) v.getTag();
-                Log.d("DOWNLOAD", String.valueOf(position));
+                Log.d("DETALHES", String.valueOf(position));
+                Timetable timetable = (Timetable) getItem(position);
+                TimetablesController timetablesController = TimetablesController.getInstance();
+                String classes = timetablesController.getTimetableClasses(timetable);
 
-//                // custom dialog
-//                final Dialog dialog = new Dialog(context);
-//                dialog.setContentView(R.layout.dialog);
-//                dialog.setTitle("Title...");
-//
-//                // set the custom dialog components - text, image and button
-//                TextView text = (TextView) dialog.findViewById(R.id.text);
-//                text.setText("Android custom dialog example!");
-//                ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//                image.setImageResource(R.drawable.ic_launcher);
-//
-//                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-//                // if button is clicked, close the custom dialog
-//                dialogButton.setOnClickListener(new OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
+                new AlertDialog.Builder(context)
+                        .setTitle("Turmas da Grade " + (position + 1) )
+                        .setMessage(classes)
+                        .setPositiveButton(android.R.string.yes, null)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
             }
         };
     }

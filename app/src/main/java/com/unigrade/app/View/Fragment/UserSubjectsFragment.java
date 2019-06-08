@@ -36,28 +36,6 @@ public class UserSubjectsFragment extends Fragment {
 
         ArrayList<Subject> subjectsList = SubjectDB.getInstance(getActivity()).all();
 
-        try{
-            ArrayList<Subject> verifyList = ((MainActivity) getActivity()).getSubjectsList();
-
-            for (int i = 0; i < subjectsList.size(); i++) {
-                removeSubject = true;
-                for (int j = 0; j < verifyList.size(); j++) {
-                    if(verifyList.get(j).getCode().contains(subjectsList.get(i).getCode())) {
-                        SubjectDB.getInstance(getActivity()).alter(verifyList.get(j));
-                        subjectsList.set(i, verifyList.get(j));
-                        removeSubject = false;
-                        break;
-                    }
-                }
-                if (removeSubject) {
-                    SubjectDB.getInstance(getActivity()).delete(subjectsList.get(i).getCode());
-                    subjectsList.remove(i);
-                }
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
         ListView listSubjectsUser = view.findViewById(R.id.user_subjects_list);
         listSubjectsUser.setAdapter(new SubjectListAdapter(subjectsList, getActivity()));
 
