@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/period_list"
+        android:listSelector="@android:color/transparent"
         android:clickable="false">
 
     </ListView>
