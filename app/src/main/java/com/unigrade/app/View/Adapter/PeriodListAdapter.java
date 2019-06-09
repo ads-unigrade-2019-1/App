@@ -10,9 +10,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.unigrade.app.Controller.FlowController;
 import com.unigrade.app.Model.Period;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
+import com.unigrade.app.View.Fragment.FlowFragment;
 
 import java.util.ArrayList;
 
@@ -44,23 +46,19 @@ public class PeriodListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        Log.d("Repeticao", "VIEW: " + convertView);
 
-        if(convertView == null){
+        //if(convertView == null){
             Log.d("Repeticao", "view null, Position:" + position);
             convertView = LayoutInflater.from(
                     context).inflate(R.layout.item_period, parent, false
             );
-
             viewHolder = new ViewHolder();
             viewHolder.periodTable = convertView.findViewById(R.id.period_table);
-
-            convertView.setTag(viewHolder);
-
-        } else {
+            //convertView.setTag(viewHolder);
+        //} else {
             Log.d("Repeticao", "view nao null, Position:" + position);
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+           // viewHolder = (ViewHolder) convertView.getTag();
+        //}
 
         Period period = (Period) this.getItem(position);
         populatePeriodTable(viewHolder, period);
@@ -121,7 +119,7 @@ public class PeriodListAdapter extends BaseAdapter {
         }
     }
 
-    static class ViewHolder{
+    private class ViewHolder{
         TableLayout periodTable;
     }
 }
