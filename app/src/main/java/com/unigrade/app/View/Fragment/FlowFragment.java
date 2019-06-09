@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.unigrade.app.Controller.FlowController;
@@ -21,6 +22,7 @@ public class FlowFragment extends Fragment {
     private ProgressBar progressBar;
     private AsyncTask getFlow;
     private LinearLayout noInternet;
+    private ListView periodList;
 
     public FlowFragment() {
         // Required empty public constructor
@@ -37,6 +39,7 @@ public class FlowFragment extends Fragment {
 
         progressBar = v.findViewById(R.id.progress_bar);
         noInternet = v.findViewById(R.id.no_internet);
+        periodList = v.findViewById(R.id.period_list);
         Button btnReload = v.findViewById(R.id.reload);
 
         callServer();
@@ -72,6 +75,10 @@ public class FlowFragment extends Fragment {
         if(getFlow != null && getFlow.getStatus() != AsyncTask.Status.FINISHED) {
             getFlow.cancel(true);
         }
+    }
+
+    public ListView getPeriodList(){
+        return periodList;
     }
 
 }

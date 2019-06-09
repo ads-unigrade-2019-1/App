@@ -5,9 +5,12 @@ import android.view.View;
 
 import com.unigrade.app.Controller.FlowController;
 import com.unigrade.app.Model.Period;
+import com.unigrade.app.View.Adapter.PeriodListAdapter;
 import com.unigrade.app.View.Fragment.FlowFragment;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class GetFlow extends AsyncTask<String, Integer, ArrayList<Period> > {
 
@@ -32,5 +35,8 @@ public class GetFlow extends AsyncTask<String, Integer, ArrayList<Period> > {
     @Override
     protected void onPostExecute(ArrayList<Period> flow) {
         flowFragment.getProgressBar().setVisibility(View.GONE);
+        flowFragment.getPeriodList().setAdapter(
+                new PeriodListAdapter(flow, flowFragment.getContext())
+        );
     }
 }
