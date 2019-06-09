@@ -1,6 +1,7 @@
 package com.unigrade.app.View.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +44,10 @@ public class PeriodListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
+        Log.d("Repeticao", "VIEW: " + convertView);
 
         if(convertView == null){
+            Log.d("Repeticao", "view null, Position:" + position);
             convertView = LayoutInflater.from(
                     context).inflate(R.layout.item_period, parent, false
             );
@@ -53,17 +56,19 @@ public class PeriodListAdapter extends BaseAdapter {
             viewHolder.periodTable = convertView.findViewById(R.id.period_table);
 
             convertView.setTag(viewHolder);
+
         } else {
+            Log.d("Repeticao", "view nao null, Position:" + position);
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Period period = (Period)getItem(position);
+        Period period = (Period) this.getItem(position);
         populatePeriodTable(viewHolder, period);
 
         return convertView;
     }
 
-    void populatePeriodTable(ViewHolder viewHolder, Period period){
+    private void populatePeriodTable(ViewHolder viewHolder, Period period){
         TableRow firstRow = new TableRow(context);
         TableRow secondRow = new TableRow(context);
 
@@ -92,31 +97,31 @@ public class PeriodListAdapter extends BaseAdapter {
         viewHolder.periodTable.addView(firstRow);
         viewHolder.periodTable.addView(secondRow);
 
+        insertSubjectsInTable(viewHolder, period);
+    }
+
+    private void insertSubjectsInTable(ViewHolder viewHolder, Period period){
         for(Subject subject : period.getSubjects()){
-            insertSubjectRowInTable(subject, viewHolder);
+            TableRow subjectRow = new TableRow(context);
+
+            TextView subjectCode = new TextView(context);
+            subjectCode.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            subjectCode.setText(subject.getCode());
+            ((TableRow.MarginLayoutParams) subjectCode.getLayoutParams()).setMargins(20, 5, 10, 0);
+
+            TextView subjectName = new TextView(context);
+            subjectName.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            subjectName.setText(subject.getName());
+            ((TableRow.MarginLayoutParams) subjectName.getLayoutParams()).setMargins(0, 5, 80, 0);
+
+            subjectRow.addView(subjectCode);
+            subjectRow.addView(subjectName);
+
+            viewHolder.periodTable.addView(subjectRow);
         }
     }
 
-    private void insertSubjectRowInTable(Subject subject, ViewHolder viewHolder){
-        TableRow subjectRow = new TableRow(context);
-
-        TextView subjectCode = new TextView(context);
-        subjectCode.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-        subjectCode.setText(subject.getCode());
-        ((TableRow.MarginLayoutParams) subjectCode.getLayoutParams()).setMargins(20, 5, 10, 0);
-
-        TextView subjectName = new TextView(context);
-        subjectName.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-        subjectName.setText(subject.getName());
-        ((TableRow.MarginLayoutParams) subjectName.getLayoutParams()).setMargins(0, 5, 80, 0);
-
-        subjectRow.addView(subjectCode);
-        subjectRow.addView(subjectName);
-
-        viewHolder.periodTable.addView(subjectRow);
-    }
-
-    private class ViewHolder{
+    static class ViewHolder{
         TableLayout periodTable;
     }
 }

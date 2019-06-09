@@ -1,6 +1,7 @@
 package com.unigrade.app.View.AsyncTask;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.unigrade.app.Controller.FlowController;
@@ -33,8 +34,9 @@ public class GetFlow extends AsyncTask<String, Integer, ArrayList<Period> > {
     @Override
     protected void onPostExecute(ArrayList<Period> flow) {
         flowFragment.getProgressBar().setVisibility(View.GONE);
-        flowFragment.getPeriodList().setAdapter(
-                new PeriodListAdapter(flow, flowFragment.getContext())
-        );
+        flowFragment.getPeriodList()
+                .setAdapter(
+                    new PeriodListAdapter(flow, flowFragment.getContext())
+                );
     }
 }

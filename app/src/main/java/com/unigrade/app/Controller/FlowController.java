@@ -1,5 +1,9 @@
 package com.unigrade.app.Controller;
+import android.content.Context;
 import android.util.Log;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.unigrade.app.DAO.ServerHelper;
 import com.unigrade.app.Model.Course;

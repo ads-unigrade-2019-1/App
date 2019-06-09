@@ -5,12 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_gravity="top"
-    android:paddingBottom="15dp">
+    android:paddingBottom="15dp"
+    android:clickable="false">
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/period_table">
+        android:id="@+id/period_table"
+        android:clickable="false">
 
     </TableLayout>
 </LinearLayout>
