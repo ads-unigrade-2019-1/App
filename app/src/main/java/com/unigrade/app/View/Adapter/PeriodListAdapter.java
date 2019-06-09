@@ -1,6 +1,9 @@
 package com.unigrade.app.View.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,10 +69,12 @@ public class PeriodListAdapter extends BaseAdapter {
         TextView title = new TextView(context);
         title.setText(String.format("PERÍODO %s", period.getNumber()));
         title.setTextSize(17);
+        title.setTextColor(Color.WHITE);
+        title.setTypeface(null, Typeface.BOLD);
         title.setLayoutParams(new TableRow.LayoutParams(
                 TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         ((TableRow.MarginLayoutParams) title.getLayoutParams())
-                .setMargins(20, 30, 0, 0);
+                .setMargins(20, 20, 0, 20);
 
         TextView code = new TextView(context);
         code.setLayoutParams(new TableRow.LayoutParams(
@@ -87,6 +92,7 @@ public class PeriodListAdapter extends BaseAdapter {
 
 
         firstRow.addView(title);
+        firstRow.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
 
         secondRow.addView(code);
         secondRow.addView(name);
