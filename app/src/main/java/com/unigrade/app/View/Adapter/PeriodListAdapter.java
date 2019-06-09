@@ -68,22 +68,21 @@ public class PeriodListAdapter extends BaseAdapter {
         TableRow secondRow = new TableRow(context);
 
         TextView title = new TextView(context);
-        toString();
         title.setText(String.format("PERÍODO %s", period.getNumber()));
-//        title.getLayoutParams().width = TableRow.LayoutParams.WRAP_CONTENT;
-//        title.getLayoutParams().height = TableRow.LayoutParams.WRAP_CONTENT;
+        title.setTextSize(17);
+        title.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        ((TableRow.MarginLayoutParams) title.getLayoutParams()).setMargins(20, 30, 0, 0);
 
         TextView code = new TextView(context);
-//        code.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        code.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        code.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        ((TableRow.MarginLayoutParams) code.getLayoutParams()).setMargins(20, 10, 0, 5);
         code.setText("Código");
 
         TextView name = new TextView(context);
-//        name.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        name.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        name.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         name.setText("Nome");
-//        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) name.getLayoutParams();
-//        params.rightMargin = 80;
+        ((TableRow.MarginLayoutParams) name.getLayoutParams()).setMargins(0, 10, 80, 5);
+
 
         firstRow.addView(title);
 
@@ -102,20 +101,14 @@ public class PeriodListAdapter extends BaseAdapter {
         TableRow subjectRow = new TableRow(context);
 
         TextView subjectCode = new TextView(context);
-//        subjectCode.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        subjectCode.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        subjectCode.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         subjectCode.setText(subject.getCode());
-
-
-//        ViewGroup.MarginLayoutParams subjectCodeParams = (ViewGroup.MarginLayoutParams) subjectCode.getLayoutParams();
-//        subjectCodeParams.rightMargin = 10;
+        ((TableRow.MarginLayoutParams) subjectCode.getLayoutParams()).setMargins(20, 5, 10, 0);
 
         TextView subjectName = new TextView(context);
-//        subjectName.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        subjectName.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        subjectName.setText(subject.getCode());
-//        ViewGroup.MarginLayoutParams subjectNameParams = (ViewGroup.MarginLayoutParams) subjectName.getLayoutParams();
-//        subjectNameParams.rightMargin = 80;
+        subjectName.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        subjectName.setText(subject.getName());
+        ((TableRow.MarginLayoutParams) subjectName.getLayoutParams()).setMargins(0, 5, 80, 0);
 
         subjectRow.addView(subjectCode);
         subjectRow.addView(subjectName);

@@ -10,8 +10,6 @@ import com.unigrade.app.View.Fragment.FlowFragment;
 
 import java.util.ArrayList;
 
-import static java.security.AccessController.getContext;
-
 public class GetFlow extends AsyncTask<String, Integer, ArrayList<Period> > {
 
     private FlowFragment flowFragment;
