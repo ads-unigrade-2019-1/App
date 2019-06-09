@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.unigrade.app.Controller.FlowController;
@@ -32,6 +33,7 @@ public class CourseFragment extends Fragment {
     private int position;
     private ArrayList<Course> courses;
     private ArrayAdapter<String> spinnerAdapter;
+    private ProgressBar progressBar;
 
     public CourseFragment() {
         // Required empty public constructor
@@ -39,6 +41,10 @@ public class CourseFragment extends Fragment {
 
     public Spinner getSpnCourse() {
         return spnCourse;
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
     @Override
@@ -51,6 +57,7 @@ public class CourseFragment extends Fragment {
         spnCampus = view.findViewById(R.id.campus_spinner);
         spnCourse = view.findViewById(R.id.course_spinner);
         button = view.findViewById(R.id.btn_continue);
+        progressBar = view.findViewById(R.id.progress_bar);
         spinnerAdapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, android.R.id.text1
         );
