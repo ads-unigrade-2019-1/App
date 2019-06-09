@@ -28,6 +28,7 @@ public class CourseFragment extends Fragment {
     private Spinner spnCampus;
     private Spinner spnCourse;
     private AsyncTask getCourses;
+    private Button button;
     private int position;
     private ArrayList<Course> courses;
     private ArrayAdapter<String> spinnerAdapter;
@@ -49,18 +50,26 @@ public class CourseFragment extends Fragment {
 
         spnCampus = view.findViewById(R.id.campus_spinner);
         spnCourse = view.findViewById(R.id.course_spinner);
+        button = view.findViewById(R.id.btn_continue);
         spinnerAdapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, android.R.id.text1
         );
+
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCourse.setAdapter(spinnerAdapter);
+        button.setEnabled(false);
+        button.setOnClickListener(continueListener(view));
+        spnCampus.setOnItemSelectedListener(spnCampusListener());
+        spnCourse.setOnItemSelectedListener(spnCourseListener());
 
         callServer();
 
-        final Button button = view.findViewById(R.id.btn_continue);
-        button.setOnClickListener(continueListener(view));
+        // Inflate the layout for this fragment
+        return view;
+    }
 
-        spnCampus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener spnCampusListener(){
+        return new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 String item = parent.getItemAtPosition(pos).toString();
                 Log.d("CAMPUS", item);
@@ -69,22 +78,21 @@ public class CourseFragment extends Fragment {
             }
             public void onNothingSelected(AdapterView<?> parent) {
             }
-        });
+        };
+    }
 
-        spnCourse.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private AdapterView.OnItemSelectedListener spnCourseListener(){
+        return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 position = pos;
+                button.setEnabled(true);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
-        });
-
-        // Inflate the layout for this fragment
-        return view;
+        };
     }
 
     private void callServer(){
