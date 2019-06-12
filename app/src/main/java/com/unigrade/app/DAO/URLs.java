@@ -7,4 +7,5 @@ public class URLs {
     public static final String URL_ALL_TIMETABLES = "https://mwapi.herokuapp.com/timetable/";
     public static final String URL_CAMPUS_COURSES = "https://mwapi.herokuapp.com/course/";
     public static final String URL_COURSE_FLOW = "https://mwapi.herokuapp.com/habilitation/";
+    public static final String AWAKE_CALL = "https://mwapi.herokuapp.com/";
 }

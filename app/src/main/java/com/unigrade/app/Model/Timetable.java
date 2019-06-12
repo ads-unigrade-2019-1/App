@@ -19,21 +19,8 @@ public class Timetable implements Serializable {
         return timetableClasses;
     }
 
-    public SubjectClass findClassesByTimeDay(final String[] initHour, Integer timeIndex,  String day){
-
-        for(SubjectClass subjectClass : this.getTimetableClasses()){
-            for(ClassMeeting classMeeting : subjectClass.getSchedules()){
-                if((classMeeting.getInit_hour().equals(initHour[(timeIndex*4 + 3)])
-                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4 + 2])
-                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4 + 1])
-                    || classMeeting.getInit_hour().equals(initHour[timeIndex*4]))
-                    && classMeeting.getDay().equals(day)){
-
-                    return subjectClass;
-                }
-            }
-        }
-        return null;
+    public ArrayList<SubjectClass> getTimetableClass() {
+        return timetableClasses;
     }
 
     public void printTimetable(){

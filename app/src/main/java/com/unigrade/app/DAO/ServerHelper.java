@@ -17,85 +17,89 @@ public class ServerHelper {
         this.url = url;
     }
 
-    public String get(){
+    public String get() {
         result = null;
-        try {
-            URL myUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
+        while (result == null) {
+            try {
+                URL myUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
 
-            //Set configuration to connection
-            connection.setRequestMethod("GET");
-            connection.setReadTimeout(READ_TIMEOUT);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.connect();
+                //Set configuration to connection
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+                connection.connect();
 
-            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
 
-            BufferedReader reader = new BufferedReader(streamReader);
-            StringBuilder stringBuilder = new StringBuilder();
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
 
-            String inputLine;
-            //Check if it's reading a null lline
-            while((inputLine = reader.readLine()) != null) {
-                stringBuilder.append(inputLine);
+                String inputLine;
+                //Check if it's reading a null lline
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
 
+                }
+
+                reader.close();
+                streamReader.close();
+
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            reader.close();
-            streamReader.close();
-
-            //Set our result equal to our stringBuilder
-            result = stringBuilder.toString();
-            
-        } catch(IOException e){
-            e.printStackTrace();
         }
-
         return result;
 
     }
 
     public String post(String postData){
         result = null;
-        try {
-            URL myUrl = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
 
-            //Set configuration to connection
-            connection.setRequestMethod("POST");
-            connection.setReadTimeout(READ_TIMEOUT);
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-type", "application/json");
-            connection.setDoOutput(true);
-            connection.connect();
+        while (result == null){
+            try {
+                URL myUrl = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) myUrl.openConnection();
 
-            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-            wr.write(postData);
-            wr.flush();
+                //Set configuration to connection
+                connection.setRequestMethod("POST");
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setRequestProperty("Content-type", "application/json");
+                connection.setDoOutput(true);
+                connection.connect();
 
-            int number = connection.getResponseCode();
+                OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+                wr.write(postData);
+                wr.flush();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            StringBuilder stringBuilder = new StringBuilder();
+                int number = connection.getResponseCode();
 
-            String inputLine;
-            //Check if it's reading a null lline
-            while((inputLine = reader.readLine()) != null) {
-                stringBuilder.append(inputLine);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        connection.getInputStream()));
+                StringBuilder stringBuilder = new StringBuilder();
 
+                String inputLine;
+                //Check if it's reading a null lline
+                while((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+
+                }
+
+                reader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+
+                //SubjectsController subjectsController = new SubjectsController();
+                //String subjects = subjectsController.(result);
+
+            } catch(Exception e){
+                e.printStackTrace();
             }
-
-            reader.close();
-            //Set our result equal to our stringBuilder
-            result = stringBuilder.toString();
-
-            //SubjectsController subjectsController = new SubjectsController();
-            //String subjects = subjectsController.(result);
-
-        } catch(IOException e){
-            e.printStackTrace();
         }
 
         return result;

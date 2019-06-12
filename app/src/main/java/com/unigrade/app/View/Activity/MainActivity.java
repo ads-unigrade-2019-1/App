@@ -7,10 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 
+import com.unigrade.app.DAO.ServerHelper;
+import com.unigrade.app.DAO.URLs;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
 import androidx.navigation.NavController;
@@ -29,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Call to awake api server
+        Thread t = new Thread(MainActivity.awakeServer);
+        t.start();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = findViewById(R.id.toolbar);
@@ -76,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -99,5 +105,14 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private static  Runnable awakeServer = new Runnable() {
+        @Override
+        public void run() {
+            ServerHelper serverHelper = new ServerHelper(URLs.AWAKE_CALL);
+            serverHelper.get();
+            // Log.d("AwakeServer", serverHelper.get());
+        }
+    };
 
 }
