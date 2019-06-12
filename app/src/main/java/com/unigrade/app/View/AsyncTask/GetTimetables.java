@@ -31,7 +31,6 @@ public class GetTimetables extends AsyncTask<String, ArrayList<Timetable>, Array
 
     @Override
     protected void onPostExecute(ArrayList<Timetable> timetables) {
-        timetablesFragment.setSubjects(timetables);
         timetablesFragment.getSubjectList()
                 .setAdapter(
                         new TimetableListAdapter(timetables, timetablesFragment)

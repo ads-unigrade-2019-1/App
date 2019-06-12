@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -28,8 +29,8 @@ import com.unigrade.app.View.Activity.MainActivity;
 
 public class ExpandedTimetableFragment extends Fragment {
 
-    private Timetable timetable;
     private TableLayout timetableLayout;
+    private ActionBar toolbar;
 
     public ExpandedTimetableFragment() {
         // Required empty public constructor
@@ -43,17 +44,17 @@ public class ExpandedTimetableFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(
                 R.layout.fragment_expanded_timetable, container, false
         );
 
-        ActionBar toolbar = ((MainActivity) getActivity()).getSupportActionBar();
+        toolbar = ((MainActivity) getActivity()).getSupportActionBar();
 
         Bundle bundle = getArguments();
-        timetable = (Timetable) bundle.getSerializable("timetable");
+        Timetable timetable = (Timetable) bundle.getSerializable("timetable");
         timetableLayout = v.findViewById(R.id.timetable_layout);
 
         TimetablesController timetablesController  = TimetablesController.getInstance();
@@ -66,7 +67,6 @@ public class ExpandedTimetableFragment extends Fragment {
         );
 
         toolbar.setTitle("");
-        toolbar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         toolbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setDisplayShowHomeEnabled(true);
 
@@ -77,6 +77,8 @@ public class ExpandedTimetableFragment extends Fragment {
     public void onDetach(){
         super.onDetach();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        toolbar.setDisplayHomeAsUpEnabled(false);
+        toolbar.setDisplayShowHomeEnabled(false);
     }
 
     @Override

@@ -1,14 +1,12 @@
 package com.unigrade.app.Controller;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.TableLayout;
@@ -22,7 +20,6 @@ import com.unigrade.app.Model.ClassMeeting;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.Model.SubjectClass;
 import com.unigrade.app.Model.Timetable;
-import com.unigrade.app.View.Fragment.TimetablesFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,15 +84,15 @@ public class TimetablesController extends Controller{
             e.printStackTrace();
 
         }
-        for(int i =0; i<timetables.size(); i++){
-            Timetable timetable = timetables.get(i);
-            Log.d("ShowTimetable", "TIMETABLE " + i);
-            for (SubjectClass subjectClass : timetable.getTimetableClass()){
-                Log.d("ShowTimetable", "---------------------");
-                Log.d("ShowTimetable", "Nome: " + subjectClass.getName());
-                Log.d("ShowTimetable", "Horário: " + subjectClass.getSchedulesString());
-            }
-        }
+//        for(int i =0; i<timetables.size(); i++){
+//            Timetable timetable = timetables.get(i);
+//            Log.d("ShowTimetable", "TIMETABLE " + i);
+//            for (SubjectClass subjectClass : timetable.getTimetableClasses()){
+//                Log.d("ShowTimetable", "---------------------");
+//                Log.d("ShowTimetable", "Nome: " + subjectClass.getName());
+//                Log.d("ShowTimetable", "Horário: " + subjectClass.getSchedulesString());
+//            }
+//        }
 
         return timetables;
     }
@@ -144,12 +141,6 @@ public class TimetablesController extends Controller{
         return isPermitted == PackageManager.PERMISSION_GRANTED;
     }
 
-    public boolean shouldShowExplanation(Activity activity){
-        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
-    }
-
     public String downloadTableLayout(TableLayout tableLayout, Context context){
 
         tableLayout.setDrawingCacheEnabled(true);
@@ -192,8 +183,6 @@ public class TimetablesController extends Controller{
 
     public void insertTimetableInView(
             TableLayout timetableLayout, Timetable timetable, Context context, boolean isMinified){
-
-        timetable.printTimetable();
 
         Map<Integer, Integer> times = new HashMap<>();
         times.put(6, 0);
@@ -287,11 +276,21 @@ public class TimetablesController extends Controller{
 
     public boolean haveSubjects(Context context) {
         ArrayList<SubjectClass> subjects = ClassDB.getInstance(context).allSelected();
-        if (subjects.size() == 0) {
-            return false;
-        } else {
-            return true;
+        return !subjects.isEmpty();
+    }
+
+    public String getTimetableClasses(Timetable timetable){
+        StringBuilder classesString = new StringBuilder();
+        ArrayList<SubjectClass> classes = timetable.getTimetableClasses();
+
+        for(SubjectClass subjectClass : classes) {
+            classesString.append(subjectClass.getName());
+            classesString.append(" - ");
+            classesString.append(subjectClass.getTeacherString(' '));
+            classesString.append("\n");
         }
+
+        return classesString.toString();
     }
 
 

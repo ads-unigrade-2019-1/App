@@ -12,7 +12,6 @@ import android.widget.ListView;
 import com.unigrade.app.DAO.SubjectDB;
 import com.unigrade.app.Model.Subject;
 import com.unigrade.app.R;
-import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.Adapter.SubjectListAdapter;
 
 import java.io.Serializable;

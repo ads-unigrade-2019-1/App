@@ -13,7 +13,7 @@ import com.unigrade.app.Model.SubjectClass;
 import java.util.ArrayList;
 
 public class MeetingDB {
-    private String table = "meetings";
+    private final String table = "meetings";
 
     private static MeetingDB instance;
     private Context context;
@@ -25,7 +25,7 @@ public class MeetingDB {
         return instance;
     }
 
-    public MeetingDB(Context context) {
+    private MeetingDB(Context context) {
         this.context = context;
     }
 

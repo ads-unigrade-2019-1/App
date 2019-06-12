@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ClassDB {
-    private String table = "classes";
-    private Context context;
+    private final String table = "classes";
+    private final Context context;
 
     private static ClassDB instance;
 
@@ -27,7 +27,7 @@ public class ClassDB {
         return instance;
     }
 
-    public ClassDB(Context context) {
+    private ClassDB(Context context) {
         this.context = context;
     }
 
@@ -239,16 +239,6 @@ public class ClassDB {
         cursor.close();
         return true;
 
-    }
-
-    public void insertClassesArray(ArrayList<SubjectClass> subjectClassesList){
-        for(SubjectClass subjectClass : subjectClassesList){
-            try {
-                insert(subjectClass);
-            } catch (SQLiteException e){
-                e.printStackTrace();
-            }
-        }
     }
 
     private ContentValues getClassAttribute(SubjectClass subjectClass){

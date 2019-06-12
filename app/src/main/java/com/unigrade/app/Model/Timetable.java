@@ -15,35 +15,15 @@ public class Timetable implements Serializable {
         this.timetableClasses = timetableClass;
     }
 
+    public ArrayList<SubjectClass> getTimetableClasses() {
+        return timetableClasses;
+    }
+
     public ArrayList<SubjectClass> getTimetableClass() {
         return timetableClasses;
     }
 
-    public ArrayList<ClassMeeting> getTimetableMeetings(){
-        ArrayList<ClassMeeting> classMeetings = new ArrayList<>();
-
-        for (SubjectClass timetableClass : timetableClasses) {
-            classMeetings.addAll(timetableClass.getSchedules());
-        }
-
-        return classMeetings;
-    }
-
-    public ClassMeeting findMeetingByTimeDay(final String initHour, String day){
-        ClassMeeting findedClassMeeting = new ClassMeeting();
-
-        for(ClassMeeting classMeeting : this.getTimetableMeetings()){
-            if(classMeeting.getInit_hour().equals(initHour) && classMeeting.getDay().equals(day)){
-                findedClassMeeting = classMeeting;
-                break;
-            }
-        };
-
-        return findedClassMeeting;
-    }
-
     public void printTimetable(){
-//        test method
         try {
             Log.d("TimetablePrint", "-----------------------------------------------");
             for (int i = 0; i < timetableClasses.size(); i++) {

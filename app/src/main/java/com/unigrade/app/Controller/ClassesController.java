@@ -22,7 +22,7 @@ public class ClassesController extends Controller {
 
     private static ClassesController instance;
 
-    public ClassesController(){
+    private ClassesController(){
         //Empty constructor
     }
 
