@@ -1,0 +1,26 @@
+language: android
+dist: trusty
+android:
+  components:
+  - build-tools-28.0.3
+  - android-28
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - sys-img-x86-android-26
+  - sys-img-armeabi-v7a-android-17
+
+
+deploy:
+  provider: releases
+  api_key:
+    secure: QqwcqPesJd6TOeCIxKwUATQ7I8Og5cVDBJJL8X6fForAewkcUA6Jb4lKcxdazJD577RNBdlt3EHrpJ+3VL/z+qVO7iewlSJ4wfzARvnFZYhpEWD1IAFAf/yufqUI7cov8l46lN7JEBSi/2R77liiJcw1yz2S2eJHtPLmPPAuIFvOK1iyxerW76ohgouV/0mdOuqudJ/pIypz3yNXTI8GlA3SLFBAwbN4VQT+WIlmLXuXwDHgju3ykxUQw96DVH9aKdLLaTuWOHH5JYUAKBH4ojiF+lw/IW9rNDWyqtGqxza8E9koszylYKUca6uB96w4SV6BNpN9fuBw/VvdAmeaNrCenKXU+1NhC2h+7JPrqTI/T257KOCsjycHLWAKGExpTQhqoQEg0EyNo70h8+bN9LmpjpfeAxTp3PG7JClNV8Qpu35leS72Fbaoe5+jJ14rtwhJ80G5s4BhKPgsR3phnE5YR1usNYibuEkpsAdy0dq3ksjv5sWlH51tx7I8wN7HzYY/dpkrgSRi99J3mJdombWOEKk5kv4d5JfGy1hJaiqsEL7JryzoXgcbxvpvG1764Ok9W7yymiGpr72aw57iQiLjFL5Oxkyqy90YV82ydD3tLYD0luhJ1wwWqwLTfI9QrXEZPWyqPoQG1tL9koKRncDoFo7tErbLGC7E9LEjyl0=
+  file: app/build/outputs/apk/debug/app-debug.apk
+  file_glob: true
+  skip_cleanup: "true"
+  on:
+    repo: ads-unigrade-2019-1/App
+    branch: develop master
+  
+after_success:
+- sh set_tags.sh
