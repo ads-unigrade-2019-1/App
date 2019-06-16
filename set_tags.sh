@@ -1,8 +1,8 @@
 MASTER_BRANCH="master"
-DEV_BRANCH="develop"
+DEV_BRANCH="deploy"
 
 # Are we on the right branch?
-if [ "$TRAVIS_BRANCH" = "$DEV_BRANCH" || "$TRAVIS_BRANCH" = "$MASTER_BRANCH"]; then
+if [  "$TRAVIS_BRANCH" = "$DEV_BRANCH" ] || [ "$TRAVIS_BRANCH" = "$MASTER_BRANCH" ]; then
   
   # Is this not a Pull Request?
   if [ "$TRAVIS_PULL_REQUEST" = false ]; then
@@ -16,13 +16,13 @@ if [ "$TRAVIS_BRANCH" = "$DEV_BRANCH" || "$TRAVIS_BRANCH" = "$MASTER_BRANCH"]; t
 
       # Add tag and push to master.
     
-      if [ "$TRAVIS_BRANCH" = "$DEV_BRANCH"]; then
+      if [ "$TRAVIS_BRANCH" = "$DEV_BRANCH" ]; then
       
         git tag -a debug_v${TRAVIS_BUILD_NUMBER} -m "Travis build $TRAVIS_BUILD_NUMBER pushed a tag."
       
       fi
     
-      if [ "$TRAVIS_BRANCH" = "$MASTER_BRANCH"]; then
+      if [ "$TRAVIS_BRANCH" = "$MASTER_BRANCH" ]; then
       
         git tag -a release_v${TRAVIS_BUILD_NUMBER} -m "Travis build $TRAVIS_BUILD_NUMBER pushed a tag."
       
