@@ -1,15 +1,39 @@
 apply plugin: 'com.android.application'
 
 android {
+    
     compileSdkVersion 28
-    defaultConfig {
-        applicationId "com.unigrade.app"
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def v_code = versionProps['VERSION_CODE'];
+        def travis_code = System.getenv("TRAVIS_BUILD_NUMBER");
+        if (travis_code != null) v_code = travis_code.toInteger();
+
+        def name = versionProps['VERSION_NAME']
+        def v_name = "v" + v_code.toString();
+        name = v_name;
+        
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "com.unigrade.app"
+            minSdkVersion 16
+            targetSdkVersion 28
+            versionCode v_code
+            versionName v_name
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
     }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
     buildTypes {
         release {
             minifyEnabled false
