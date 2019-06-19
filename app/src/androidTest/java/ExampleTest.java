@@ -1,3 +1,4 @@
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
 
@@ -9,6 +10,7 @@ import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,12 @@ public class ExampleTest{
         solo = new Solo(activityTestRule.getInstrumentation(), activityTestRule.getActivity());
     }
 
+    @BeforeClass
+    public static void init() throws Exception{
+        InstrumentationRegistry.getTargetContext().deleteDatabase("Unigrade");
+    }
+
+
     @Test
     public void addUserClass(){
         //vai para a pagina de add matérias
@@ -38,7 +46,7 @@ public class ExampleTest{
         //clica na primeira matéria encontrada
         solo.clickInList(0);
         solo.sleep(200);
-        //salva o nome da matéria testada
+        //salva o nome da matéria
         CharSequence subjectName = ((TextView)solo.getView(R.id.class_title)).getText();
         //seleciona a primeira e a segunda turma da matéria
         if(!solo.isCheckBoxChecked(0)){
@@ -54,20 +62,19 @@ public class ExampleTest{
         //vai para a tela de turmas adicionadas
         solo.clickOnView(solo.getView(R.id.userSubjectsFragment));
         solo.sleep(2000);
-        //Clica na primeira matéria adicionada
-        solo.clickInList(0);
+        //Clica na última matéria adicionada
+        solo.clickInList(1);
         //salva o nome da matéria que foi adicionada
         CharSequence addedSubjectName = ((TextView)solo.getView(R.id.class_title)).getText();
         //Verifica se o nome da matéria adicionada é o esperado
         assertEquals(subjectName, addedSubjectName);
-        //Verifica se a primeira turma foi selecionada
+        //Verifica se a primeira turma está selecionada
         assertTrue(solo.isCheckBoxChecked(0));
-        //Verifica se a segunda turma foi selecionada
+        //Verifica se a segunda turma est selecionada
         assertTrue(solo.isCheckBoxChecked(1));
     }
 
     //TODO teste de remoção de matéria
     //TODO teste de geração de grade horária (com as turmas adicionadas)
     //TODO teste de visualização do fluxo
-
 }
