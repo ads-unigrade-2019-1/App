@@ -1,4 +1,8 @@
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.TextView;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.robotium.solo.Solo;
 import com.unigrade.app.R;
@@ -22,12 +26,48 @@ public class ExampleTest{
     }
 
     @Test
-    public void testBtnExample(){
-        //indo para a pagina de add matérias
-        solo.clickOnButton(solo.getString(R.id.subjectsFragment));
+    public void addUserClass(){
+        //vai para a pagina de add matérias
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.subjectsFragment));
+        solo.sleep(500);
 
+        //adiciona texto na pesquisa
+        solo.enterText(0, "algoritmo");
+        solo.sleep(500);
+        //clica na primeira matéria encontrada
+        solo.clickInList(0);
+        solo.sleep(200);
+        //salva o nome da matéria testada
+        CharSequence subjectName = ((TextView)solo.getView(R.id.class_title)).getText();
+        //seleciona a primeira e a segunda turma da matéria
+        if(!solo.isCheckBoxChecked(0)){
+            solo.clickOnCheckBox(0);
+            solo.sleep(500);
+        }
+        if(!solo.isCheckBoxChecked(1)){
+            solo.clickOnCheckBox(1);
+            solo.sleep(500);
+        }
 
-        //solo.clickOnButton(solo.getString(R.id.));
+        solo.goBack();
+        //vai para a tela de turmas adicionadas
+        solo.clickOnView(solo.getView(R.id.userSubjectsFragment));
+        solo.sleep(2000);
+        //Clica na primeira matéria adicionada
+        solo.clickInList(0);
+        //salva o nome da matéria que foi adicionada
+        CharSequence addedSubjectName = ((TextView)solo.getView(R.id.class_title)).getText();
+        //Verifica se o nome da matéria adicionada é o esperado
+        assertEquals(subjectName, addedSubjectName);
+        //Verifica se a primeira turma foi selecionada
+        assertTrue(solo.isCheckBoxChecked(0));
+        //Verifica se a segunda turma foi selecionada
+        assertTrue(solo.isCheckBoxChecked(1));
     }
+
+    //TODO teste de remoção de matéria
+    //TODO teste de geração de grade horária (com as turmas adicionadas)
+    //TODO teste de visualização do fluxo
 
 }
