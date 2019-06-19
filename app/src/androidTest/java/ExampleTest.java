@@ -1,6 +1,6 @@
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.robotium.solo.Solo;
 import com.unigrade.app.R;
 import com.unigrade.app.View.Activity.MainActivity;
 
@@ -9,21 +9,25 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
 @RunWith(AndroidJUnit4.class)
 public class ExampleTest{
+    private Solo solo;
+
     @Rule
-    public ActivityTestRule<MainActivity> activityActivityTestRule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public MyActivityTestRule<MainActivity> activityTestRule = new MyActivityTestRule<>(MainActivity.class, true, true);
+
+    @Before
+    public void setUp() throws Exception {
+        solo = new Solo(activityTestRule.getInstrumentation(), activityTestRule.getActivity());
+    }
 
     @Test
     public void testBtnExample(){
-        onView(withId(R.id.btn_continue)).check(matches((isClickable())));
-        onView(withId(R.id.btn_continue)).perform(click());
+        //indo para a pagina de add matérias
+        solo.clickOnButton(solo.getString(R.id.subjectsFragment));
+
+
+        //solo.clickOnButton(solo.getString(R.id.));
     }
 
 }
