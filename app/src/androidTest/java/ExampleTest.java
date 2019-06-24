@@ -35,8 +35,9 @@ public class ExampleTest{
     }
 
     @Test
-    public void insertCourse(){
+    public void test1_insertCourse(){
         solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.menu.menu_main));
         View viewCampus = solo.getView(R.id.campus_spinner, 0);
         solo.clickOnView(viewCampus);
         solo.sleep(100);
@@ -48,11 +49,11 @@ public class ExampleTest{
         solo.clickOnView(solo.getView(TextView.class, 3)); 
         solo.sleep(150);
         solo.clickOnView(solo.getView(R.id.btn_continue));
-        solo.sleep(300);
+        assertTrue(solo.getView(R.id.timetables_list).isShown());
     }
 
     @Test
-    public void addUserClass(){
+    public void test2_addUserClass(){
         //vai para a pagina de add matérias
         solo.sleep(2000);
         solo.clickOnView(solo.getView(R.id.subjectsFragment));
@@ -96,7 +97,7 @@ public class ExampleTest{
     }
 
     @Test
-    public void generateTimetables(){
+    public void test3_generateTimetables(){
         //vai para a pagina de add matérias
         solo.sleep(2000);
         solo.clickOnView(solo.getView(R.id.subjectsFragment));
@@ -129,7 +130,7 @@ public class ExampleTest{
     }
 
     @Test
-    public void flowShow(){
+    public void test4_flowShow(){
         solo.sleep(2000);
         solo.clickOnView(solo.getView(R.id.flowFragment));
         solo.sleep(300);
@@ -138,7 +139,7 @@ public class ExampleTest{
     }
 
     @Test
-    public void removeUserClass(){
+    public void test5_removeUserClass(){
         //vai para a pagina de add matérias
         solo.sleep(2000);
         solo.clickOnView(solo.getView(R.id.subjectsFragment));
