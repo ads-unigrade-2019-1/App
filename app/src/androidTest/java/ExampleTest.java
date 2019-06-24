@@ -1,6 +1,7 @@
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
+import android.view.View;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -33,6 +34,22 @@ public class ExampleTest{
         InstrumentationRegistry.getTargetContext().deleteDatabase("Unigrade");
     }
 
+    @Test
+    public void insertCourse(){
+        solo.sleep(2000);
+        View viewCampus = solo.getView(R.id.campus_spinner, 0);
+        solo.clickOnView(viewCampus);
+        solo.sleep(100);
+        solo.clickOnView(solo.getView(TextView.class, 3)); 
+        solo.sleep(150);
+        View viewCourse = solo.getView(R.id.course_spinner, 0);
+        solo.clickOnView(viewCourse);
+        solo.sleep(100);
+        solo.clickOnView(solo.getView(TextView.class, 3)); 
+        solo.sleep(150);
+        solo.clickOnView(solo.getView(R.id.btn_continue));
+        solo.sleep(300);
+    }
 
     @Test
     public void addUserClass(){
@@ -79,6 +96,48 @@ public class ExampleTest{
     }
 
     @Test
+    public void generateTimetables(){
+        //vai para a pagina de add matérias
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.subjectsFragment));
+        solo.sleep(500);
+
+        //adiciona texto na pesquisa
+        solo.enterText(0, "algoritmo");
+        solo.sleep(500);
+        //clica na primeira matéria encontrada
+        solo.clickInList(0);
+        solo.sleep(200);
+        //salva o nome da matéria
+        CharSequence subjectName = ((TextView)solo.getView(R.id.class_title)).getText();
+        //seleciona a primeira e a segunda turma da matéria
+        if(!solo.isCheckBoxChecked(0)){
+            solo.clickOnCheckBox(0);
+            solo.sleep(500);
+        }
+        if(!solo.isCheckBoxChecked(1)){
+            solo.clickOnCheckBox(1);
+            solo.sleep(500);
+        }
+
+        solo.goBack();
+        solo.clickOnView(solo.getView(R.id.timetablesFragment));
+        solo.clickOnView(solo.getView(R.id.btn_visualize));
+        solo.sleep(300);
+
+        assertTrue(solo.getView(R.id.timetables_list).isShown());
+    }
+
+    @Test
+    public void flowShow(){
+        solo.sleep(2000);
+        solo.clickOnView(solo.getView(R.id.flowFragment));
+        solo.sleep(300);
+
+        assertTrue(solo.getView(R.id.period_list).isShown());
+    }
+
+    @Test
     public void removeUserClass(){
         //vai para a pagina de add matérias
         solo.sleep(2000);
@@ -114,9 +173,4 @@ public class ExampleTest{
         //Verifica se a turma foi removida da lista de turmas do usuário
         assertFalse(solo.searchText(subjectName));
     }
-
-    //TODO teste de geração de grade horária (com pelo menos 1 turma adicionada pelo o usuário)
-    //TODO teste de inserção do curso
-    //TODO teste de visualização do fluxo (com o curso selecionado pelo usuário)
-
 }

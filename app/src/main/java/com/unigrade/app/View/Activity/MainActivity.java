@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.change_course) {
             Navigation.findNavController(findViewById(R.id.nav_host_fragment))
                     .navigate(R.id.courseFragment);
+            SharedPreferences pref = getApplicationContext()
+                .getSharedPreferences("MyPref", 0);
+            pref.edit().putBoolean("isCourseSelected", false).commit();
             return true;
         }
 
