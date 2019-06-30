@@ -11,8 +11,9 @@ android {
 
         versionProps.load(new FileInputStream(versionPropsFile))
 
-        def v_code = versionProps['VERSION_CODE'];
+        def code = versionProps['VERSION_CODE'];
         def travis_code = System.getenv("TRAVIS_BUILD_NUMBER");
+        def v_code = code;
         if (travis_code != null) v_code = travis_code.toInteger();
 
         def name = versionProps['VERSION_NAME']
@@ -21,13 +22,25 @@ android {
         
         versionProps.store(versionPropsFile.newWriter(), null)
 
-        defaultConfig {
-            applicationId "com.unigrade.app"
-            minSdkVersion 16
-            targetSdkVersion 28
-            versionCode v_code
-            versionName v_name
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        if(System.getenv("TRAVIS_BUILD_NUMBER") != null){
+            defaultConfig {
+                applicationId "com.unigrade.app"
+                minSdkVersion 16
+                targetSdkVersion 28
+                versionCode v_code
+                versionName v_name
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            }
+
+        }else {
+            defaultConfig {
+                applicationId "com.unigrade.app"
+                minSdkVersion 16
+                targetSdkVersion 28
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            }
+
         }
     }
     else {
