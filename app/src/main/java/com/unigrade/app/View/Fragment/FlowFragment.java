@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 
 import com.unigrade.app.Controller.FlowController;
 import com.unigrade.app.R;
+import com.unigrade.app.View.Activity.MainActivity;
 import com.unigrade.app.View.AsyncTask.GetFlow;
 
 
@@ -41,6 +42,8 @@ public class FlowFragment extends Fragment {
         noInternet = v.findViewById(R.id.no_internet);
         periodList = v.findViewById(R.id.period_list);
         Button btnReload = v.findViewById(R.id.reload);
+
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Matérias do curso");
 
         callServer();
 
