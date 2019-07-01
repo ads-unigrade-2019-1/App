@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/courseFragment">
+
+    <fragment
+        android:id="@+id/courseFragment"
+        android:name="com.unigrade.app.View.Fragment.CourseFragment"
+        android:label="fragment_course"
+        tools:layout="@layout/fragment_course" >
+        <action
+            android:id="@+id/action_CourseFragment_to_TimetableFragment"
+            app:destination="@id/timetablesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subjectsFragment"
+        android:name="com.unigrade.app.View.Fragment.SubjectsFragment"
+        android:label="fragment_subjects"
+        tools:layout="@layout/fragment_subjects" >
+        <action
+            android:id="@+id/action_SubjectsFragment_to_ClassFragment"
+            app:destination="@id/classesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flowFragment"
+        android:name="com.unigrade.app.View.Fragment.FlowFragment"
+        android:label="fragment_flow"
+        tools:layout="@layout/fragment_flow" />
+    <fragment
+        android:id="@+id/timetablesFragment"
+        android:name="com.unigrade.app.View.Fragment.TimetablesFragment"
+        android:label="fragment_timetables"
+        tools:layout="@layout/fragment_timetables" >
+        <action
+            android:id="@+id/action_timetablesFragment_to_expandedTimetableFragment"
+            app:destination="@id/expandedTimetableFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userSubjectsFragment"
+        android:name="com.unigrade.app.View.Fragment.UserSubjectsFragment"
+        android:label="fragment_user_subjects"
+        tools:layout="@layout/fragment_user_subjects" />
+    <fragment
+        android:id="@+id/classesFragment"
+        android:name="com.unigrade.app.View.Fragment.ClassesFragment"
+        android:label="ClassesFragment" />
+    <fragment
+        android:id="@+id/expandedTimetableFragment"
+        android:name="com.unigrade.app.View.Fragment.ExpandedTimetableFragment"
+        android:label="fragment_expanded_timetable"
+        tools:layout="@layout/fragment_expanded_timetable" />
+
+
+</navigation>

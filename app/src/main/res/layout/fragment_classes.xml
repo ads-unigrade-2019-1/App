@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:visibility="gone" />
+
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Cálculo 3"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="#000"
+            android:layout_margin="10sp"
+            android:id="@+id/class_title" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Créditos: 00 - 00 - 00 - 00"
+            android:layout_marginBottom="10sp"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:textColor="#000"
+            android:id="@+id/class_credits" />
+        <View
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
+            android:textAlignment="center"
+            android:id="@+id/viewlinebar" />
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/class_list"
+            android:layout_marginTop="20dp" />
+
+
+    </LinearLayout>
+
+    <include layout="@layout/content_no_internet"/>
+
+</FrameLayout>

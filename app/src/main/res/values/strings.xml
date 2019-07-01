@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Unigrade</string>
+
+    <string-array name="campus_array">
+        <item>Selecione</item>
+        <item>Gama</item>
+        <item>Ceilândia</item>
+        <item>Planaltina</item>
+        <item>Darcy Ribeiro</item>
+    </string-array>
+
+    <string-array name="courses_array">
+        <item>Selecione</item>
+        <item>Engenharia de Software</item>
+        <item>Letras</item>
+        <item>Jornalismo</item>
+        <item>Medicina</item>
+        <item>Direito</item>
+        <item>Arquitetura</item>
+        <item>Engenharia Civil</item>
+        <item>Turismo</item>
+    </string-array>
+
+    <string-array name="classes_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string name="separator">-</string>
+</resources>

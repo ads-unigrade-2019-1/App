@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@id/timetablesFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_calendar"
+        android:title="Grades"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@id/userSubjectsFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_list"
+        android:title="Adicionadas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@id/subjectsFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_list_add"
+        android:title="Adicionar"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@id/flowFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_timeline"
+        android:title="Fluxo"
+        app:showAsAction="never" />
+
+</menu>

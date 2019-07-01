@@ -1,0 +1,69 @@
+apply plugin: 'com.android.application'
+
+android {
+    
+    compileSdkVersion 28
+
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def code = versionProps['VERSION_CODE'];
+        def travis_code = System.getenv("TRAVIS_BUILD_NUMBER");
+        def v_code = code;
+        if (travis_code != null) v_code = travis_code.toInteger();
+
+        def name = versionProps['VERSION_NAME']
+        def v_name = "v" + v_code.toString();
+        name = v_name;
+        
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+
+        if(System.getenv("TRAVIS_BUILD_NUMBER") != null){
+            defaultConfig {
+                applicationId "com.unigrade.app"
+                minSdkVersion 16
+                targetSdkVersion 28
+                versionCode v_code
+                versionName v_name
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            }
+
+        }else {
+            defaultConfig {
+                applicationId "com.unigrade.app"
+                minSdkVersion 16
+                targetSdkVersion 28
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            }
+
+        }
+    }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0'
+}

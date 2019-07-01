@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_download"
+        android:title="Baixar grade"
+        android:icon="@drawable/ic_download"
+        android:iconTint="#FFF"
+        app:showAsAction="always" />
+</menu>
